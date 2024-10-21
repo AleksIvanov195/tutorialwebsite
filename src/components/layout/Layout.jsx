@@ -8,12 +8,11 @@ export default function Layout(props) {
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
-	console.log(props)
 	return (
 		<div className = "layout">
 			<Header/>
 			<Navbar/>
-			<main className= 'home-main'>
+			<main>
 				{props.children}
 			</main>
 			<Footer />
