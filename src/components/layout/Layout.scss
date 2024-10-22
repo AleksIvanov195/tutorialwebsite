@@ -15,4 +15,10 @@ html, body {
 		padding: 24px;
 		background-color: $bgColour;
 	}
+
+	@media (max-width: 768px) {
+		main {
+			padding: 16px;
+		}
+	}
 }

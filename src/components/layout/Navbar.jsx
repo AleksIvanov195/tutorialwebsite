@@ -6,6 +6,8 @@ export default function Navbar() {
 			<ul>
 				<li><a>Home</a></li>
 				<li><a>Courses</a></li>
+				<li><a>Languages</a></li>
+				<li><a>Exercises</a></li>
 			</ul>
 		</nav>
 	);
