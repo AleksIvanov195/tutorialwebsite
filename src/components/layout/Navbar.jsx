@@ -1,13 +1,12 @@
-
+import './Navbar.scss';
 
 export default function Navbar() {
-	// Inititalisation --------------------------------------------
-	// State ----------------------------------------------
-	// Handlers --------------------------------------------
-	// View --------------------------------------------
 	return (
-		<nav>
-			<p>NAVBAR</p>
+		<nav className="navbar">
+			<ul>
+				<li><a>Home</a></li>
+				<li><a>Courses</a></li>
+			</ul>
 		</nav>
 	);
 }

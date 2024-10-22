@@ -1,0 +1,11 @@
+@import '../styles/variables';
+
+.footer {
+	background-color: $secondaryColour;
+	color: white;
+	text-align: center;
+	padding: 16px;
+	position: sticky;
+	bottom: 0;
+
+}
