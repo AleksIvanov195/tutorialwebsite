@@ -5,13 +5,18 @@ import Navbar from './Navbar';
 export default function Header() {
 	return (
 		<header className="header">
-			<div className="logo">
-				<img src="https://placehold.co/600x400" alt="Logo" />
+			<div className="navContainer">
+				<div className="logo">
+					<img src="https://placehold.co/600x400" alt="Logo" />
+				</div>
+				<Navbar />
 			</div>
-			<Navbar />
-			<button>Sign In</button>
-			<button>Sign Up</button>
+			<div className="buttons">
+				<button>sign in</button>
+				<button>sign up</button>
+			</div>
 		</header>
+
 	);
 }
 
