@@ -1,6 +1,4 @@
 import API_URL from './apiURL';
-
-
 // Object with methods
 
 const API = {
