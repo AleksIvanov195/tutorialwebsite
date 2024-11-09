@@ -24,7 +24,7 @@ export default function Navbar() {
 				<li><a>Topics</a></li>
 				<li><a>Exercises</a></li>
 				{
-					loggedInUser.UserType == 'ContentCreator' && <li><NavLink to="#">Creator Dashboard</NavLink></li>
+					loggedInUser.UserType == 'ContentCreator' && <li><NavLink to="/creatordashboard">Creator Dashboard</NavLink></li>
 				}
 			</ul>
 		</nav>

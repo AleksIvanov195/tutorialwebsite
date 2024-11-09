@@ -3,6 +3,7 @@ import { AuthProvider } from './hooks/useAuth';
 import Layout from './components/layout/Layout';
 import Homepage from './views/Homepage';
 import Course from './views/Course';
+import CreatorDashboard from './views/CreatorDashboard';
 import './App.scss';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
 					<Routes>
 						<Route path ='/' element={<Homepage/>}/>
 						<Route path ='/courses' element={<Course/>}/>
+						<Route path ='/creatordashboard' element={<CreatorDashboard/>}/>
 					</Routes>
 				</Layout>
 			</BrowserRouter>
