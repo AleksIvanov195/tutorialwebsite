@@ -10,7 +10,6 @@ export default function CreatorDashboard() {
 	const [publishedCourses, setPublishedCourses, publishedCoursesMessage, isLoadingPublished, loadPublishedCourses] = useLoad('/courses?CourseCoursepublicationstatusID=4');
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
-	console.log(draftCourses);
 	return (
 		<>
 			<CourseTray header='Draft Courses'>
@@ -20,6 +19,7 @@ export default function CreatorDashboard() {
 							draftCourses.map(course => (
 								<Card key={course.id}>
 									<p>{course.CourseName}</p>
+									<p>{course.CourseDescription}</p>
 								</Card>
 							))
 						}
@@ -33,6 +33,7 @@ export default function CreatorDashboard() {
 							publishedCourses.map(course => (
 								<Card key={course.id}>
 									<p>{course.CourseName}</p>
+									<p>{course.CourseDescription}</p>
 								</Card>
 							))
 						}

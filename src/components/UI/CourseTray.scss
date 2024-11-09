@@ -1,0 +1,50 @@
+@import '../styles/variables.scss';
+
+.courseTray {
+  margin-bottom: 10px;
+	border-radius: 8px;
+	background-color: $bgColour;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+	.courseTrayHeader {
+		display: flex;
+		border-radius: 15px 15px 0px 0px;
+		padding: 15px;
+		background-color: $primaryColour;
+		color: #fff;
+		cursor: pointer;
+		justify-content: space-between;
+		align-items: center;
+		font-weight: bold;
+		transition: background-color 0.3s ease;
+
+		&:hover {
+			background-color: darken($primaryColour, 15%);
+		}
+		span {
+			font-size: 40px;
+		}
+	}
+
+	.courseTrayContent {
+		padding: 15px;
+		background-color: #fff;
+		color: $secondaryColour;
+
+	}
+	
+	@media (max-width: 768px) {
+		.cardContainer{
+			justify-content: center;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
