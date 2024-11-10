@@ -3,13 +3,14 @@ import API from '../api/API';
 import CourseForm from '../components/enitity/forms/CourseForm';
 import CourseTray from '../components/UI/CourseTray';
 
-export default function CreatorCourse() {
+export default function CreateCourse() {
 	// Inititalisation --------------------------------------------
 	const { loggedInUser, loading } = useAuth();
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
-	const handleCourseSubmit = (data) => {
-		API.post('/courses', data);
+	const handleCourseSubmit = async (data) => {
+		const response = await API.post('/courses', data);
+		console.log(response);
 	};
 
 	// View -------------------------------------------------------
