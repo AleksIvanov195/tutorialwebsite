@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-
+import './CourseForm.scss';
 export default function CourseForm({ onSubmit }) {
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: { CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: 1 },

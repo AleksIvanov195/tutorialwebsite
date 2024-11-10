@@ -1,34 +1,25 @@
 import useLoad from '../api/useLoad';
 import { Card, CardContainer } from '../components/UI/Card';
 import { useAuth } from '../hooks/useAuth';
-import { useState } from 'react';
 import CourseTray from '../components/UI/CourseTray';
-import CourseForm from '../components/enitity/forms/CourseForm';
-import API from '../api/API';
+import { useNavigate } from 'react-router-dom';
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
 	const { loggedInUser, loading } = useAuth();
+	const navigate = useNavigate();
 	// State ------------------------------------------------------
 	const [draftCourses, setDraftCourses, draftCoursesMessage, isLoadingDraft, loadDraftCourses] = useLoad('/courses?CourseCoursepublicationstatusID=1');
 	const [publishedCourses, setPublishedCourses, publishedCoursesMessage, isLoadingPublished, loadPublishedCourses] = useLoad('/courses?CourseCoursepublicationstatusID=4');
-	const [isFormVisible, setFormVisible] = useState(false);
 	// Handlers ---------------------------------------------------
-	const handleCourseSubmit = (data) => {
-		API.post('/courses', data);
-		loadDraftCourses();
-		loadPublishedCourses();
-		setFormVisible(false);
+
+	const handleNavigateToCreateCourse = () =>{
+		navigate('/createcourse');
 	};
-	console.log(draftCourses)
 	// View -------------------------------------------------------
 	return (
 		<>
-			<button onClick={() => setFormVisible(!isFormVisible)}>
-				{isFormVisible ? 'Close Form' : 'Add New Course'}
-			</button>
-			{isFormVisible && (
-				<CourseForm onSubmit={handleCourseSubmit} />
-			)}
+			<button onClick={handleNavigateToCreateCourse}> Create Course </button>
+
 			<CourseTray header='Draft Courses'>
 				{
 					<CardContainer>
