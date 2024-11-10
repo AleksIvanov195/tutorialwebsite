@@ -10,9 +10,15 @@ export default function CourseForm({ onSubmit }) {
 		{ value: 'Programming', label: 'Programming' },
 		{ value: 'Web Design', label: 'Web Design' },
 	];
+	const publicationStatus = [
+		{ value: '', label: 'Select a category' },
+		{ value: 1, label: 'Draft' },
+		{ value: 2, label: 'Submit For Review' },
+		{ value: 4, label: 'Publish' },
+	];
 	// State ------------------------------------------------------
 	const { register, handleSubmit, formState, formState: { errors, isSubmitSuccessful }, reset } = useForm({
-		defaultValues: { CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: 1 },
+		defaultValues: { CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: '',},
 	});
 	React.useEffect(() => {
 		if (formState.isSubmitSuccessful) {
@@ -69,11 +75,16 @@ export default function CourseForm({ onSubmit }) {
 			</div>
 
 			<div className='formItem'>
-				<label>CourseCoursepublicationstatusID</label>
-				<input
-					{...register('CourseCoursepublicationstatusID')}
-					placeholder="Enter course CourseCoursepublicationstatusID"
-				/>
+				<label>Course Publication</label>
+				<select
+					{...register('CourseCoursepublicationstatusID', { required: 'Course Publication is required' })}
+				>
+					{publicationStatus.map((status) => (
+						<option key={status.value} value={status.value}>
+							{status.label}
+						</option>
+					))}
+				</select>
 				{errors.CourseCoursepublicationstatusID && <p className='errorMessage'>{errors.CourseCoursepublicationstatusID.message}</p>}
 			</div>
 
