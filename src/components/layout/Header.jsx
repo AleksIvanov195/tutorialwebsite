@@ -7,9 +7,11 @@ export default function Header() {
 	// Inititalisation --------------------------------------------
 	const { login } = useAuth();
 	const learner = {
+		UserName: 'Carri',
 		UserType:'Learner',
 	};
-	const CC = {
+	const ContentCreator = {
+		UserName: 'Mike',
 		UserType: 'ContentCreator',
 	};
 	// State ------------------------------------------------------
@@ -27,7 +29,7 @@ export default function Header() {
 				<Navbar />
 			</div>
 			<div className="buttons">
-				<button onClick={() => handleLogin(CC)}>sign in</button>
+				<button onClick={() => handleLogin(ContentCreator)}>sign in</button>
 				<button>sign up</button>
 			</div>
 		</header>

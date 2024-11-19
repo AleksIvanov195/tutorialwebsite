@@ -10,6 +10,7 @@ export default function CreatorDashboard() {
 	// State ------------------------------------------------------
 	const [draftCourses, setDraftCourses, draftCoursesMessage, isLoadingDraft, loadDraftCourses] = useLoad('/courses?CourseCoursepublicationstatusID=1');
 	const [publishedCourses, setPublishedCourses, publishedCoursesMessage, isLoadingPublished, loadPublishedCourses] = useLoad('/courses?CourseCoursepublicationstatusID=4');
+	const [reviewedCourses, setReviewedCourses, reviewedCoursesMessage, isLoadingReviewed, loadReviewedCourses] = useLoad('/courses?CourseCoursepublicationstatusID=3');
 	// Handlers ---------------------------------------------------
 
 	const handleNavigateToCreateCourse = () =>{
@@ -20,7 +21,7 @@ export default function CreatorDashboard() {
 		<>
 			<button onClick={handleNavigateToCreateCourse}> Create Course </button>
 
-			<CourseTray header='Draft Courses'>
+			<CourseTray header={`Draft Courses (${draftCourses.length})`}>
 				{
 					<CardContainer>
 						{
@@ -34,7 +35,21 @@ export default function CreatorDashboard() {
 					</CardContainer>
 				}
 			</CourseTray>
-			<CourseTray header='Published Courses'>
+			<CourseTray header={`Reviewed/Ready for Publication Courses (${reviewedCourses.length})`}>
+				{
+					<CardContainer>
+						{
+							reviewedCourses.map(course => (
+								<Card key={course.id}>
+									<p>{course.CourseName}</p>
+									<p>{course.CourseDescription}</p>
+								</Card>
+							))
+						}
+					</CardContainer>
+				}
+			</CourseTray>
+			<CourseTray header={`Published Courses (${publishedCourses.length})`}>
 				{
 					<CardContainer>
 						{
@@ -48,6 +63,7 @@ export default function CreatorDashboard() {
 					</CardContainer>
 				}
 			</CourseTray>
+
 		</>
 	);
 }

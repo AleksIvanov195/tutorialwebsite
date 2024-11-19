@@ -14,7 +14,7 @@ export default function Course() {
 			<CardContainer>
 				{
 					courses.map((course) => (
-						<Card key={course.id}>
+						<Card key={course.CourseID}>
 							<p style={{ fontWeight: 'bold' }}>{course.CourseName}</p>
 							<p>{course.CourseDescription}</p>
 						</Card>
