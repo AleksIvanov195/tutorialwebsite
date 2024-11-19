@@ -1,7 +1,7 @@
 import useLoad from '../api/useLoad';
 import { Card, CardContainer } from '../components/UI/Card';
 import { useAuth } from '../hooks/useAuth';
-import CourseTray from '../components/UI/CourseTray';
+import CollapsiblePanel from '../components/UI/CollapsiblePanel';
 import { useNavigate } from 'react-router-dom';
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
@@ -21,7 +21,7 @@ export default function CreatorDashboard() {
 		<>
 			<button onClick={handleNavigateToCreateCourse}> Create Course </button>
 
-			<CourseTray header={`Draft Courses (${draftCourses.length})`}>
+			<CollapsiblePanel header={`Draft Courses (${draftCourses.length})`}>
 				{
 					<CardContainer>
 						{
@@ -34,8 +34,8 @@ export default function CreatorDashboard() {
 						}
 					</CardContainer>
 				}
-			</CourseTray>
-			<CourseTray header={`Reviewed/Ready for Publication Courses (${reviewedCourses.length})`}>
+			</CollapsiblePanel>
+			<CollapsiblePanel header={`Reviewed/Ready for Publication Courses (${reviewedCourses.length})`}>
 				{
 					<CardContainer>
 						{
@@ -48,8 +48,8 @@ export default function CreatorDashboard() {
 						}
 					</CardContainer>
 				}
-			</CourseTray>
-			<CourseTray header={`Published Courses (${publishedCourses.length})`}>
+			</CollapsiblePanel>
+			<CollapsiblePanel header={`Published Courses (${publishedCourses.length})`}>
 				{
 					<CardContainer>
 						{
@@ -62,7 +62,7 @@ export default function CreatorDashboard() {
 						}
 					</CardContainer>
 				}
-			</CourseTray>
+			</CollapsiblePanel>
 
 		</>
 	);

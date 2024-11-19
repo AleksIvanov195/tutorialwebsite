@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Collapse from 'react-collapse';
-import './CourseTray.scss';
+import './CollapsiblePanel.scss';
 
-export default function CourseTray({ children, header }) {
+export default function CollapsiblePanel({ children, header }) {
 	// Inititalisation --------------------------------------------
 	// State ------------------------------------------------------
 	const [isCollapsed, setIsCollapsed] = useState(false);
@@ -13,13 +13,13 @@ export default function CourseTray({ children, header }) {
 	// View -------------------------------------------------------
 	return (
 		<>
-			<div className='courseTray'>
-				<div className="courseTrayHeader" onClick={handleToggle}>
+			<div className='collapsiblePanel'>
+				<div className="collapsiblePanelHeader" onClick={handleToggle}>
 					<h1>{header}</h1>
 					<span>{isCollapsed ? '▼' : '▲'}</span>
 				</div>
 				<Collapse isOpened={isCollapsed}>
-					<div className="courseTrayContent">{children}</div>
+					<div className="collapsiblePanelContent">{children}</div>
 				</Collapse>
 			</div>
 		</>
