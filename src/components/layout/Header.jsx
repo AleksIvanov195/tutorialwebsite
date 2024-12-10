@@ -30,7 +30,10 @@ export default function Header() {
 							</NavLink>
 						</>
 						:
-						<button onClick={logout}>Register</button>
+						<>
+							<button>Profile</button>
+							<button onClick={logout}>Logout</button>
+						</>
 				}
 
 			</div>
