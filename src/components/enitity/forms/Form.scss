@@ -1,0 +1,55 @@
+@import '../../styles/variables.scss';
+
+.form{
+	max-width: 600px;
+  margin: 10px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+	.formItem{
+		margin-bottom: 20px;
+	}
+	
+	label {
+		font-weight: bold;
+		display: block;
+		margin-bottom: 9px;
+	}
+	input,
+	textarea,
+	select {
+		width: 100%;
+		font-size: 14px;
+		padding: 10px;
+		border: 1px solid #b8b1b1;
+		border-radius: 5px;
+		box-sizing: border-box;
+	}
+	textarea {
+		resize: vertical;
+		min-height: 100px;
+	}
+	.errorMessage {
+		color: red;
+		font-size: 14px;
+		margin-top: 5px;
+	}
+
+	button {
+    padding: 12px 20px;
+    background-color: $primaryColour;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primaryColour, 15%);
+    }
+	}
+	
+}
