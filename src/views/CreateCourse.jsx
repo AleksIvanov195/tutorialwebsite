@@ -1,11 +1,9 @@
-import { useAuth } from '../hooks/useAuth';
 import API from '../api/API';
 import CourseForm from '../components/enitity/forms/CourseForm';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
 
 export default function CreateCourse() {
 	// Inititalisation --------------------------------------------
-	const { loggedInUser, loading } = useAuth();
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
 	const handleCourseSubmit = async (data) => {
