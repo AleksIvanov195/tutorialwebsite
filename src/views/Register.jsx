@@ -12,14 +12,14 @@ export default function Register() {
 		return <div>You are logged in.</div>;
 	}
 	// Handlers ---------------------------------------------------
-	const handleRegister= async (data) => {
+	const handleRegister = async (data) => {
 		setRegisterMessage('');
 		const response = await register(data);
 		if (response.isSuccess) {
-			setRegisterMessage('Registersuccessful!');
+			setRegisterMessage('Register Successful!');
 			window.location.href = '/';
 		} else {
-			setRegisterMessage(`Registerfailed: ${response.message}`);
+			setRegisterMessage(`Register Failed: ${response.message}`);
 		}
 	};
 	// View -------------------------------------------------------
@@ -27,5 +27,5 @@ export default function Register() {
 		<>
 		 <RegisterForm onSubmit={handleRegister} registerMessage = {registerMessage}/>
 		</>
-	)
+	);
 }

@@ -47,10 +47,13 @@ export const AuthProvider = ({ children }) => {
 	const login = async (data) => {
 		return await auth.login(data);
 	};
+	const register = async (data) => {
+		return await auth.register(data);
+	};
 
 	// View------------------------------------------------------------
 	return (
-		<AuthContext.Provider value={{ authState, checkAuth, logout, login }}>
+		<AuthContext.Provider value={{ authState, checkAuth, logout, login, register }}>
 			{children}
 		</AuthContext.Provider>
 	);

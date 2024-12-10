@@ -5,6 +5,7 @@ const auth = {
 	login: (data) => login(data),
 	logout: (redirectLocation) => logout(redirectLocation),
 	checkAuth: () => checkAuth(),
+	register: (data) => register(data),
 };
 const login = async (data) => {
 	try {
@@ -25,6 +26,26 @@ const login = async (data) => {
 			isSuccess: false,
 			message: `Error: ${error.message}`,
 		};
+	}
+};
+const register = async (data) => {
+	try{
+		const response = await fetch(`${API_URL}/users/register`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+			credentials:'include',
+		});
+		const result = await response.json();
+		if(response.ok) {
+			return { isSucess: true, result };
+		}else{
+			return{ isSuccess: false, message: result.message || 'Unable to Register' };
+		}
+	}catch(error) {
+		return {
+			isSuccess: false,
+			message: `Error: ${error.message}` };
 	}
 };
 const refresh = async () => {
@@ -61,7 +82,10 @@ const logout = async (redirectLocation) => {
 			console.log('Failed to log out:');
 		}
 	} catch (error) {
-		console.log('Error during logout:', error);
+		return {
+			isSuccess: false,
+			message: `Error: ${error.message}`,
+		};
 	}
 };
 const checkAuth = async () => {
@@ -83,7 +107,7 @@ const checkAuth = async () => {
 	} catch (error) {
 		return {
 			isSuccess: false,
-			message: 'Unexpected error', error,
+			message: `Error: ${error.message}`,
 		};
 	}
 };
