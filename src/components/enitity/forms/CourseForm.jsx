@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
-import React from 'react';
-import './CourseForm.scss';
+import { useEffect } from 'react';
+import './Form.scss';
 export default function CourseForm({ onSubmit }) {
 	// Inititalisation --------------------------------------------
 	const categories = [
@@ -20,7 +20,7 @@ export default function CourseForm({ onSubmit }) {
 	const { register, handleSubmit, formState, formState: { errors, isSubmitSuccessful }, reset } = useForm({
 		defaultValues: { CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: '',},
 	});
-	React.useEffect(() => {
+	useEffect(() => {
 		if (formState.isSubmitSuccessful) {
 			reset({ CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: 1 });
 		}
@@ -29,7 +29,7 @@ export default function CourseForm({ onSubmit }) {
 	// View -------------------------------------------------------
 
 	return (
-		<form className="courseForm" onSubmit={handleSubmit(onSubmit)}>
+		<form className="form" onSubmit={handleSubmit(onSubmit)}>
 			<div className='formItem'>
 				<label>Course Name</label>
 				<input
@@ -88,7 +88,7 @@ export default function CourseForm({ onSubmit }) {
 				{errors.CourseCoursepublicationstatusID && <p className='errorMessage'>{errors.CourseCoursepublicationstatusID.message}</p>}
 			</div>
 
-			<button className='submitCourseButton' type="submit">Save Course</button>
+			<button type="submit">Save Course</button>
 		</form>
 	);
 }

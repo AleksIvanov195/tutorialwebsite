@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import API from './API';
 
-const useLoad = (endpoint) =>{
+const useLoad = (endpoint, isLoggedIn) =>{
 	// State ------------------------------------------------------
 	const [records, setRecords] = useState([]);
 	const [loadingMessage, setLoadingMessage] = useState('Loading records...');
 	const [isLoading, setIsLoading] = useState(true);
 	// Methods ---------------------------------------------------
 	const loadRecords = async () => {
-		setIsLoading(true);
-		const response = await API.get(endpoint);
+	
+		const response = await API.get(endpoint, isLoggedIn);
 		setIsLoading(false);
-
 		if (response.isSuccess) {
 			setRecords(response.result || []);
 

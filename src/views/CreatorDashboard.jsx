@@ -1,16 +1,16 @@
 import useLoad from '../api/useLoad';
 import { Card, CardContainer } from '../components/UI/Card';
-import { useAuth } from '../hooks/useAuth';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
-	const { loggedInUser, loading } = useAuth();
+	const { authState } = useAuth();
 	const navigate = useNavigate();
 	// State ------------------------------------------------------
-	const [draftCourses, setDraftCourses, draftCoursesMessage, isLoadingDraft, loadDraftCourses] = useLoad('/courses?CourseCoursepublicationstatusID=1');
-	const [publishedCourses, setPublishedCourses, publishedCoursesMessage, isLoadingPublished, loadPublishedCourses] = useLoad('/courses?CourseCoursepublicationstatusID=4');
-	const [reviewedCourses, setReviewedCourses, reviewedCoursesMessage, isLoadingReviewed, loadReviewedCourses] = useLoad('/courses?CourseCoursepublicationstatusID=3');
+	const [draftCourses, setDraftCourses, draftCoursesMessage, isLoadingDraft, loadDraftCourses] = useLoad('/courses?CoursePublicationstatusID=1', authState.isLoggedIn);
+	const [publishedCourses, setPublishedCourses, publishedCoursesMessage, isLoadingPublished, loadPublishedCourses] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
+	const [reviewedCourses, setReviewedCourses, reviewedCoursesMessage, isLoadingReviewed, loadReviewedCourses] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
 	// Handlers ---------------------------------------------------
 
 	const handleNavigateToCreateCourse = () =>{

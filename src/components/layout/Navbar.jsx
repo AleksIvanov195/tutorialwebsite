@@ -3,16 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import './Navbar.scss';
 import Hamburger from 'hamburger-react';
-
 export default function Navbar() {
 	// Inititalisation --------------------------------------------
-	const { loggedInUser, loading } = useAuth();
+	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const [isOpen, setIsOpen] = useState(false);
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
-	if (loading) return <p>Loading User info...</p>;
-	if (!loggedInUser) return <p>User not logged in.</p>;
 	return (
 		<nav className="navbar">
 			<div className="hamburger">
@@ -24,7 +21,7 @@ export default function Navbar() {
 				<li><a>Topics</a></li>
 				<li><a>Exercises</a></li>
 				{
-					loggedInUser.UserType == 'ContentCreator' && <li><NavLink to="/creatordashboard">Creator Dashboard</NavLink></li>
+					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard">Creator Dashboard</NavLink></li>
 				}
 			</ul>
 		</nav>
