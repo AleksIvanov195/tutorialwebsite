@@ -38,7 +38,7 @@ const register = async (data) => {
 		});
 		const result = await response.json();
 		if(response.ok) {
-			return { isSucess: true, result };
+			return { isSuccess: true, result };
 		}else{
 			return{ isSuccess: false, message: result.message || 'Unable to Register' };
 		}

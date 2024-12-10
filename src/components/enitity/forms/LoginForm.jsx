@@ -7,7 +7,6 @@ export default function LoginForm({ onSubmit, loginMessage, sessionExpired }) {
 	const { register, handleSubmit, formState, formState: { errors, isSubmitSuccessful }, reset } = useForm({
 		defaultValues: { UserEmail: '', UserPassword: '' },
 	});
-	console.log(formState);
 	// State ------------------------------------------------------
 	// Reset the form when submission is successful
 	useEffect(() => {

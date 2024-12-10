@@ -1,9 +1,11 @@
 import './Header.scss';
-import '../styles/variables.scss';
 import Navbar from './Navbar';
+import { useAuth } from '../../hooks/useAuth';
+import { NavLink } from 'react-router-dom';
 
 export default function Header() {
 	// Inititalisation --------------------------------------------
+	const { authState, logout } = useAuth();
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
@@ -16,8 +18,21 @@ export default function Header() {
 				<Navbar />
 			</div>
 			<div className="buttons">
-				<button >sign in</button>
-				<button>sign up</button>
+				{
+					!authState.isLoggedIn
+						?
+						<>
+							<NavLink to="/login">
+								<button>Log In</button>
+							</NavLink>
+							<NavLink to="/register">
+								<button>Register</button>
+							</NavLink>
+						</>
+						:
+						<button onClick={logout}>Register</button>
+				}
+
 			</div>
 		</header>
 

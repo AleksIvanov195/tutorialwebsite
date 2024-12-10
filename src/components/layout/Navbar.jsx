@@ -5,7 +5,7 @@ import './Navbar.scss';
 import Hamburger from 'hamburger-react';
 export default function Navbar() {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth()
+	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const [isOpen, setIsOpen] = useState(false);
 	// Handlers ---------------------------------------------------
@@ -20,7 +20,6 @@ export default function Navbar() {
 				<li><NavLink to="/courses">Courses</NavLink></li>
 				<li><a>Topics</a></li>
 				<li><a>Exercises</a></li>
-				<li><NavLink to="/login">login</NavLink></li>
 				{
 					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard">Creator Dashboard</NavLink></li>
 				}
