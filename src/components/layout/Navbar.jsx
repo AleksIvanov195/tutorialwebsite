@@ -6,22 +6,31 @@ import Hamburger from 'hamburger-react';
 export default function Navbar() {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
+	const [currentLocation, setCurrentLocation] = useState('');
 	// State ------------------------------------------------------
-	const [isOpen, setIsOpen] = useState(false);
+	const [isHamburgerOpen, setIsHambrugerOpen] = useState(false);
 	// Handlers ---------------------------------------------------
+	const handleChangeLocation = (name) => {
+		setCurrentLocation(name);
+	};
 	// View -------------------------------------------------------
 	return (
 		<nav className="navbar">
 			<div className="hamburger">
-				<Hamburger toggled={isOpen} toggle={setIsOpen} />
+				<Hamburger toggled={isHamburgerOpen} toggle={setIsHambrugerOpen} />
 			</div>
-			<ul className={`navLinks ${isOpen ? 'show' : ''}`}>
-				<li><NavLink to="/">Home</NavLink></li>
-				<li><NavLink to="/courses">Courses</NavLink></li>
+			{!isHamburgerOpen &&
+			<div className="activeLinkDisplay">
+				{currentLocation && <span>{currentLocation}</span>}
+			</div>
+			}
+			<ul className={`navLinks ${isHamburgerOpen ? 'show' : ''}`}>
+				<li><NavLink to="/" onClick={() => handleChangeLocation('Home')} >Home</NavLink></li>
+				<li><NavLink to="/courses" onClick={() => handleChangeLocation('Courses')} >Courses</NavLink></li>
 				<li><a>Topics</a></li>
 				<li><a>Exercises</a></li>
 				{
-					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard">Creator Dashboard</NavLink></li>
+					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard" onClick={() => handleChangeLocation('Dashboard')}>Creator Dashboard</NavLink></li>
 				}
 			</ul>
 		</nav>
