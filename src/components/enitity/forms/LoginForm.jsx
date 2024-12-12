@@ -27,9 +27,8 @@ export default function LoginForm({ onSubmit, loginMessage }) {
 
 	const defaultValues = { UserEmail: '', UserPassword: '' };
 
-	return (
-		<>
-			<Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} apiResponse = {loginMessage}/>
-		</>
-	);
+	const header = 'Log In';
+
+	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} apiResponse = {loginMessage} header={header}/>;
+
 }
