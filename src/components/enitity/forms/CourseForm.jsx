@@ -1,94 +1,60 @@
-import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
-import './Form.scss';
+import Form from '../../UI/Form';
 export default function CourseForm({ onSubmit }) {
-	// Inititalisation --------------------------------------------
-	const categories = [
-		{ value: '', label: 'Select a category' },
-		{ value: 'Web Development', label: 'Web Development' },
-		{ value: 'Backend Development', label: 'Backend Development' },
-		{ value: 'Programming', label: 'Programming' },
-		{ value: 'Web Design', label: 'Web Design' },
+	// Specify fields with name (match default values), label, type, placeholder, validation
+	const fields = [
+		{
+			name: 'CourseName',
+			label: 'Course Name',
+			type: 'text',
+			placeholder: 'Enter course name',
+			validation: {
+				required: 'Course Name is required',
+				minLength: { value: 3, message: 'Must be at least 3 characters long' },
+			},
+		},
+		{
+			name: 'CourseDescription',
+			label: 'Course Description',
+			type: 'textarea',
+			placeholder: 'Enter course description',
+			validation: {
+				required: 'Course Description is required',
+				minLength: { value: 10, message: 'Must be at least 10 characters long' },
+			},
+		},
+		{
+			name: 'CourseCategory',
+			label: 'Course Category',
+			type: 'select',
+			options: [
+				{ value: '', label: 'Select a category' },
+				{ value: 'Web Development', label: 'Web Development' },
+				{ value: 'Backend Development', label: 'Backend Development' },
+				{ value: 'Programming', label: 'Programming' },
+				{ value: 'Web Design', label: 'Web Design' },
+			],
+			validation: { required: 'Course Category is required' },
+		},
+		{
+			name: 'CoursePublicationStatusID',
+			label: 'Course Publication',
+			type: 'select',
+			options: [
+				{ value: '', label: 'Select a status' },
+				{ value: 1, label: 'Draft' },
+				{ value: 2, label: 'Submit for Review' },
+				{ value: 4, label: 'Publish' },
+			],
+			validation: { required: 'Course Publication is required' },
+		},
 	];
-	const publicationStatus = [
-		{ value: '', label: 'Select a category' },
-		{ value: 1, label: 'Draft' },
-		{ value: 2, label: 'Submit For Review' },
-		{ value: 4, label: 'Publish' },
-	];
-	// State ------------------------------------------------------
-	const { register, handleSubmit, formState, formState: { errors, isSubmitSuccessful }, reset } = useForm({
-		defaultValues: { CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: '',},
-	});
-	useEffect(() => {
-		if (formState.isSubmitSuccessful) {
-			reset({ CourseName: '', CourseDescription: '', CourseCategory: '', CourseCoursepublicationstatusID: 1 });
-		}
-	}, [formState, reset]);
-	// Handlers ---------------------------------------------------
-	// View -------------------------------------------------------
 
-	return (
-		<form className="form" onSubmit={handleSubmit(onSubmit)}>
-			<div className='formItem'>
-				<label>Course Name</label>
-				<input
-					{...register('CourseName', {
-						required: 'Course Name is required',
-						minLength: {
-							value: 3,
-							message: 'Course Name must be at least 3 characters long',
-						},
-					})}
-					placeholder="Enter course name"
-				/>
-				{errors.CourseName && <p className='errorMessage'>{errors.CourseName.message}</p>}
-			</div>
+	const defaultValues = {
+		CourseName: '',
+		CourseDescription: '',
+		CourseCategory: '',
+		CoursePublicationStatusID: '',
+	};
 
-			<div className='formItem'>
-				<label>Course Description</label>
-				<textarea
-					{...register('CourseDescription', {
-						required: 'Course Description is required',
-						minLength: {
-							value: 10,
-							message: 'Course Description must be at least 10 characters long',
-						},
-					})}
-					placeholder="Enter course description"
-				/>
-				{errors.CourseDescription && <p className='errorMessage'>{errors.CourseDescription.message}</p>}
-			</div>
-
-			<div className='formItem'>
-				<label>Course Category</label>
-				<select
-					{...register('CourseCategory', { required: 'Course Category is required' })}
-				>
-					{categories.map((category) => (
-						<option key={category.value} value={category.value}>
-							{category.label}
-						</option>
-					))}
-				</select>
-				{errors.CourseCategory && <p className='errorMessage'>{errors.CourseCategory.message}</p>}
-			</div>
-
-			<div className='formItem'>
-				<label>Course Publication</label>
-				<select
-					{...register('CourseCoursepublicationstatusID', { required: 'Course Publication is required' })}
-				>
-					{publicationStatus.map((status) => (
-						<option key={status.value} value={status.value}>
-							{status.label}
-						</option>
-					))}
-				</select>
-				{errors.CourseCoursepublicationstatusID && <p className='errorMessage'>{errors.CourseCoursepublicationstatusID.message}</p>}
-			</div>
-
-			<button type="submit">Save Course</button>
-		</form>
-	);
+	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} />;
 }

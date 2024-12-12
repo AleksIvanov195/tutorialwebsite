@@ -1,13 +1,19 @@
-@import '../../styles/variables.scss';
+@import '../styles/variables.scss';
 
 .form{
 	max-width: 600px;
   margin: 10px auto;
-  padding: 20px;
+  padding: 10px 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 
+	.formHeader{
+		text-align: center;
+		font-weight: bold;
+		font-size: 32px;
+		margin-bottom: 10px;
+	}
 	.formItem{
 		margin-bottom: 20px;
 	}
