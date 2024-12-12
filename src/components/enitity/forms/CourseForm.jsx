@@ -1,5 +1,11 @@
 import Form from '../../UI/Form';
-export default function CourseForm({ onSubmit }) {
+import useLoad from '../../../api/useLoad';
+import { useAuth } from '../../../hooks/useAuth';
+export default function CourseForm({ onSubmit, courseMessage }) {
+	// Inititalisation --------------------------------------------
+	const { authState } = useAuth();
+	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategory', authState.isLoggedIn);
+
 	// Specify fields with name (match default values), label, type, placeholder, validation
 	const fields = [
 		{
@@ -23,20 +29,23 @@ export default function CourseForm({ onSubmit }) {
 			},
 		},
 		{
-			name: 'CourseCategory',
+			name: 'CourseCoursecategoryID',
 			label: 'Course Category',
 			type: 'select',
-			options: [
-				{ value: '', label: 'Select a category' },
-				{ value: 'Web Development', label: 'Web Development' },
-				{ value: 'Backend Development', label: 'Backend Development' },
-				{ value: 'Programming', label: 'Programming' },
-				{ value: 'Web Design', label: 'Web Design' },
-			],
+			options:
+			isLoading
+				? [{ value: '', label: 'Loading Categories...' }]
+				: categories.length > 0
+					?
+					categories.map((category) => ({
+						value: category.CoursecategoryID,
+						label: category.CoursecategoryName,
+					}))
+					: [{ value: '', label: 'No categories available' }],
 			validation: { required: 'Course Category is required' },
 		},
 		{
-			name: 'CoursePublicationStatusID',
+			name: 'CoursePublicationstatusID',
 			label: 'Course Publication',
 			type: 'select',
 			options: [
@@ -52,9 +61,11 @@ export default function CourseForm({ onSubmit }) {
 	const defaultValues = {
 		CourseName: '',
 		CourseDescription: '',
-		CourseCategory: '',
-		CoursePublicationStatusID: '',
+		CourseCoursecategoryID: '',
+		CoursePublicationstatusID: '',
 	};
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} />;
+	const header = 'Create Course';
+
+	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} apiResponse={courseMessage} header={header} />;
 }
