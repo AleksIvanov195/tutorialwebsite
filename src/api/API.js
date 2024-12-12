@@ -17,7 +17,6 @@ const callFetch = async (endpoint, method, data, isLoggedIn = false) => {
 		credentials: 'include',
 	};
 	const endpointAddress = `${API_URL}${endpoint}`;
-
 	try {
 		let response = await fetch(endpointAddress, requestObj);
 
@@ -28,14 +27,16 @@ const callFetch = async (endpoint, method, data, isLoggedIn = false) => {
 			result = null;
 		} else {
 			result = await response.json().catch(() => null);
-			if (isLoggedIn && response.status === 401 && (result.message === 'Access token expired' || result.message === 'Access token missing')) {
-				const refreshResponse = await auth.refresh();
-				if (refreshResponse.isSuccess) {
+			if (isLoggedIn) {
+				if (response.status === 401 && (result.message === 'Access token expired' || result.message === 'Access token missing')) {
+					const refreshResponse = await auth.refresh();
+					if (refreshResponse.isSuccess) {
 					// Retry the original request after refreshing token
-					response = await fetch(endpointAddress, requestObj);
-					result = await response.json().catch(() => null);
-				}else{
-					await auth.logout('/login?sessionExpired=true');
+						response = await fetch(endpointAddress, requestObj);
+						result = await response.json().catch(() => null);
+					}else{
+						await auth.logout('/login?sessionExpired=true');
+					}
 				}
 			}
 		}
