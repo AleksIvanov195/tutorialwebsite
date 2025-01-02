@@ -15,6 +15,7 @@ import Blockquote from '@tiptap/extension-blockquote';
 import Highlight from '@tiptap/extension-highlight';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import ImageResize from 'tiptap-extension-resize-image';
+import Heading from '@tiptap/extension-heading';
 import Button from './Buttons';
 import './RichTextEditor.scss';
 
@@ -30,6 +31,10 @@ const OptionsBar = ({ editor, options }) =>{
 		if (url) {
 			editor.chain().focus().setImage({ src: url }).run();
 		}
+	};
+	const setHeading = (event) => {
+		const level = parseInt(event.target.value);
+		editor.chain().focus().toggleHeading({ level }).run();
 	};
 	// View -------------------------------------------------------
 	return (
@@ -95,6 +100,17 @@ const OptionsBar = ({ editor, options }) =>{
 				Add Image
 				</Button>
 			)}
+			{options.heading && (
+				<select onChange={setHeading} className="optionsBarDropdown">
+					<option value="">Select Heading</option>
+					<option value="1">Heading 1</option>
+					<option value="2">Heading 2</option>
+					<option value="3">Heading 3</option>
+					<option value="4">Heading 4</option>
+					<option value="5">Heading 5</option>
+					<option value="6">Heading 6</option>
+				</select>
+			)}
 		</div>
 	);
 
@@ -122,6 +138,7 @@ const RichTextEditor = ({ initialContent, options }) => {
 			Highlight,
 			Dropcursor,
 			ImageResize,
+			Heading,
 		],
 		content: initialContent || '<p>Start writing your lesson here...</p>',
 	});
@@ -134,12 +151,22 @@ const RichTextEditor = ({ initialContent, options }) => {
 	};
 	// View -------------------------------------------------------
 	return (
-		<div>
-			<OptionsBar editor={editor} options={options} />
-			<EditorContent editor={editor} />
-			<Button onClick={onSave}>Save</Button>
-			<div dangerouslySetInnerHTML={{ __html: content }} />
-		</div>
+		<>
+			<div className = 'editorContainer'>
+				<OptionsBar editor={editor} options={options} />
+				<div className='editorContent'>
+					<EditorContent editor={editor} />
+				</div>
+				<Button onClick={onSave}>Save Draft</Button>
+				<Button>Preview</Button>
+				<Button>Send For Review</Button>
+				<Button>Discard</Button>
+				<Button>Publish</Button>
+				<div className = 'preview' dangerouslySetInnerHTML={{ __html: content }} />
+			</div>
+
+		</>
+
 	);
 };
 

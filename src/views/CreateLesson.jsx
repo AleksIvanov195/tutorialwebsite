@@ -13,6 +13,7 @@ const LessonCreator = () => {
 		image: true,
 		link: true,
 		highlight: true,
+		heading: true,
 	};
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
