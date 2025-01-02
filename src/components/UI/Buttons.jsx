@@ -1,6 +1,6 @@
 import './Buttons.scss';
 
-const Button = ({ children, onClick, className }) => {
+export const Button = ({ children, onClick, className }) => {
 	const buttonClass = className ? className : 'defaultStyle';
 	return (
 		<button
@@ -12,4 +12,11 @@ const Button = ({ children, onClick, className }) => {
 	);
 };
 
-export default Button;
+export const ButtonTray = ({ children }) => {
+	return(
+		<div className='buttonTray'>
+			{children}
+		</div>
+	);
+};
+

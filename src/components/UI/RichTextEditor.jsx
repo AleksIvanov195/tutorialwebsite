@@ -16,7 +16,7 @@ import Highlight from '@tiptap/extension-highlight';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import ImageResize from 'tiptap-extension-resize-image';
 import Heading from '@tiptap/extension-heading';
-import Button from './Buttons';
+import { ButtonTray, Button } from './Buttons';
 import './RichTextEditor.scss';
 
 const OptionsBar = ({ editor, options }) =>{
@@ -157,11 +157,14 @@ const RichTextEditor = ({ initialContent, options }) => {
 				<div className='editorContent'>
 					<EditorContent editor={editor} />
 				</div>
-				<Button onClick={onSave}>Save Draft</Button>
-				<Button>Preview</Button>
-				<Button>Send For Review</Button>
-				<Button>Discard</Button>
-				<Button>Publish</Button>
+				<ButtonTray>
+					<Button onClick={onSave}>Save Draft</Button>
+					<Button>Preview</Button>
+					<Button>Send For Review</Button>
+					<Button>Discard</Button>
+					<Button>Publish</Button>
+				</ButtonTray>
+
 				<div className = 'preview' dangerouslySetInnerHTML={{ __html: content }} />
 			</div>
 
