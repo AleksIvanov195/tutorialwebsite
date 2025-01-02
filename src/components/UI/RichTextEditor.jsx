@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Bold from '@tiptap/extension-bold';
-import CodeBlock from '@tiptap/extension-code-block';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import { common, createLowlight } from 'lowlight';
 import Image from '@tiptap/extension-image';
 import Italic from '@tiptap/extension-italic';
 import Underline from '@tiptap/extension-underline';
@@ -90,7 +91,7 @@ const OptionsBar = ({ editor, options }) =>{
 				</Button>
 			)}
 			{options.image && (
-				<Button onClick={addImage}>
+				<Button onClick={addImage } className={'optionsBarButton'}>
 				Add Image
 				</Button>
 			)}
@@ -103,14 +104,14 @@ const RichTextEditor = ({ initialContent, options }) => {
 	// Inititalisation --------------------------------------------
 	const editor = useEditor({
 		extensions: [
-			StarterKit,
+			StarterKit.configure({
+				codeBlock: false,
+			}),
 			Bold,
 			Italic,
 			Underline,
-			CodeBlock.configure({
-				HTMLAttributes: {
-					class: 'codeBlock',
-				},
+			CodeBlockLowlight.configure({
+				lowlight: createLowlight(common),
 			}),
 			Image,
 			Link,
