@@ -14,6 +14,7 @@ const LessonCreator = () => {
 		link: true,
 		highlight: true,
 		heading: true,
+		fontStyle: true,
 	};
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------

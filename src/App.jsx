@@ -6,12 +6,12 @@ import Homepage from './views/Homepage';
 import Course from './views/Course';
 import Login from './views/Login';
 import Register from './views/Register';
-import CreateLesson from './views/CreateLesson';
 import './App.scss';
 
 // Lazy load components
 const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
 const CreateCourse = lazy(() => import('./views/CreateCourse'));
+const CreateLesson = lazy(() => import('./views/CreateLesson'));
 
 // Error boundary for lazy loaded components
 const ErrorBoundary = ({ children }) => {
@@ -68,7 +68,16 @@ const AppContent = () => {
 					</ProtectedRoute>
 				}
 			/>
-			<Route path="/createlesson" element={<CreateLesson/>} />
+			<Route
+				path="/createlesson"
+				element = {
+					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
+						<ErrorBoundary>
+							<CreateLesson/>
+						</ErrorBoundary>
+					</ProtectedRoute>
+				}
+			/>
 			<Route path="*" element={<Navigate to="/"/>} />
 		</Routes>
 	);

@@ -16,10 +16,12 @@ import Highlight from '@tiptap/extension-highlight';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import ImageResize from 'tiptap-extension-resize-image';
 import Heading from '@tiptap/extension-heading';
+import TextStyle from '@tiptap/extension-text-style';
+import { FontFamily } from '@tiptap/extension-font-family';
 import { ButtonTray, Button } from './Buttons';
 import './RichTextEditor.scss';
 
-const OptionsBar = ({ editor, options }) =>{
+const OptionsBar = ({ editor, options }) => {
 	// Inititalisation --------------------------------------------
 	if (!editor) {
 		return null;
@@ -36,9 +38,13 @@ const OptionsBar = ({ editor, options }) =>{
 		const level = parseInt(event.target.value);
 		editor.chain().focus().toggleHeading({ level }).run();
 	};
+	const setFontStyle = (event) => {
+		const fontStyle = event.target.value;
+		editor.chain().focus().setFontFamily(fontStyle).run();
+	};
 	// View -------------------------------------------------------
 	return (
-		<div className='optionsBar '>
+		<div className='optionsBar'>
 			{options.bold && (
 				<Button
 					onClick={() => editor.chain().focus().toggleBold().run()}
@@ -111,6 +117,17 @@ const OptionsBar = ({ editor, options }) =>{
 					<option value="6">Heading 6</option>
 				</select>
 			)}
+			{options.fontStyle && (
+				<select onChange={setFontStyle} className="optionsBarDropdown">
+					<option value="">Select Font</option>
+					<option value="Arial">Arial</option>
+					<option value="Helvetica">Helvetica</option>
+					<option value="Tahoma">Tahoma</option>
+					<option value="Roboto">Roboto</option>
+					<option value="Serif">Serif</option>
+					<option value="Monospace">Monospace</option>
+				</select>
+			)}
 		</div>
 	);
 
@@ -139,6 +156,8 @@ const RichTextEditor = ({ initialContent, options }) => {
 			Dropcursor,
 			ImageResize,
 			Heading,
+			TextStyle,
+			FontFamily,
 		],
 		content: initialContent || '<p>Start writing your lesson here...</p>',
 	});
