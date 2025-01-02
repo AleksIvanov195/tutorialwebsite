@@ -3,6 +3,7 @@ import { Card, CardContainer } from '../components/UI/Card';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { ButtonTray, Button } from '../components/UI/Buttons';
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
@@ -16,10 +17,16 @@ export default function CreatorDashboard() {
 	const handleNavigateToCreateCourse = () =>{
 		navigate('/createcourse');
 	};
+	const handleNavigateToCreateLesson = () =>{
+		navigate('/createlesson');
+	};
 	// View -------------------------------------------------------
 	return (
 		<>
-			<button onClick={handleNavigateToCreateCourse}> Create Course </button>
+			<ButtonTray>
+				<Button onClick={handleNavigateToCreateCourse}>Create Course</Button>
+				<Button onClick={handleNavigateToCreateLesson}>Create Lesson</Button>
+			</ButtonTray>
 
 			<CollapsiblePanel header={`Draft Courses (${draftCourses.length})`}>
 				{
