@@ -1,9 +1,10 @@
 import './Buttons.scss';
 
-const Button = ({ children, onClick, className = ''}) => {
+const Button = ({ children, onClick, className }) => {
+	const buttonClass = className ? className : 'defaultStyle';
 	return (
 		<button
-			className={!className && 'defaultStyle'}
+			className={buttonClass}
 			onClick={onClick}
 		>
 			{children}

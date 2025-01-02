@@ -6,6 +6,7 @@ import Homepage from './views/Homepage';
 import Course from './views/Course';
 import Login from './views/Login';
 import Register from './views/Register';
+import CreateLesson from './views/CreateLesson';
 import './App.scss';
 
 // Lazy load components
@@ -67,6 +68,7 @@ const AppContent = () => {
 					</ProtectedRoute>
 				}
 			/>
+			<Route path="/createlesson" element={<CreateLesson/>} />
 			<Route path="*" element={<Navigate to="/"/>} />
 		</Routes>
 	);
