@@ -1,0 +1,12 @@
+.previewContainer{
+	width: 70%;
+	margin: 0 auto;
+	
+	.previewHTML{
+		width: 100%;
+		code{
+			white-space: pre-wrap; /* Preserves whitespace and wraps text */
+		}
+	}
+}
+@import '../styles/RichTextEditorGlobal.scss';

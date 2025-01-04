@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Bold from '@tiptap/extension-bold';
@@ -162,12 +161,21 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 		content: initialContent || '<p>Start writing your lesson here...</p>',
 	});
 	// State ------------------------------------------------------
-	const [content, setContent] = useState('');
 	// Handlers ---------------------------------------------------
 	const onSave = () =>{
-		console.log(editor.getHTML());
 		handleSave(JSON.stringify(editor.getJSON()));
-		setContent(editor.getHTML());
+	};
+	const onPreview = () => {
+		const contentJSON = JSON.stringify(editor.getJSON());
+		sessionStorage.setItem('contentJSON', contentJSON);
+		window.open('/preview', '_blank');
+	};
+	const onDiscard = () =>{
+		const confirmDiscard = window.confirm('Are you sure you want to discard all content?');
+		if (confirmDiscard) {
+			editor.commands.clearContent();
+			editor.commands.setContent('<p>Editor has been cleared, please start typing here...</p>');
+		}
 	};
 	// View -------------------------------------------------------
 	return (
@@ -179,13 +187,11 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 				</div>
 				<ButtonTray>
 					<Button onClick={onSave}>Save Draft</Button>
-					<Button>Preview</Button>
+					<Button onClick={onPreview}>Preview</Button>
 					<Button>Send For Review</Button>
-					<Button>Discard</Button>
+					<Button onClick={onDiscard}>Discard</Button>
 					<Button>Publish</Button>
 				</ButtonTray>
-
-				<div className = 'preview' dangerouslySetInnerHTML={{ __html: content }} />
 			</div>
 
 		</>
