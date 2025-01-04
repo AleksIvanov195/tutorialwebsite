@@ -133,7 +133,7 @@ const OptionsBar = ({ editor, options }) => {
 
 };
 
-const RichTextEditor = ({ initialContent, options }) => {
+const RichTextEditor = ({ initialContent, options, handleSave }) => {
 	// Inititalisation --------------------------------------------
 	const editor = useEditor({
 		extensions: [
@@ -166,6 +166,7 @@ const RichTextEditor = ({ initialContent, options }) => {
 	// Handlers ---------------------------------------------------
 	const onSave = () =>{
 		console.log(editor.getHTML());
+		handleSave(JSON.stringify(editor.getJSON()));
 		setContent(editor.getHTML());
 	};
 	// View -------------------------------------------------------
