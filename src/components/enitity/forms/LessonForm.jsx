@@ -1,6 +1,6 @@
 // When you click create lesson a popup appears with a form. Sumbit, success then redirect to lesson editor.
 import Form from '../../UI/Form';
-const LessonForm = ({ onSubmit, onClose, lessonMessage }) =>{
+const LessonForm = ({ onSubmit, onClose, lessonMessage, initialValues = {}, mode = 'create'}) =>{
 	// Inititalisation --------------------------------------------
 	const fields = [
 		{
@@ -31,11 +31,12 @@ const LessonForm = ({ onSubmit, onClose, lessonMessage }) =>{
 		LessonContentJSON: JSON.stringify(defaultContent),
 		LessonPublicationstatusID: '1',
 	};
+	const initialFormValues = mode === 'edit' ? initialValues : defaultValues;
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
 
 	// View -------------------------------------------------------
-	const header = 'Create Lesson';
-	return <Form fields={fields} defaultValues={defaultValues} onClose = {onClose} onSubmit={onSubmit} apiResponse={lessonMessage}header={header} />;
+	const header = mode === 'edit' ? 'Edit Lesson' : 'Create Lesson';
+	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} apiResponse={lessonMessage}header={header}/>;
 };
 export default LessonForm;
