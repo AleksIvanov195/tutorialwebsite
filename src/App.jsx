@@ -11,6 +11,8 @@ import './App.scss';
 // Lazy load components
 const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
 const CreateCourse = lazy(() => import('./views/CreateCourse'));
+const LessonEditor = lazy(() => import('./views/LessonEditor'));
+const PreviewRichTextContent = lazy(() => import('./views/PreviewRichTextContent'));
 
 // Error boundary for lazy loaded components
 const ErrorBoundary = ({ children }) => {
@@ -45,6 +47,7 @@ const AppContent = () => {
 			<Route path="/courses" element={<Course />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
+			<Route path="/preview" element={<PreviewRichTextContent />} />
 
 			{/* Content Creator routes ----------------------------------*/}
 			<Route
@@ -63,6 +66,26 @@ const AppContent = () => {
 					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
 						<ErrorBoundary>
 							<CreateCourse />
+						</ErrorBoundary>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/lessoneditor"
+				element = {
+					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
+						<ErrorBoundary>
+							<LessonEditor/>
+						</ErrorBoundary>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/preview"
+				element = {
+					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
+						<ErrorBoundary>
+							<PreviewRichTextContent/>
 						</ErrorBoundary>
 					</ProtectedRoute>
 				}

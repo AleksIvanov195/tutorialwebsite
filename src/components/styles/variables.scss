@@ -2,3 +2,7 @@ $primaryColour: #3e92cc;
 $secondaryColour: #190b28;
 $tertiaryColour: #42f5bf;
 $bgColour: #fffaff;
+
+$headerButtonColour: #1e3c72;
+$headerButtonTextColour: white;
+$mixedColour: mix($secondaryColour, $primaryColour, 50%);
