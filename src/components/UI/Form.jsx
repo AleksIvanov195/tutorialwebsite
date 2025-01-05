@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { Button } from './Buttons';
 import './Form.scss';
 
-export default function Form({ fields, defaultValues, onSubmit, apiResponse, header }) {
+export default function Form({ fields, defaultValues, onSubmit, onClose, apiResponse, header }) {
 	// Inititalisation --------------------------------------------
 	const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, reset } = useForm({ defaultValues });
 	// State ------------------------------------------------------
@@ -53,7 +54,8 @@ export default function Form({ fields, defaultValues, onSubmit, apiResponse, hea
 					</div>
 				))}
 				{apiResponse && <p className="errorMessage">{apiResponse}</p>}
-				<button type="submit">Submit</button>
+				<Button type="submit">Submit</Button>
+				{onClose && <Button onClick={onClose}>Close</Button> }
 			</form>
 		</>
 	);
