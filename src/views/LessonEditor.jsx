@@ -7,7 +7,7 @@ import useLoad from '../api/useLoad';
 import LessonForm from '../components/enitity/forms/LessonForm';
 import Modal from '../components/UI/Modal';
 import { Button } from '../components/UI/Buttons';
-const LessonCreator = () => {
+const LessonEditor = () => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	const location = useLocation();
@@ -75,4 +75,4 @@ const LessonCreator = () => {
 	);
 };
 
-export default LessonCreator;
+export default LessonEditor;

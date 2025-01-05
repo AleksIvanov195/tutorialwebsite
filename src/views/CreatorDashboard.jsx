@@ -16,6 +16,7 @@ export default function CreatorDashboard() {
 	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1', authState.isLoggedIn);
 	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
 	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
+	const [lessons ] = useLoad('/lessons', authState.isLoggedIn);
 	const [showLessonForm, setShowLessonForm] = useState(false);
 	const [lessonMessage, setLessonMessage] = useState('');
 	// Handlers ---------------------------------------------------
@@ -28,10 +29,13 @@ export default function CreatorDashboard() {
 		const response = await API.post('/lessons', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const lessonID = response.result.data.LessonID;
-			navigate('/createlesson', { state: { lessonID } });
+			navigate('/lessoneditor', { state: { lessonID } });
 		} else {
 			setLessonMessage(`Lesson Creation failed: ${response.message}`);
 		}
+	};
+	const handleNavigateToLessonEditor = (lessonID) =>{
+		navigate('/lessoneditor', { state: { lessonID } });
 	};
 	const openLessonForm = () =>{
 		setShowLessonForm(!showLessonForm);
@@ -49,12 +53,27 @@ export default function CreatorDashboard() {
 					<LessonForm onClose={openLessonForm} onSubmit={handleLessonSubmit} lessonMessage={lessonMessage}/>
 				</Modal>
 			}
+			<CollapsiblePanel header={`Lessons (${lessons.length})`}>
+				{
+					<CardContainer>
+						{
+							lessons.map(lesson => (
+								<Card key={lesson.LessonID}>
+									<p>{lesson.LessonName}</p>
+									<p>{lesson.LessonDescription}</p>
+									<Button onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
+								</Card>
+							))
+						}
+					</CardContainer>
+				}
+			</CollapsiblePanel>
 			<CollapsiblePanel header={`Draft Courses (${draftCourses.length})`}>
 				{
 					<CardContainer>
 						{
 							draftCourses.map(course => (
-								<Card key={course.id}>
+								<Card key={course.CourseID}>
 									<p>{course.CourseName}</p>
 									<p>{course.CourseDescription}</p>
 								</Card>
@@ -68,7 +87,7 @@ export default function CreatorDashboard() {
 					<CardContainer>
 						{
 							reviewedCourses.map(course => (
-								<Card key={course.id}>
+								<Card key={course.CourseID}>
 									<p>{course.CourseName}</p>
 									<p>{course.CourseDescription}</p>
 								</Card>
@@ -82,7 +101,7 @@ export default function CreatorDashboard() {
 					<CardContainer>
 						{
 							publishedCourses.map(course => (
-								<Card key={course.id}>
+								<Card key={course.CourseID}>
 									<p>{course.CourseName}</p>
 									<p>{course.CourseDescription}</p>
 								</Card>
