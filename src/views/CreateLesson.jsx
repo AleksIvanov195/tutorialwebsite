@@ -1,11 +1,13 @@
 import RichTextEditor from '../components/UI/RichTextEditor';
 import { useAuth } from '../hooks/useAuth';
+import { useLocation } from 'react-router-dom';
 import API from '../api/API';
 import useLoad from '../api/useLoad';
-import RenderContentViaHtml from '../components/utility/RenderContentViaHtml ';
-import RenderContentWithEditor from '../components/utility/RenderContentWithEditor';
 const LessonCreator = () => {
 	// Inititalisation --------------------------------------------
+	const { authState } = useAuth();
+	const location = useLocation();
+	const { lessonID } = location.state || { lessonID: null };
 	const editorOptions = {
 		bold: true,
 		italic: true,
@@ -20,20 +22,12 @@ const LessonCreator = () => {
 		heading: true,
 		fontStyle: true,
 	};
-	const { authState } = useAuth();
-	const [lessons, , , isLoading ] = useLoad('/lessons', authState.isLoggedIn);
-	console.log(lessons);
-	if (isLoading == false) {
-		const lessonContent = JSON.parse(lessons[0].LessonContentJSON);
-		console.log(lessonContent);
-	}
-
 	// State ------------------------------------------------------
+	const [lesson, , , isLoading ] = useLoad(`/lessons?LessonID=${lessonID}`, authState.isLoggedIn);
 	// Handlers ---------------------------------------------------
-
 	const handleSaveLesson = async (data) =>{
-		const lessonData = { LessonName: 'TestLesson', LessonDescription: 'TestDescription', LessonContentJSON: data };
-		const response = await API.post('/lessons', lessonData, authState.isLoggedIn);
+		const lessonData = { LessonContentJSON: data };
+		const response = await API.put(`/lessons/${lesson[0].LessonID}`, lessonData, authState.isLoggedIn);
 		console.log(response);
 	};
 	// View -------------------------------------------------------
@@ -43,12 +37,8 @@ const LessonCreator = () => {
 			{isLoading ? (
 				<p>Loading lesson content...</p>
 			) : (
-				<>
-					<RenderContentViaHtml contentJSON={JSON.parse(lessons[1].LessonContentJSON)} />
-					<RenderContentWithEditor contentJSON={JSON.parse(lessons[1].LessonContentJSON)} readOnly={true} />
-				</>
+				<RichTextEditor options = {editorOptions} handleSave = {handleSaveLesson} initialContent={JSON.parse(lesson[0].LessonContentJSON)}/>
 			)}
-			<RichTextEditor options = {editorOptions} handleSave = {handleSaveLesson}/>
 		</div>
 	);
 };
