@@ -162,8 +162,14 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 	});
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
-	const onSave = () =>{
-		handleSave(JSON.stringify(editor.getJSON()));
+	const onSaveDraft = () =>{
+		handleSave(JSON.stringify(editor.getJSON()), 1);
+	};
+	const onSavePublish = () =>{
+		handleSave(JSON.stringify(editor.getJSON()), 4);
+	};
+	const onSaveReview = () =>{
+		handleSave(JSON.stringify(editor.getJSON()), 2);
 	};
 	const onPreview = () => {
 		const contentJSON = JSON.stringify(editor.getJSON());
@@ -186,11 +192,11 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 					<EditorContent editor={editor} />
 				</div>
 				<ButtonTray>
-					<Button onClick={onSave}>Save Draft</Button>
+					<Button onClick={onSaveDraft}>Save Draft</Button>
 					<Button onClick={onPreview}>Preview</Button>
-					<Button>Send For Review</Button>
+					<Button onClick={onSaveReview}>Send For Review</Button>
 					<Button onClick={onDiscard}>Discard</Button>
-					<Button>Publish</Button>
+					<Button onClick={onSavePublish}>Publish</Button>
 				</ButtonTray>
 			</div>
 

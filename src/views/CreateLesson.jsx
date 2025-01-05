@@ -31,8 +31,8 @@ const LessonCreator = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [lessonUpdateMessage, setLessonUpdateMessage] = useState('');
 	// Handlers ---------------------------------------------------
-	const handleSaveLessonContent = async (data) =>{
-		const lessonData = { LessonContentJSON: data };
+	const handleSaveLessonContent = async (data, status) =>{
+		const lessonData = { LessonContentJSON: data, LessonPublicationstatusID: status };
 		const response = await API.put(`/lessons/${lesson[0].LessonID}`, lessonData, authState.isLoggedIn);
 		console.log(response);
 	};
@@ -56,7 +56,6 @@ const LessonCreator = () => {
 	return (
 		<div>
 			<h1>Lesson Editor</h1>
-
 			{isLoading ? (
 				<p>Loading lesson content...</p>
 			) : (
