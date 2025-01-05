@@ -2,6 +2,7 @@ import './Header.scss';
 import Navbar from './Navbar';
 import { useAuth } from '../../hooks/useAuth';
 import { NavLink } from 'react-router-dom';
+import { Button, ButtonTray } from '../UI/Buttons';
 
 export default function Header() {
 	// Inititalisation --------------------------------------------
@@ -21,19 +22,19 @@ export default function Header() {
 				{
 					!authState.isLoggedIn
 						?
-						<>
+						<ButtonTray className={'headerButtonTray'}>
 							<NavLink to="/login">
-								<button>Log In</button>
+								<Button className="headerButton">Log In</Button>
 							</NavLink>
 							<NavLink to="/register">
-								<button>Register</button>
+								<Button className="headerButton">Register</Button>
 							</NavLink>
-						</>
+						</ButtonTray>
 						:
-						<>
-							<button>Profile</button>
-							<button onClick={logout}>Logout</button>
-						</>
+						<ButtonTray className={'headerButtonTray'}>
+							<Button className="headerButton">Profile</Button>
+							<Button className="headerButton" onClick={logout}>Logout</Button>
+						</ButtonTray>
 				}
 
 			</div>

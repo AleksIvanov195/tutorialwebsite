@@ -15,10 +15,30 @@
 	}
 }
 
-.buttonTray{
+.headerButton {
+	background-color: $headerButtonColour;
+	color: $headerButtonTextColour;
+	border: none;
+	border-radius: 4px;
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	text-wrap: nowrap;
+
+	&:hover {
+			background-color: darken($headerButtonColour, 10%);
+	}
+}
+
+.defaultButtonTray{
 	display: flex;
 	gap: 5px;
 	margin-bottom: 10px;
+}
+.headerButtonTray{
+	display: flex;
+	gap: 5px;
 }
 
 

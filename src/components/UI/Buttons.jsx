@@ -13,9 +13,10 @@ export const Button = ({ type = 'button', children, onClick, className }) => {
 	);
 };
 
-export const ButtonTray = ({ children }) => {
+export const ButtonTray = ({ children, className }) => {
+	const buttonTrayClass = className ? className : 'defaultButtonTray';
 	return(
-		<div className='buttonTray'>
+		<div className={buttonTrayClass}>
 			{children}
 		</div>
 	);
