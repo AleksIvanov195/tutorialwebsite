@@ -1,9 +1,10 @@
 import './Buttons.scss';
 
-export const Button = ({ children, onClick, className }) => {
+export const Button = ({ type = 'button', children, onClick, className }) => {
 	const buttonClass = className ? className : 'defaultStyle';
 	return (
 		<button
+			type={type}
 			className={buttonClass}
 			onClick={onClick}
 		>
