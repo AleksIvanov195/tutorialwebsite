@@ -16,7 +16,7 @@ export default function CreatorDashboard() {
 	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1', authState.isLoggedIn);
 	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
 	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
-	const [lessons ] = useLoad('/lessons', authState.isLoggedIn);
+	const [lessons ] = useLoad('/lessons/mylessons', authState.isLoggedIn);
 	const [showLessonForm, setShowLessonForm] = useState(false);
 	const [lessonMessage, setLessonMessage] = useState('');
 	// Handlers ---------------------------------------------------
@@ -53,7 +53,7 @@ export default function CreatorDashboard() {
 					<LessonForm onClose={openLessonForm} onSubmit={handleLessonSubmit} lessonMessage={lessonMessage}/>
 				</Modal>
 			}
-			<CollapsiblePanel header={`Lessons (${lessons.length})`}>
+			<CollapsiblePanel header={`My Lessons (${lessons.length})`}>
 				{
 					<CardContainer>
 						{
