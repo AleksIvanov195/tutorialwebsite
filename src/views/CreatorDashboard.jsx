@@ -16,7 +16,7 @@ export default function CreatorDashboard() {
 	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1', authState.isLoggedIn);
 	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
 	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
-	const [lessons ] = useLoad('/lessons/mylessons', authState.isLoggedIn);
+	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons', authState.isLoggedIn);
 	const [showLessonForm, setShowLessonForm] = useState(false);
 	const [lessonMessage, setLessonMessage] = useState('');
 	// Handlers ---------------------------------------------------
@@ -24,8 +24,13 @@ export default function CreatorDashboard() {
 	const handleNavigateToCreateCourse = () =>{
 		navigate('/createcourse');
 	};
+	const handleNavigateToLessonEditor = (lessonID) =>{
+		navigate('/lessoneditor', { state: { lessonID } });
+	};
+	const openLessonForm = () =>{
+		setShowLessonForm(!showLessonForm);
+	};
 	const handleLessonSubmit = async (data) => {
-		console.log(data);
 		const response = await API.post('/lessons', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const lessonID = response.result.data.LessonID;
@@ -34,11 +39,12 @@ export default function CreatorDashboard() {
 			setLessonMessage(`Lesson Creation failed: ${response.message}`);
 		}
 	};
-	const handleNavigateToLessonEditor = (lessonID) =>{
-		navigate('/lessoneditor', { state: { lessonID } });
-	};
-	const openLessonForm = () =>{
-		setShowLessonForm(!showLessonForm);
+	const onDeleteLesson = async (id) =>{
+		const response = await API.delete(`/lessons/${id}`, authState.isLoggedIn);
+		if (response.isSuccess) {
+			alert('Lesson Deleted');
+			loadLessons();
+		} else {alert(`Something went wrong: ${response.message}`);}
 	};
 	// View -------------------------------------------------------
 	return (
@@ -61,7 +67,10 @@ export default function CreatorDashboard() {
 								<Card key={lesson.LessonID}>
 									<p>{lesson.LessonName}</p>
 									<p>{lesson.LessonDescription}</p>
-									<Button onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
+									<ButtonTray>
+										<Button onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
+										<Button onClick={() => onDeleteLesson(lesson.LessonID)}>Delete</Button>
+									</ButtonTray>
 								</Card>
 							))
 						}
