@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Layout from './components/layout/Layout';
 import Homepage from './views/Homepage';
@@ -47,7 +47,6 @@ const AppContent = () => {
 			<Route path="/courses" element={<Course />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			<Route path="/preview" element={<PreviewRichTextContent />} />
 
 			{/* Content Creator routes ----------------------------------*/}
 			<Route
