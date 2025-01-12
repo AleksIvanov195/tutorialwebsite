@@ -192,7 +192,7 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 					<EditorContent editor={editor} />
 				</div>
 				<ButtonTray>
-					<Button onClick={onSaveDraft}>Save Draft</Button>
+					<Button onClick={onSaveDraft}>Save as Draft</Button>
 					<Button onClick={onPreview}>Preview</Button>
 					<Button onClick={onSaveReview}>Send For Review</Button>
 					<Button onClick={onDiscard}>Discard</Button>

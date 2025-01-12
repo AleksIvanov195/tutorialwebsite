@@ -6,7 +6,7 @@ import API from '../api/API';
 import useLoad from '../api/useLoad';
 import LessonForm from '../components/enitity/forms/LessonForm';
 import Modal from '../components/UI/Modal';
-import { Button } from '../components/UI/Buttons';
+import { Button, ButtonTray } from '../components/UI/Buttons';
 const LessonEditor = () => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
