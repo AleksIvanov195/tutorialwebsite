@@ -24,6 +24,16 @@
 		span {
 			font-size: 40px;
 		}
+
+		}
+		&.isActive {
+			.collapsiblePanelHeader {
+				background-color: darken($primaryColour, 15%);
+				&:hover {
+					background-color: $primaryColour;
+				}
+			}
+
 	}
 
 	.collapsiblePanelContent {

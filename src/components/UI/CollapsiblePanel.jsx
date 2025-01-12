@@ -13,7 +13,7 @@ export default function CollapsiblePanel({ children, header }) {
 	// View -------------------------------------------------------
 	return (
 		<>
-			<div className='collapsiblePanel'>
+			<div className={`collapsiblePanel ${isCollapsed ? 'isActive' : ''} `}>
 				<div className="collapsiblePanelHeader" onClick={handleToggle}>
 					<h1>{header}</h1>
 					<span>{isCollapsed ? '▼' : '▲'}</span>
@@ -25,3 +25,4 @@ export default function CollapsiblePanel({ children, header }) {
 		</>
 	);
 }
+
