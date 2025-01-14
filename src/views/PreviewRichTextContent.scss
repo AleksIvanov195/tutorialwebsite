@@ -2,10 +2,14 @@
 	width: 70%;
 	margin: 0 auto;
 	
+	.previewContent{
+		padding: 20px;
+		box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+	}
 	.previewHTML{
 		width: 100%;
 		code{
-			white-space: pre-wrap; /* Preserves whitespace and wraps text */
+			white-space: pre-wrap;
 		}
 	}
 }
