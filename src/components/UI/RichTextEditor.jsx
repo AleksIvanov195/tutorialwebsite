@@ -26,22 +26,40 @@ const OptionsBar = ({ editor, options }) => {
 		return null;
 	}
 	// State ------------------------------------------------------
+
 	// Handlers ---------------------------------------------------
-	const addImage = () =>{
+	const addImage = () => {
 		const url = prompt('Enter the URL of the image:');
 		if (url) {
 			editor.chain().focus().setImage({ src: url }).run();
 		}
 	};
-	const setHeading = (event) => {
+
+	const handleHeadingChange = (event) => {
 		const level = parseInt(event.target.value);
 		editor.chain().focus().toggleHeading({ level }).run();
 	};
-	const setFontStyle = (event) => {
+
+	const handleFontChange = (event) => {
 		const fontStyle = event.target.value;
 		editor.chain().focus().setFontFamily(fontStyle).run();
 	};
+
 	// View -------------------------------------------------------
+	const currentHeading =
+	editor.isActive('heading', { level: 1 }) ? '1' :
+		editor.isActive('heading', { level: 2 }) ? '2' :
+			editor.isActive('heading', { level: 3 }) ? '3' :
+				editor.isActive('heading', { level: 4 }) ? '4' :
+					editor.isActive('heading', { level: 5 }) ? '5' :
+						editor.isActive('heading', { level: 6 }) ? '6' : '';
+
+	const currentFont = editor.isActive('textStyle', { fontFamily: 'Arial' }) ? 'Arial' :
+		editor.isActive('textStyle', { fontFamily: 'Helvetica' }) ? 'Helvetica' :
+			editor.isActive('textStyle', { fontFamily: 'Tahoma' }) ? 'Tahoma' :
+				editor.isActive('textStyle', { fontFamily: 'Roboto' }) ? 'Roboto' :
+					editor.isActive('textStyle', { fontFamily: 'Serif' }) ? 'Serif' :
+						editor.isActive('textStyle', { fontFamily: 'Monospace' }) ? 'Monospace' : 'Arial';
 	return (
 		<div className='optionsBar'>
 			{options.bold && (
@@ -89,7 +107,7 @@ const OptionsBar = ({ editor, options }) => {
 					onClick={() => editor.chain().focus().toggleOrderedList().run()}
 					className={`optionsBarButton ${editor.isActive('orderedList') ? 'isActive' : ''}`}
 				>
-					Ordered List
+				Ordered List
 				</Button>
 			)}
 			{options.blockquote && (
@@ -101,12 +119,12 @@ const OptionsBar = ({ editor, options }) => {
 				</Button>
 			)}
 			{options.image && (
-				<Button onClick={addImage } className={'optionsBarButton'}>
+				<Button onClick={addImage} className={'optionsBarButton'}>
 				Add Image
 				</Button>
 			)}
 			{options.heading && (
-				<select onChange={setHeading} className="optionsBarDropdown">
+				<select value={currentHeading} onChange={handleHeadingChange} className="optionsBarDropdown">
 					<option value="">Select Heading</option>
 					<option value="1">Heading 1</option>
 					<option value="2">Heading 2</option>
@@ -117,8 +135,7 @@ const OptionsBar = ({ editor, options }) => {
 				</select>
 			)}
 			{options.fontStyle && (
-				<select onChange={setFontStyle} className="optionsBarDropdown">
-					<option value="">Select Font</option>
+				<select value={currentFont} onChange={handleFontChange} className="optionsBarDropdown">
 					<option value="Arial">Arial</option>
 					<option value="Helvetica">Helvetica</option>
 					<option value="Tahoma">Tahoma</option>
@@ -129,7 +146,6 @@ const OptionsBar = ({ editor, options }) => {
 			)}
 		</div>
 	);
-
 };
 
 const RichTextEditor = ({ initialContent, options, handleSave }) => {
@@ -180,7 +196,7 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 		const confirmDiscard = window.confirm('Are you sure you want to discard all content?');
 		if (confirmDiscard) {
 			editor.commands.clearContent();
-			editor.commands.setContent('<p>Editor has been cleared, please start typing here...</p>');
+			editor.commands.setContent({ 'type':'doc', 'content':[{ 'type':'paragraph', 'content':[{ 'type':'text', 'marks':[{ 'type':'textStyle', 'attrs':{ 'fontFamily':'Arial' } }], 'text':'Editor has been cleared, please start typing here...' }] }] });
 		}
 	};
 	// View -------------------------------------------------------
