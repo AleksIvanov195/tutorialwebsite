@@ -95,12 +95,14 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 				icon = {<Icons.Discard/>}
 				onClick={onDiscard}
 				className={'optionsBarButton'}
+				title='Clear editor, CTRL + Z to revert'
 			/>
 			{options.bold && (
 				<Button
 					icon = {<Icons.Bold/>}
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					className={`optionsBarButton ${editor.isActive('bold') ? 'isActive' : ''}`}
+					title='Make your text Bold, CTRL + B'
 				/>
 			)}
 			{options.italic && (
@@ -108,6 +110,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.Italic/>}
 					onClick={() => editor.chain().focus().toggleItalic().run()}
 					className={`optionsBarButton ${editor.isActive('italic') ? 'isActive' : ''}`}
+					title='Italicize your text, CTRL + I'
 				/>
 			)}
 			{options.underline && (
@@ -115,6 +118,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.Underline/>}
 					onClick={() => editor.chain().focus().toggleUnderline().run()}
 					className={`optionsBarButton ${editor.isActive('underline') ? 'isActive' : ''}`}
+					title='Underline your text, CTRL + U'
 				/>
 			)}
 			{options.codeBlock && (
@@ -122,6 +126,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 				  icon = {<Icons.Code/>}
 					onClick={() => editor.chain().focus().toggleCodeBlock().run()}
 					className={`optionsBarButton ${editor.isActive('codeBlock') ? 'isActive' : ''}`}
+					title='Codeblock'
 				/>
 			)}
 			{options.bulletList && (
@@ -129,6 +134,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.UnorderedList/>}
 					onClick={() => editor.chain().focus().toggleBulletList().run()}
 					className={`optionsBarButton ${editor.isActive('bulletList') ? 'isActive' : ''}`}
+					title='Bullets'
 				/>
 			)}
 			{options.orderedList && (
@@ -136,6 +142,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.OrderedList/>}
 					onClick={() => editor.chain().focus().toggleOrderedList().run()}
 					className={`optionsBarButton ${editor.isActive('orderedList') ? 'isActive' : ''}`}
+					title='Ordered list'
 				/>
 			)}
 			{options.blockquote && (
@@ -143,6 +150,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.Blockquote/>}
 					onClick={() => editor.chain().focus().toggleBlockquote().run()}
 					className={`optionsBarButton ${editor.isActive('blockquote') ? 'isActive' : ''}`}
+					title='Block'
 				/>
 			)}
 			{options.image && (
@@ -150,6 +158,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 				 icon = {<Icons.AddImage/>}
 				 onClick={addImage}
 				 className={'optionsBarButton'}
+				 title='Insert an image'
 				 />
 			)}
 			{options.heading && (
