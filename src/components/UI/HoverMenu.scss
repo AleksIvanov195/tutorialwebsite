@@ -1,0 +1,61 @@
+@import '../styles/variables.scss';
+.hovermenu {
+  position: relative;
+  display: inline-block;
+
+  .hoverButton {
+    background-color: $primaryColour;
+		font-weight: bold;
+    color: white;
+    padding: 9px 12px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $mixedColour;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    }
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover .arrow {
+    transform: rotate(90deg);
+  }
+  .content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+		width:170px;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+		cursor: pointer;
+
+    a {
+      color: black;
+      padding: 12px 10px;
+      text-decoration: none;
+      display: flex;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
+  }
+
+  &:hover .content {
+    display: block;
+  }
+  &:hover .hoverButton .arrow {
+    transform: rotate(90deg);
+  }
+}
