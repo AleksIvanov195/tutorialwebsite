@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev-exposed": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -37,6 +38,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.2",
+    "react-icons": "^5.4.0",
     "react-router-dom": "^6.27.0",
     "tiptap-extension-resize-image": "^1.2.1"
   },
