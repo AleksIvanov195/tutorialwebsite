@@ -20,6 +20,7 @@ import { FontFamily } from '@tiptap/extension-font-family';
 import { ButtonTray, Button } from './Buttons';
 import Icons from './Icons';
 import HoverMenu from './HoverMenu';
+import Select from './Select';
 import './RichTextEditor.scss';
 
 const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, onSaveReview, onDiscard, onSavePublish }) => {
@@ -62,6 +63,24 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 				editor.isActive('textStyle', { fontFamily: 'Roboto' }) ? 'Roboto' :
 					editor.isActive('textStyle', { fontFamily: 'Serif' }) ? 'Serif' :
 						editor.isActive('textStyle', { fontFamily: 'Monospace' }) ? 'Monospace' : 'Arial';
+	const headingOptions = [
+		{ value: '', label: 'Select Heading' },
+		{ value: '1', label: 'Heading 1' },
+		{ value: '2', label: 'Heading 2' },
+		{ value: '3', label: 'Heading 3' },
+		{ value: '4', label: 'Heading 4' },
+		{ value: '5', label: 'Heading 5' },
+		{ value: '6', label: 'Heading 6' },
+	];
+
+	const fontOptions = [
+		{ value: 'Arial', label: 'Arial' },
+		{ value: 'Helvetica', label: 'Helvetica' },
+		{ value: 'Tahoma', label: 'Tahoma' },
+		{ value: 'Roboto', label: 'Roboto' },
+		{ value: 'Serif', label: 'Serif' },
+		{ value: 'Monospace', label: 'Monospace' },
+	];
 	return (
 		<div className='optionsBar'>
 			<HoverMenu label = 'File'>
@@ -134,25 +153,20 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 				 />
 			)}
 			{options.heading && (
-				<select value={currentHeading} onChange={handleHeadingChange} className="optionsBarDropdown">
-					<option value="">Select Heading</option>
-					<option value="1">Heading 1</option>
-					<option value="2">Heading 2</option>
-					<option value="3">Heading 3</option>
-					<option value="4">Heading 4</option>
-					<option value="5">Heading 5</option>
-					<option value="6">Heading 6</option>
-				</select>
+				<Select
+					value={currentHeading}
+					onChange={handleHeadingChange}
+					options={headingOptions}
+					className="optionsBarDropdown"
+				/>
 			)}
 			{options.fontStyle && (
-				<select value={currentFont} onChange={handleFontChange} className="optionsBarDropdown">
-					<option value="Arial">Arial</option>
-					<option value="Helvetica">Helvetica</option>
-					<option value="Tahoma">Tahoma</option>
-					<option value="Roboto">Roboto</option>
-					<option value="Serif">Serif</option>
-					<option value="Monospace">Monospace</option>
-				</select>
+				<Select
+					value={currentFont}
+					onChange={handleFontChange}
+					options={fontOptions}
+					className="optionsBarDropdown"
+				/>
 			)}
 		</div>
 	);
