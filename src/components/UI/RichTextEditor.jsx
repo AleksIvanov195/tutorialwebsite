@@ -18,9 +18,11 @@ import Heading from '@tiptap/extension-heading';
 import TextStyle from '@tiptap/extension-text-style';
 import { FontFamily } from '@tiptap/extension-font-family';
 import { ButtonTray, Button } from './Buttons';
+import Icons from './Icons';
+import HoverMenu from './HoverMenu';
 import './RichTextEditor.scss';
 
-const OptionsBar = ({ editor, options }) => {
+const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, onSaveReview, onDiscard, onSavePublish }) => {
 	// Inititalisation --------------------------------------------
 	if (!editor) {
 		return null;
@@ -62,66 +64,74 @@ const OptionsBar = ({ editor, options }) => {
 						editor.isActive('textStyle', { fontFamily: 'Monospace' }) ? 'Monospace' : 'Arial';
 	return (
 		<div className='optionsBar'>
+			<HoverMenu label = 'File'>
+				<a onClick={onSaveDraft}><Icons.Draft/> &nbsp; Save as Draft</a>
+				<a onClick={onPreview}><Icons.Preview/>&nbsp;Preview</a>
+				<a onClick={onSaveReview}><Icons.Review/>&nbsp;Send for Review</a>
+				<a onClick={onDiscard}><Icons.Discard/>&nbsp;Discard</a>
+				<a onClick={onSavePublish}><Icons.Publish/>&nbsp;Publish</a>
+				<a onClick={onEditDetails}><Icons.Edit/>&nbsp;Edit Details</a>
+			</HoverMenu>
+			<Button
+				icon = {<Icons.Discard/>}
+				onClick={onDiscard}
+				className={'optionsBarButton'}
+			/>
 			{options.bold && (
 				<Button
+					icon = {<Icons.Bold/>}
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					className={`optionsBarButton ${editor.isActive('bold') ? 'isActive' : ''}`}
-				>
-				Bold
-				</Button>
+				/>
 			)}
 			{options.italic && (
 				<Button
+					icon = {<Icons.Italic/>}
 					onClick={() => editor.chain().focus().toggleItalic().run()}
 					className={`optionsBarButton ${editor.isActive('italic') ? 'isActive' : ''}`}
-				>
-				Italic
-				</Button>
+				/>
 			)}
 			{options.underline && (
 				<Button
+					icon = {<Icons.Underline/>}
 					onClick={() => editor.chain().focus().toggleUnderline().run()}
 					className={`optionsBarButton ${editor.isActive('underline') ? 'isActive' : ''}`}
-				>
-				Underline
-				</Button>
+				/>
 			)}
 			{options.codeBlock && (
 				<Button
+				  icon = {<Icons.Code/>}
 					onClick={() => editor.chain().focus().toggleCodeBlock().run()}
 					className={`optionsBarButton ${editor.isActive('codeBlock') ? 'isActive' : ''}`}
-				>
-				Code Block
-				</Button>
+				/>
 			)}
 			{options.bulletList && (
 				<Button
+					icon = {<Icons.UnorderedList/>}
 					onClick={() => editor.chain().focus().toggleBulletList().run()}
 					className={`optionsBarButton ${editor.isActive('bulletList') ? 'isActive' : ''}`}
-				>
-				Bullet List
-				</Button>
+				/>
 			)}
 			{options.orderedList && (
 				<Button
+					icon = {<Icons.OrderedList/>}
 					onClick={() => editor.chain().focus().toggleOrderedList().run()}
 					className={`optionsBarButton ${editor.isActive('orderedList') ? 'isActive' : ''}`}
-				>
-				Ordered List
-				</Button>
+				/>
 			)}
 			{options.blockquote && (
 				<Button
+					icon = {<Icons.Blockquote/>}
 					onClick={() => editor.chain().focus().toggleBlockquote().run()}
 					className={`optionsBarButton ${editor.isActive('blockquote') ? 'isActive' : ''}`}
-				>
-				Blockquote
-				</Button>
+				/>
 			)}
 			{options.image && (
-				<Button onClick={addImage} className={'optionsBarButton'}>
-				Add Image
-				</Button>
+				<Button
+				 icon = {<Icons.AddImage/>}
+				 onClick={addImage}
+				 className={'optionsBarButton'}
+				 />
 			)}
 			{options.heading && (
 				<select value={currentHeading} onChange={handleHeadingChange} className="optionsBarDropdown">
@@ -148,7 +158,7 @@ const OptionsBar = ({ editor, options }) => {
 	);
 };
 
-const RichTextEditor = ({ initialContent, options, handleSave }) => {
+const RichTextEditor = ({ handleEditContentDetails, initialContent, options, handleSave }) => {
 	// Inititalisation --------------------------------------------
 	const editor = useEditor({
 		extensions: [
@@ -203,17 +213,19 @@ const RichTextEditor = ({ initialContent, options, handleSave }) => {
 	return (
 		<>
 			<div className = 'editorContainer'>
-				<OptionsBar editor={editor} options={options} />
+				<OptionsBar
+					editor={editor}
+					options={options}
+					onSaveDraft={onSaveDraft}
+					onPreview={onPreview}
+					onSaveReview={onSaveReview}
+					onDiscard={onDiscard}
+					onSavePublish={onSavePublish}
+					onEditDetails={handleEditContentDetails}
+				/>
 				<div className='editorContent'>
 					<EditorContent editor={editor} />
 				</div>
-				<ButtonTray>
-					<Button onClick={onSaveDraft}>Save as Draft</Button>
-					<Button onClick={onPreview}>Preview</Button>
-					<Button onClick={onSaveReview}>Send For Review</Button>
-					<Button onClick={onDiscard}>Discard</Button>
-					<Button onClick={onSavePublish}>Publish</Button>
-				</ButtonTray>
 			</div>
 
 		</>
