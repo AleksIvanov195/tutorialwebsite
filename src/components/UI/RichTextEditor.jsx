@@ -18,6 +18,7 @@ import Heading from '@tiptap/extension-heading';
 import TextStyle from '@tiptap/extension-text-style';
 import { FontFamily } from '@tiptap/extension-font-family';
 import { ButtonTray, Button } from './Buttons';
+import js from 'highlight.js/lib/languages/javascript';
 import Icons from './Icons';
 import HoverMenu from './HoverMenu';
 import Select from './Select';
@@ -126,7 +127,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 				  icon = {<Icons.Code/>}
 					onClick={() => editor.chain().focus().toggleCodeBlock().run()}
 					className={`optionsBarButton ${editor.isActive('codeBlock') ? 'isActive' : ''}`}
-					title='Codeblock'
+					title='Codeblock, CTRL + Alt + C'
 				/>
 			)}
 			{options.bulletList && (
@@ -134,7 +135,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.UnorderedList/>}
 					onClick={() => editor.chain().focus().toggleBulletList().run()}
 					className={`optionsBarButton ${editor.isActive('bulletList') ? 'isActive' : ''}`}
-					title='Bullets'
+					title='Bullets, CTRL + Shift + 8'
 				/>
 			)}
 			{options.orderedList && (
@@ -142,7 +143,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.OrderedList/>}
 					onClick={() => editor.chain().focus().toggleOrderedList().run()}
 					className={`optionsBarButton ${editor.isActive('orderedList') ? 'isActive' : ''}`}
-					title='Ordered list'
+					title='Ordered list, CTRL + Shift + 7'
 				/>
 			)}
 			{options.blockquote && (
@@ -150,7 +151,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 					icon = {<Icons.Blockquote/>}
 					onClick={() => editor.chain().focus().toggleBlockquote().run()}
 					className={`optionsBarButton ${editor.isActive('blockquote') ? 'isActive' : ''}`}
-					title='Block'
+					title='Blockquote, CTRL + Shift + B'
 				/>
 			)}
 			{options.image && (
@@ -183,6 +184,7 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 
 const RichTextEditor = ({ handleEditContentDetails, initialContent, options, handleSave }) => {
 	// Inititalisation --------------------------------------------
+	const lowlight = createLowlight(common);
 	const editor = useEditor({
 		extensions: [
 			StarterKit.configure({
@@ -192,7 +194,7 @@ const RichTextEditor = ({ handleEditContentDetails, initialContent, options, han
 			Italic,
 			Underline,
 			CodeBlockLowlight.configure({
-				lowlight: createLowlight(common),
+				lowlight,
 			}),
 			Image,
 			Link,

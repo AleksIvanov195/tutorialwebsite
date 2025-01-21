@@ -63,10 +63,19 @@ const LessonEditor = () => {
 					{
 						showModal &&
 						<Modal>
-							<LessonForm initialValues={{ LessonName: lesson[0].LessonName, LessonDescription: lesson[0].LessonDescription }} lessonMessage={lessonUpdateMessage} onSubmit={handleSaveLessonDetails} onClose={openModal} mode={'edit'}/>
+							<LessonForm
+								initialValues={{ LessonName: lesson[0].LessonName, LessonDescription: lesson[0].LessonDescription }}
+								lessonMessage={lessonUpdateMessage}
+								onSubmit={handleSaveLessonDetails}
+								onClose={openModal}
+								mode={'edit'}/>
 						</Modal>
 					}
-					<RichTextEditor options = {editorOptions} handleSave = {handleSaveLessonContent} handleEditContentDetails = {openModal}initialContent={JSON.parse(lesson[0].LessonContentJSON)}/>
+					<RichTextEditor
+						options = {editorOptions}
+						handleSave = {handleSaveLessonContent}
+						handleEditContentDetails = {openModal}
+						initialContent={JSON.parse(lesson[0].LessonContentJSON)}/>
 				</>
 			)}
 

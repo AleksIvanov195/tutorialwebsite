@@ -1,5 +1,5 @@
 import './Modal.scss';
-const Modal = ({ open, children, onClose }) =>{
+const Modal = ({ children }) =>{
 	// Inititalisation --------------------------------------------
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
