@@ -1,11 +1,11 @@
-import RichTextEditor from '../components/UI/RichTextEditor';
-import { useAuth } from '../hooks/useAuth';
+import RichTextEditor from '../../components/UI/RichTextEditor';
+import { useAuth } from '../../hooks/useAuth';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import API from '../api/API';
-import useLoad from '../api/useLoad';
-import LessonForm from '../components/enitity/forms/LessonForm';
-import Modal from '../components/UI/Modal';
+import API from '../../api/API';
+import useLoad from '../../api/useLoad';
+import LessonForm from '../../components/enitity/forms/LessonForm';
+import Modal from '../../components/UI/Modal';
 const LessonEditor = () => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
@@ -32,10 +32,10 @@ const LessonEditor = () => {
 	// Handlers ---------------------------------------------------
 	const handleSaveLessonContent = async (data, status) =>{
 		const lessonData = { LessonContentJSON: data, LessonPublicationstatusID: status };
-		const response = await API.put(`/lessons/${lesson[0].LessonID}`, lessonData, authState.isLoggedIn);
+		const response = await API.put(`/lessons/${lesson[0].LessonID}/content-status`, lessonData, authState.isLoggedIn);
 	};
 	const handleSaveLessonDetails = async (data)=>{
-		const response = await API.put(`/lessons/${lesson[0].LessonID}`, data, authState.isLoggedIn);
+		const response = await API.put(`/lessons/${lesson[0].LessonID}/name-description`, data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			setLesson([
 				{ ...lesson[0], LessonName: data.LessonName, LessonDescription: data.LessonDescription },

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { ButtonTray, Button } from '../components/UI/Buttons';
 import LessonForm from '../components/enitity/forms/LessonForm';
+import QuizForm from '../components/enitity/forms/QuizForm';
 import Modal from '../components/UI/Modal';
 import API from '../api/API';
 export default function CreatorDashboard() {
@@ -17,8 +18,8 @@ export default function CreatorDashboard() {
 	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
 	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
 	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons', authState.isLoggedIn);
-	const [showLessonForm, setShowLessonForm] = useState(false);
-	const [lessonMessage, setLessonMessage] = useState('');
+	const [showForm, setShowForm] = useState({ show: false, type: '' });
+	const [messages, setMessages] = useState({ lessonMessage: '', quizMessage: '' });
 	// Handlers ---------------------------------------------------
 
 	const handleNavigateToCreateCourse = () =>{
@@ -27,16 +28,29 @@ export default function CreatorDashboard() {
 	const handleNavigateToLessonEditor = (lessonID) =>{
 		navigate('/lessoneditor', { state: { lessonID } });
 	};
-	const openLessonForm = () =>{
-		setShowLessonForm(!showLessonForm);
+	const openForm = (type) =>{
+		setShowForm({ show: !showForm.show, type });
+		if (showForm.show) {
+			setMessages({ lessonMessage: '', quizMessage: '' });
+		}
 	};
+
 	const handleLessonSubmit = async (data) => {
 		const response = await API.post('/lessons', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const lessonID = response.result.data.LessonID;
 			navigate('/lessoneditor', { state: { lessonID } });
 		} else {
-			setLessonMessage(`Lesson Creation failed: ${response.message}`);
+			setMessages({ ...messages, lessonMessage: `Lesson Creation failed: ${response.message}` });
+		}
+	};
+	const handleQuizSubmit = async (data) => {
+		const response = await API.post('/quizzes', data, authState.isLoggedIn);
+		if (response.isSuccess) {
+			const quizID = response.result.data.QuizID;
+			// navigate('/lessoneditor', { state: { lessonID } });
+		} else {
+			setMessages({ ...messages, quizMessage: `Quiz Creation failed: ${response.message}` });
 		}
 	};
 	const onDeleteLesson = async (id) =>{
@@ -51,12 +65,19 @@ export default function CreatorDashboard() {
 		<>
 			<ButtonTray>
 				<Button onClick={handleNavigateToCreateCourse}>Create Course</Button>
-				<Button onClick={openLessonForm }>Create Lesson</Button>
+				<Button onClick={() => openForm('lesson') }>Create Lesson</Button>
+				<Button onClick={() => openForm('quiz') }>Create Quiz</Button>
 			</ButtonTray>
 			{
-				showLessonForm &&
+				showForm.show && showForm.type === 'lesson' &&
 				<Modal>
-					<LessonForm onClose={openLessonForm} onSubmit={handleLessonSubmit} lessonMessage={lessonMessage}/>
+					<LessonForm onClose={() => openForm('lesson')} onSubmit={handleLessonSubmit} lessonMessage={messages.lessonMessage} />
+				</Modal>
+			}
+			{
+				showForm.show && showForm.type === 'quiz' &&
+				<Modal>
+					<QuizForm onClose={() => openForm('quiz')} onSubmit={handleQuizSubmit} quizMessage={messages.quizMessage}/>
 				</Modal>
 			}
 			<CollapsiblePanel header={`My Lessons (${lessons.length})`}>
