@@ -18,6 +18,7 @@ export default function CreatorDashboard() {
 	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
 	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
 	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons', authState.isLoggedIn);
+	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes', authState.isLoggedIn);
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
 	const [messages, setMessages] = useState({ lessonMessage: '', quizMessage: '' });
 	// Handlers ---------------------------------------------------
@@ -27,6 +28,9 @@ export default function CreatorDashboard() {
 	};
 	const handleNavigateToLessonEditor = (lessonID) =>{
 		navigate('/lessoneditor', { state: { lessonID } });
+	};
+	const handleNavigateToQuizEditor = (quizID) =>{
+		navigate('/quizeditor', { state: { quizID } });
 	};
 	const openForm = (type) =>{
 		setShowForm({ show: !showForm.show, type });
@@ -60,6 +64,9 @@ export default function CreatorDashboard() {
 			loadLessons();
 		} else {alert(`Something went wrong: ${response.message}`);}
 	};
+	const onDeleteQuiz = async (id) =>{
+		//const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
+	};
 	// View -------------------------------------------------------
 	return (
 		<>
@@ -91,6 +98,24 @@ export default function CreatorDashboard() {
 									<ButtonTray>
 										<Button onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
 										<Button onClick={() => onDeleteLesson(lesson.LessonID)}>Delete</Button>
+									</ButtonTray>
+								</Card>
+							))
+						}
+					</CardContainer>
+				}
+			</CollapsiblePanel>
+			<CollapsiblePanel header={`My Quizzes (${quizzes.length})`}>
+				{
+					<CardContainer>
+						{
+							quizzes.map(quiz => (
+								<Card key={quiz.QuizID}>
+									<p>{quiz.QuizName}</p>
+									<p>{quiz.QuizDescription}</p>
+									<ButtonTray>
+										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID)}>Edit</Button>
+										<Button onClick={() => onDeleteQuiz(quiz.QuizID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
 							))

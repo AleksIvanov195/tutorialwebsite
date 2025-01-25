@@ -17,7 +17,7 @@ const QuizEditor = () => {
 	const location = useLocation();
 	const { quizID } = location.state || { quizID: null };
 	// State ------------------------------------------------------
-	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions ] = useLoad(`/questions?QuestionQuizID=${1}`, authState.isLoggedIn);
+	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions ] = useLoad(`/questions?QuestionQuizID=${quizID}`, authState.isLoggedIn);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [formType, setFormType] = useState(null);
 	const [updateMessage, setUpdateMessage] = useState('');
@@ -41,7 +41,7 @@ const QuizEditor = () => {
 		const newQuestion = {
 			QuestionText: `Question ${questions.length + 1}`,
 			QuestionFeedbacktext: 'No Feedback',
-			QuestionQuizID: 1,
+			QuestionQuizID: quizID,
 		};
 		const response = await API.post('/questions', newQuestion, authState.isLoggedIn);
 		if(response.isSuccess) {
@@ -70,7 +70,7 @@ const QuizEditor = () => {
 		}
 	};
 
-	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers, loadAnswers }) =>{
+	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) =>{
 		let response = '';
 		for (const answer of addedAnswers) {
 			response = await API.post('/answers', { ...answer, AnswerQuestionID: selectedQuestion.QuestionID }, authState.isLoggedIn);
