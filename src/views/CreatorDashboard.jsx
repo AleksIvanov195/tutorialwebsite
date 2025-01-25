@@ -48,7 +48,7 @@ export default function CreatorDashboard() {
 		const response = await API.post('/quizzes', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const quizID = response.result.data.QuizID;
-			// navigate('/lessoneditor', { state: { lessonID } });
+			navigate('/quizeditor', { state: { quizID } });
 		} else {
 			setMessages({ ...messages, quizMessage: `Quiz Creation failed: ${response.message}` });
 		}
