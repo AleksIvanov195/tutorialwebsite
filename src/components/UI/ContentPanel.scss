@@ -1,0 +1,92 @@
+@import '../styles/variables.scss';
+
+.contentPanel {
+	display: flex;
+	flex-direction: column;
+
+	background-color: $secondaryColour;
+	border-radius: 5px;
+	padding: 20px;
+	width: 15%;
+	min-width: 275px;
+	height: 100vh;
+	overflow-y: auto;
+	color: $bgColour;
+
+	.panelHeader{
+		align-self: center;
+		color:white;
+		font-weight: bold;
+		font-size: 28px;
+		border-bottom: 1px solid $mixedColour;
+		margin-bottom: 8px;
+		
+	}
+	.contentItem {
+		padding: 15px;
+		margin: 5px 0px;
+		border-radius: 5px;
+		cursor: pointer;
+		background-color: $primaryColour;
+		color: $bgColour;
+		transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+		.contentItemText {
+			margin: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 100%;
+		}
+		&:hover {
+			background-color: $mixedColour;
+			transform: translateY(-5px) scale(1.02);
+		}
+		&.selected {
+			margin-bottom: 0px;
+			background-color: $tertiaryColour;
+			transform: translateY(0px) scale(1.02);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+	}
+	.contentItemOptions {
+		padding: 10px;
+		margin-bottom: 8px;
+		background-color: lighten($primaryColour, 10%);
+		display: flex;
+		flex-direction: column;
+		.option {
+				display: flex;
+				font-size: 19px;
+				gap:5px;
+				margin-bottom: 5px;
+				padding: 5px 10px;
+				background-color: $primaryColour;
+				color: $bgColour;
+				border-radius: 3px;
+				cursor: pointer;
+				transition: background-color 0.3s;
+				&:hover {
+						background-color: $tertiaryColour;
+				}
+				&.delete:hover {
+					background-color: #a84232;
+				}
+		}
+}
+
+	//Changes to the default style of buttons
+	.defaultStyle{
+		padding: 8px 12px;
+		&:hover {
+			background-color: $mixedColour;
+		}
+	}
+
+	
+
+}
+
+
+	
+
+
