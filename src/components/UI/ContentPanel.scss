@@ -3,12 +3,11 @@
 .contentPanel {
 	display: flex;
 	flex-direction: column;
-
 	background-color: $secondaryColour;
 	border-radius: 5px;
 	padding: 20px;
-	width: 15%;
 	min-width: 275px;
+	max-width: 275px;
 	height: 100vh;
 	overflow-y: auto;
 	color: $bgColour;

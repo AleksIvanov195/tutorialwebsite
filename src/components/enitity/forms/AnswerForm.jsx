@@ -5,7 +5,7 @@ const AnswerForm = ({ onSubmit, onClose, answerMessage, question, mode = 'Edit' 
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
-	const [answers, setAnswers, , isLoading, loadAnswers ] = useLoad(`/answers?AnswerQuestionID=${question.QuestionID}`, authState.isLoggedIn);
+	const [answers, setAnswers, answersMessage, isLoading, loadAnswers ] = useLoad(`/answers?AnswerQuestionID=${question.QuestionID}`, authState.isLoggedIn);
 
 	// Handlers ---------------------------------------------------
 	const handleFormSubmit = (data) =>{
@@ -27,7 +27,7 @@ const AnswerForm = ({ onSubmit, onClose, answerMessage, question, mode = 'Edit' 
 	return(
 		<>
 			{isLoading ?
-				<p>Loading</p>
+				<p>{answersMessage}</p>
 				:
 				<Form
 					defaultValues={{ answers }}
