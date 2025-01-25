@@ -11,6 +11,7 @@
 	.formHeader{
 		text-align: center;
 		font-weight: bold;
+		word-wrap: break-word;
 		font-size: 32px;
 		margin-bottom: 10px;
 	}
@@ -42,20 +43,10 @@
 		font-size: 14px;
 		margin-top: 5px;
 	}
+	.dynamicInput{
+		display:flex;
+		flex-direction: row;
 
-	button {
-    padding: 12px 20px;
-    background-color: $primaryColour;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: darken($primaryColour, 15%);
-    }
 	}
 	
 }
