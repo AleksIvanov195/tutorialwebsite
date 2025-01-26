@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useLocation } from 'react-router-dom';
 import useLoad from '../../api/useLoad';
@@ -10,6 +10,9 @@ import AnswerForm from '../../components/enitity/forms/AnswerForm';
 import './QuizEditor.scss';
 import Icons from '../../components/UI/Icons';
 import Animate from '../../components/UI/Animate';
+import DndContext from '../../components/UI/dnd/DndContext';
+import SortableItem from '../../components/UI/dnd/SortableItem';
+import handleDragEnd from '../../components/UI/dnd/handleDragEnd';
 
 const QuizEditor = () => {
 	// Inititalisation --------------------------------------------
@@ -17,10 +20,12 @@ const QuizEditor = () => {
 	const location = useLocation();
 	const { quizID } = location.state || { quizID: null };
 	// State ------------------------------------------------------
-	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions ] = useLoad(`/questions?QuestionQuizID=${quizID}`, authState.isLoggedIn);
+	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [formType, setFormType] = useState(null);
 	const [updateMessage, setUpdateMessage] = useState('');
+	const [isReordering, setIsReordering] = useState(false);
+	let initialQuestions = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
 		setUpdateMessage('');
@@ -41,36 +46,52 @@ const QuizEditor = () => {
 		const newQuestion = {
 			QuestionText: `Question ${questions.length + 1}`,
 			QuestionFeedbacktext: 'No Feedback',
+			QuestionOrdernumber: questions.length + 1,
 			QuestionQuizID: quizID,
 		};
 		const response = await API.post('/questions', newQuestion, authState.isLoggedIn);
-		if(response.isSuccess) {
+		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
-		}else{
+		} else {
 			alert('Question could not be added, please try again!');
 		}
 	};
 	const handleEditQuestion = async (data) => {
 		const response = await API.put(`/questions/${selectedQuestion.QuestionID}`, data, authState.isLoggedIn);
-		if(response.isSuccess) {
+		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
-		}else{
+		} else {
 			setUpdateMessage(`Question Update failed: ${response.message}`);
 		}
 	};
 	const handleDeleteQuestion = async () => {
 		const response = await API.delete(`/questions/${selectedQuestion.QuestionID}`, authState.isLoggedIn);
-		if(response.isSuccess) {
+		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
-		}else{
+		} else {
 			alert('Question could not be deleted, please try again!');
 		}
 	};
 
-	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) =>{
+	const handleSubmitReorderedQuestions = async () => {
+		try{
+			await Promise.all(
+				questions.map((question, index) =>
+					API.put(`/questions/${question.QuestionID}`, { QuestionOrdernumber: index + 1 }, authState.isLoggedIn),
+				),
+			);
+			setIsReordering(false);
+			loadQuestions();
+		}catch (error) {
+			setIsReordering(false);
+			alert('Something went wrong while reordering, please try again!', error);
+		}
+
+	};
+	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) => {
 		let response = '';
 		for (const answer of addedAnswers) {
 			response = await API.post('/answers', { ...answer, AnswerQuestionID: selectedQuestion.QuestionID }, authState.isLoggedIn);
@@ -81,11 +102,22 @@ const QuizEditor = () => {
 		for (const answer of updatedAnswers) {
 			response = await API.put(`/answers/${answer.AnswerID}`, answer, authState.isLoggedIn);
 		}
-		if (response.isSuccess) {
+		if (response.isSuccess || response === '') {
 			setSelectedQuestion(null);
-		} else{
+		} else {
 			setUpdateMessage(`Answers Update failed: ${response.message}`);
 		}
+	};
+
+	const toggleReordering = () => {
+		if (isReordering) {
+			// Revert to initial order if reordering is canceled
+			setQuestions(initialQuestions.current);
+		} else {
+			// Store the initial order before reordering
+			initialQuestions.current = questions;
+		}
+		setIsReordering(!isReordering);
 	};
 
 	// View -------------------------------------------------------
@@ -100,28 +132,49 @@ const QuizEditor = () => {
 							<h1>Quiz Editor</h1>
 						</header>
 						<div className="quizEditorBody">
-							<ContentPanel title="List of Questions">
-								<ButtonTray>
-									<Button icon = {<Icons.Add size = {25}/>} onClick={handleAddQuestion} title = "Add new question"/>
-									<Button icon = {<Icons.Reorder size = {25}/>}onClick={handleAddQuestion} title = "Reorder questions"/>
-								</ButtonTray>
-								{questions.map((question) => (
-									<ContentItem
-										key={question.QuestionID}
-										title={question.QuestionText}
-										onClick={() => handleItemClick(question)}
-										isSelected={selectedQuestion?.QuestionID === question.QuestionID}
-									>
-										<span className="option" onClick={handleEditDetails}><Icons.Edit/>Edit Question Details</span>
-										<span className="option" onClick={handleEditAnswers}><Icons.Edit/>Edit Question Answers</span>
-										<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete/>Delete Question</span>
-									</ContentItem>
-								))}
-								<ButtonTray>
-									<Button icon = {<Icons.Add size = {25}/>} onClick={handleAddQuestion} title = "Add new question"/>
-									<Button icon = {<Icons.Reorder size = {25}/>}onClick={handleAddQuestion} title = "Reorder questions"/>
-								</ButtonTray>
-							</ContentPanel>
+							{isReordering ? (
+								<DndContext items={questions} onDragEnd={(event) => handleDragEnd(event, questions, setQuestions, 'QuestionID')} idField="QuestionID">
+									<ContentPanel title="List of Questions">
+										<ButtonTray>
+											<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
+											<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
+										</ButtonTray>
+										{questions.map((question) => (
+											<SortableItem key={question.QuestionID} id={question.QuestionID}>
+												<ContentItem title={question.QuestionText}>
+												</ContentItem>
+											</SortableItem>
+										))}
+										<ButtonTray>
+											<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
+											<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
+										</ButtonTray>
+									</ContentPanel>
+								</DndContext>
+							) : (
+								<ContentPanel title="List of Questions">
+									<ButtonTray>
+										<Button icon={<Icons.Add size={25} />} onClick={handleAddQuestion} title="Add new question" />
+										<Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
+									</ButtonTray>
+									{questions.map((question) => (
+										<ContentItem
+											key={question.QuestionID}
+											title={question.QuestionText}
+											onClick={() => handleItemClick(question)}
+											isSelected={selectedQuestion?.QuestionID === question.QuestionID}
+										>
+											<span className="option" onClick={handleEditDetails}><Icons.Edit />Edit Question Details</span>
+											<span className="option" onClick={handleEditAnswers}><Icons.Edit />Edit Question Answers</span>
+											<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete />Delete Question</span>
+										</ContentItem>
+									))}
+									<ButtonTray>
+										<Button icon={<Icons.Add size={25} />} onClick={handleAddQuestion} title="Add new question" />
+										<Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
+									</ButtonTray>
+								</ContentPanel>
+							)}
 							<div className={'quizEditorContent'}>
 								<Animate.FadeIn on={formType}>
 									<div className={`quizEditorForm ${selectedQuestion && formType ? 'show' : ''}`}>
@@ -137,7 +190,7 @@ const QuizEditor = () => {
 												questionMessage={null}
 												quiz={{ QuizID: quizID }}
 												questionsMessage={updateMessage}
-										 />
+											/>
 										)}
 										{selectedQuestion && formType === 'answers' && (
 											<AnswerForm
@@ -159,7 +212,6 @@ const QuizEditor = () => {
 					</div>
 			}
 		</>
-
 	);
 };
 
