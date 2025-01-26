@@ -1,4 +1,4 @@
-import Form from '../../UI/Form';
+import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
 import { useAuth } from '../../../hooks/useAuth';
 export default function CourseForm({ onSubmit, courseMessage }) {

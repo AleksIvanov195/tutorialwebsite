@@ -1,4 +1,4 @@
-import Form from '../../UI/Form';
+import Form from '../../UI/formui/Form';
 const LessonForm = ({ onSubmit, onClose, lessonMessage, initialValues = {}, mode = 'create' }) =>{
 	// Inititalisation --------------------------------------------
 	const fields = [

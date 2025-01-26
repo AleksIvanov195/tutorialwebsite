@@ -1,4 +1,4 @@
-import Form from '../../UI/Form';
+import Form from '../../UI/formui/Form';
 
 export default function LoginForm({ onSubmit, loginMessage }) {
 	// Specify fields with name (match default values), label, type, placeholder, validation

@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { Button, ButtonTray } from './Buttons';
+import { useForm } from 'react-hook-form';
+import { Button, ButtonTray } from '../Buttons';
+import DynamicFields from './FormDynamicFields';
 import './Form.scss';
 
 export default function Form({ fields, defaultValues, onSubmit, onClose, apiResponse, header, dynamicFields }) {
 	// Inititalisation --------------------------------------------
 	const { register, handleSubmit, control, formState: { errors, isSubmitSuccessful }, reset } = useForm({ defaultValues });
-	const { fields: dynamicFieldArray, append, remove } = useFieldArray({ control, name: dynamicFields?.name });
+
 	// State ------------------------------------------------------
 	// Reset the form when submission is successful
 	useEffect(() => {
@@ -15,9 +16,6 @@ export default function Form({ fields, defaultValues, onSubmit, onClose, apiResp
 		}
 	}, [isSubmitSuccessful, reset, defaultValues]);
 	// Handlers ---------------------------------------------------
-	const handleAddField = () => {
-		append(dynamicFields?.defaultValue);
-	};
 	// View -------------------------------------------------------
 	return (
 		<>
@@ -57,24 +55,7 @@ export default function Form({ fields, defaultValues, onSubmit, onClose, apiResp
 						{errors[name] && <p className="errorMessage">{errors[name]?.message}</p>}
 					</div>
 				))}
-				{dynamicFields && (
-					<>
-						{dynamicFieldArray.map((field, index) => (
-							<div className="formItem" key={field.id}>
-								<label>{`${dynamicFields.label} ${index + 1}`}</label>
-								<div className='dynamicInput'>
-									<input
-										type="text"
-										{...register(`${dynamicFields.name}[${index}].${dynamicFields.fieldName}`, { required: 'This field is required' })}
-										placeholder={dynamicFields.placeholder}
-									/>
-									<Button onClick={() => remove(index)}>Remove</Button>
-								</div>
-							</div>
-						))}
-						<Button onClick={handleAddField}>Add {dynamicFields.label}</Button>
-					</>
-				)}
+				{dynamicFields && <DynamicFields control={control} register={register} dynamicFields={dynamicFields} />}
 				{apiResponse && <p className="errorMessage">{apiResponse}</p>}
 				<ButtonTray>
 					<Button type="submit">Submit</Button>

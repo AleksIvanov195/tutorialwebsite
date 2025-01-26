@@ -1,4 +1,4 @@
-import Form from '../../UI/Form';
+import Form from '../../UI/formui/Form';
 const QuizForm = ({ onSubmit, onClose, quizMessage, initialValues = {}, mode = 'create' }) =>{
 	// Inititalisation --------------------------------------------
 	const fields = [
