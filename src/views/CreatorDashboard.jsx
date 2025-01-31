@@ -8,7 +8,9 @@ import { ButtonTray, Button } from '../components/UI/Buttons';
 import LessonForm from '../components/enitity/forms/LessonForm';
 import QuizForm from '../components/enitity/forms/QuizForm';
 import Modal from '../components/UI/Modal';
+import toast from 'react-hot-toast';
 import API from '../api/API';
+
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
@@ -20,7 +22,6 @@ export default function CreatorDashboard() {
 	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons', authState.isLoggedIn);
 	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes', authState.isLoggedIn);
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
-	const [messages, setMessages] = useState({ lessonMessage: '', quizMessage: '' });
 	// Handlers ---------------------------------------------------
 
 	const handleNavigateToCreateCourse = () =>{
@@ -34,35 +35,37 @@ export default function CreatorDashboard() {
 	};
 	const openForm = (type) =>{
 		setShowForm({ show: !showForm.show, type });
-		if (showForm.show) {
-			setMessages({ lessonMessage: '', quizMessage: '' });
-		}
 	};
 
 	const handleLessonSubmit = async (data) => {
+		const toastId = toast.loading('Saving...');
 		const response = await API.post('/lessons', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const lessonID = response.result.data.LessonID;
 			navigate('/lessoneditor', { state: { lessonID } });
 		} else {
-			setMessages({ ...messages, lessonMessage: `Lesson Creation failed: ${response.message}` });
+			toast.error(`Lesson could not be created. ${response.message}`, { id:toastId });
 		}
 	};
 	const handleQuizSubmit = async (data) => {
+		const toastId = toast.loading('Saving...');
 		const response = await API.post('/quizzes', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const quizID = response.result.data.QuizID;
 			navigate('/quizeditor', { state: { quizID } });
 		} else {
-			setMessages({ ...messages, quizMessage: `Quiz Creation failed: ${response.message}` });
+			toast.error(`Quiz could not be created. ${response.message}`, { id:toastId });
 		}
 	};
 	const onDeleteLesson = async (id) =>{
+		const toastId = toast.loading('Saving...');
 		const response = await API.delete(`/lessons/${id}`, authState.isLoggedIn);
 		if (response.isSuccess) {
-			alert('Lesson Deleted');
 			loadLessons();
-		} else {alert(`Something went wrong: ${response.message}`);}
+			toast.success('Lesson Deleted.', { id:toastId });
+		} else {
+			toast.error(`Lesson could not be deleted. ${response.message}`, { id:toastId });
+		}
 	};
 	const onDeleteQuiz = async (id) =>{
 		//const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
@@ -78,13 +81,13 @@ export default function CreatorDashboard() {
 			{
 				showForm.show && showForm.type === 'lesson' &&
 				<Modal>
-					<LessonForm onClose={() => openForm('lesson')} onSubmit={handleLessonSubmit} lessonMessage={messages.lessonMessage} />
+					<LessonForm onClose={() => openForm('lesson')} onSubmit={handleLessonSubmit} />
 				</Modal>
 			}
 			{
 				showForm.show && showForm.type === 'quiz' &&
 				<Modal>
-					<QuizForm onClose={() => openForm('quiz')} onSubmit={handleQuizSubmit} quizMessage={messages.quizMessage}/>
+					<QuizForm onClose={() => openForm('quiz')} onSubmit={handleQuizSubmit}/>
 				</Modal>
 			}
 			<CollapsiblePanel header={`My Lessons (${lessons.length})`}>

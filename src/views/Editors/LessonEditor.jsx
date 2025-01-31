@@ -6,6 +6,7 @@ import API from '../../api/API';
 import useLoad from '../../api/useLoad';
 import LessonForm from '../../components/enitity/forms/LessonForm';
 import Modal from '../../components/UI/Modal';
+import toast from 'react-hot-toast';
 const LessonEditor = () => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
@@ -28,26 +29,31 @@ const LessonEditor = () => {
 	// State ------------------------------------------------------
 	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons?LessonID=${lessonID}`, authState.isLoggedIn);
 	const [showModal, setShowModal] = useState(false);
-	const [lessonUpdateMessage, setLessonUpdateMessage] = useState('');
 	// Handlers ---------------------------------------------------
 	const handleSaveLessonContent = async (data, status) =>{
+		const toastId = toast.loading('Saving...');
 		const lessonData = { LessonContentJSON: data, LessonPublicationstatusID: status };
 		const response = await API.put(`/lessons/${lesson[0].LessonID}/content-status`, lessonData, authState.isLoggedIn);
+		if(response.isSuccess) {
+			toast.success('Lesson Saved.', { id:toastId });
+		}else{
+			toast.error(`Lesson could not be saved. ${response.message}`, { id:toastId });
+		}
 	};
 	const handleSaveLessonDetails = async (data)=>{
+		const toastId = toast.loading('Saving...');
 		const response = await API.put(`/lessons/${lesson[0].LessonID}/name-description`, data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			setLesson([
 				{ ...lesson[0], LessonName: data.LessonName, LessonDescription: data.LessonDescription },
 			]);
-			setLessonUpdateMessage('Lesson details have been updated.');
+			toast.success('Lesson details have been updated.', { id:toastId });
 		}else{
-			setLessonUpdateMessage(`Lesson Update failed: ${response.message}`);
+			toast.error(`Lesson detail could not be updated. ${response.message}`, { id:toastId });
 		}
 	};
 	const openModal = () =>{
 		setShowModal(!showModal);
-		setLessonUpdateMessage('');
 	};
 	// View -------------------------------------------------------
 	return (
@@ -65,7 +71,6 @@ const LessonEditor = () => {
 						<Modal>
 							<LessonForm
 								initialValues={{ LessonName: lesson[0].LessonName, LessonDescription: lesson[0].LessonDescription }}
-								lessonMessage={lessonUpdateMessage}
 								onSubmit={handleSaveLessonDetails}
 								onClose={openModal}
 								mode={'edit'}/>

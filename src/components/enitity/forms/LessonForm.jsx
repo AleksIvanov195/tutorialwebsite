@@ -1,5 +1,5 @@
 import Form from '../../UI/formui/Form';
-const LessonForm = ({ onSubmit, onClose, lessonMessage, initialValues = {}, mode = 'create' }) =>{
+const LessonForm = ({ onSubmit, onClose, initialValues = {}, mode = 'create' }) =>{
 	// Inititalisation --------------------------------------------
 	const fields = [
 		{
@@ -36,6 +36,6 @@ const LessonForm = ({ onSubmit, onClose, lessonMessage, initialValues = {}, mode
 
 	// View -------------------------------------------------------
 	const header = mode === 'edit' ? 'Edit Lesson' : 'Create Lesson';
-	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} apiResponse={lessonMessage}header={header}/>;
+	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} header={header}/>;
 };
 export default LessonForm;

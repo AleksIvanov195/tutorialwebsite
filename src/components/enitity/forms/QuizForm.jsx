@@ -1,5 +1,5 @@
 import Form from '../../UI/formui/Form';
-const QuizForm = ({ onSubmit, onClose, quizMessage, initialValues = {}, mode = 'create' }) =>{
+const QuizForm = ({ onSubmit, onClose, initialValues = {}, mode = 'create' }) =>{
 	// Inititalisation --------------------------------------------
 	const fields = [
 		{
@@ -34,6 +34,6 @@ const QuizForm = ({ onSubmit, onClose, quizMessage, initialValues = {}, mode = '
 
 	// View -------------------------------------------------------
 	const header = mode === 'edit' ? 'Edit Quiz' : 'Create Quiz';
-	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} apiResponse={quizMessage}header={header}/>;
+	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} header={header}/>;
 };
 export default QuizForm;
