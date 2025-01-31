@@ -27,7 +27,6 @@ const QuizEditor = () => {
 	const [updateMessage, setUpdateMessage] = useState('');
 	const [isReordering, setIsReordering] = useState(false);
 	const initialQuestions = useRef([]);
-	console.log(quizName)
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
 		setUpdateMessage('');
@@ -43,9 +42,24 @@ const QuizEditor = () => {
 		setUpdateMessage('');
 		setFormType('answers');
 	};
-	const handleQuestionDisplay = () =>{
-		setSelected
-	}
+	const handleGoToNextQuestion = () =>{
+		if (selectedQuestion) {
+			const index = questions.findIndex(q => q.QuestionID === selectedQuestion.QuestionID);
+			if (index < questions.length - 1) {
+				setSelectedQuestion(questions[index + 1]);
+			}
+		}else{
+			setSelectedQuestion(questions[0]);
+		}
+	};
+	const handleGoToPreviousQuestion = () =>{
+		if (selectedQuestion) {
+			const index = questions.findIndex(q => q.QuestionID === selectedQuestion.QuestionID);
+			if (index > 0) {
+				setSelectedQuestion(questions[index - 1]);
+			}
+		}
+	};
 
 	const handleAddQuestion = async () => {
 		const newQuestion = {
@@ -222,8 +236,8 @@ const QuizEditor = () => {
 									</div>
 								</Animate.FadeIn>
 								<ButtonTray>
-									<Button className="headerButton">Previous</Button>
-									<Button className="headerButton">Next</Button>
+									<Button onClick={handleGoToPreviousQuestion} className="headerButton" icon = {<Icons.Previous/>}/>
+									<Button onClick={handleGoToNextQuestion} className="headerButton" icon = {<Icons.Next/>}/>
 								</ButtonTray>
 							</div>
 						</div>

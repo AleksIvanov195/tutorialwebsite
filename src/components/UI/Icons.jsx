@@ -7,6 +7,7 @@ import { VscOpenPreview } from 'react-icons/vsc';
 import { MdOutlinePreview, MdPublishedWithChanges } from 'react-icons/md';
 import { BiImageAdd } from 'react-icons/bi';
 import { PiBroomFill } from 'react-icons/pi';
+import { GrLinkNext, GrLinkPrevious } from 'react-icons/gr';
 
 
 const Icons = {
@@ -31,6 +32,8 @@ const Icons = {
 	AddImage: ({ size = 20 }) => <BiImageAdd size={size} color="currentColor" />,
 	Review: ({ size = 20 }) => <VscOpenPreview size={size} color="currentColor" />,
 	Reorder: ({ size = 20 }) => <TbReorder size={size} color="currentColor" />,
+	Next: ({ size = 20 }) => <GrLinkNext size={size} color="currentColor" />,
+	Previous: ({ size = 20 }) => <GrLinkPrevious size={size} color="currentColor" />,
 };
 
 export default Icons;
