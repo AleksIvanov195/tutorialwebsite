@@ -1,31 +1,30 @@
-import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import RegisterForm from '../components/enitity/forms/RegisterForm';
+import toast from 'react-hot-toast';
 
 export default function Register() {
 	// Inititalisation --------------------------------------------
 	const { authState, register } = useAuth();
 	// State ------------------------------------------------------
-	const [registerMessage, setRegisterMessage] = useState('');
 	// Redirect when already logged in
 	if(authState.isLoggedIn) {
 		return <div>You are logged in.</div>;
 	}
 	// Handlers ---------------------------------------------------
 	const handleRegister = async (data) => {
-		setRegisterMessage('');
+		const toastId = toast.loading('Registering...');
 		const response = await register(data);
 		if (response.isSuccess) {
-			setRegisterMessage('Register Successful!');
 			window.location.href = '/';
+			toast.success('Successfully Registered!', { id:toastId });
 		} else {
-			setRegisterMessage(`Register Failed: ${response.message}`);
+			toast.error(`Registering Failed! ${response.message}`, { id:toastId });
 		}
 	};
 	// View -------------------------------------------------------
 	return (
 		<>
-		 <RegisterForm onSubmit={handleRegister} registerMessage = {registerMessage}/>
+		 <RegisterForm onSubmit={handleRegister}/>
 		</>
 	);
 }

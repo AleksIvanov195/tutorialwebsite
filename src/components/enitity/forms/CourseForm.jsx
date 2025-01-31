@@ -1,7 +1,7 @@
 import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
 import { useAuth } from '../../../hooks/useAuth';
-export default function CourseForm({ onSubmit, courseMessage }) {
+export default function CourseForm({ onSubmit }) {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategory', authState.isLoggedIn);
@@ -67,5 +67,5 @@ export default function CourseForm({ onSubmit, courseMessage }) {
 
 	const header = 'Create Course';
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} apiResponse={courseMessage} header={header} />;
+	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} header={header} />;
 }

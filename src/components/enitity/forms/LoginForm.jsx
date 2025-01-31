@@ -1,6 +1,6 @@
 import Form from '../../UI/formui/Form';
 
-export default function LoginForm({ onSubmit, loginMessage }) {
+export default function LoginForm({ onSubmit }) {
 	// Specify fields with name (match default values), label, type, placeholder, validation
 	const fields = [
 		{
@@ -29,6 +29,6 @@ export default function LoginForm({ onSubmit, loginMessage }) {
 
 	const header = 'Log In';
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} apiResponse = {loginMessage} header={header}/>;
+	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} header={header}/>;
 
 }

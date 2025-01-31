@@ -1,6 +1,6 @@
 import Form from '../../UI/formui/Form';
 
-export default function RegisterForm({ onSubmit, registerMessage }) {
+export default function RegisterForm({ onSubmit }) {
 	// Specify fields with name (match default values), label, type, placeholder, validation
 	const fields = [
 		{
@@ -46,7 +46,7 @@ export default function RegisterForm({ onSubmit, registerMessage }) {
 
 	const header = 'Sign Up';
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} apiResponse={registerMessage} header={header}/>;
+	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} header={header}/>;
 
 
 }

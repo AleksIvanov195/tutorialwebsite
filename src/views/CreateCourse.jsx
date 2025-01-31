@@ -1,21 +1,21 @@
 import API from '../api/API';
 import CourseForm from '../components/enitity/forms/CourseForm';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
-import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 export default function CreateCourse() {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
-	const [courseMessage, setCourseMessage] = useState('');
 	// Handlers ---------------------------------------------------
 	const handleCourseSubmit = async (data) => {
+		const toastId = toast.loading('Logging in...');
 		const response = await API.post('/courses', data, authState.isLoggedIn);
 		if (response.isSuccess) {
-			setCourseMessage('Course Creation successful!');
+			toast.success('Course successfully created!', { id:toastId });
 		} else {
-			setCourseMessage(`Course Creation failed: ${response.message}`);
+			toast.error(`Course Creation failed! ${response.message}`, { id:toastId });
 		}
 	};
 
@@ -23,7 +23,7 @@ export default function CreateCourse() {
 	return (
 		<>
 			<CollapsiblePanel header='Course Detail Form'>
-				<CourseForm onSubmit={handleCourseSubmit} courseMessage = {courseMessage}/>
+				<CourseForm onSubmit={handleCourseSubmit}/>
 			</CollapsiblePanel>
 			<CollapsiblePanel header='Course Content Structure'>
 				<p>Here on one side we will have the available lessons and Quizzes and other content that can be added to the course.</p>

@@ -1,13 +1,10 @@
-import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { Card, CardContainer } from '../components/UI/Card';
 import LoginForm from '../components/enitity/forms/LoginForm';
-
+import toast from 'react-hot-toast';
 export default function Login() {
 	// Inititalisation --------------------------------------------
 	const { authState, login } = useAuth();
 	// State ------------------------------------------------------
-	const [loginMessage, setLoginMessage] = useState('');
 	const sessionExpired = new URLSearchParams(location.search).get('sessionExpired') === 'true';
 
 	// Redirect when already logged in
@@ -16,19 +13,19 @@ export default function Login() {
 	}
 	// Handlers ---------------------------------------------------
 	const handleLogin = async (data) => {
-		setLoginMessage('');
+		const toastId = toast.loading('Logging in...');
 		const response = await login(data);
 		if (response.isSuccess) {
-			setLoginMessage('Login successful!');
 			window.location.href = '/';
+			toast.success('Log in Successful!', { id:toastId });
 		} else {
-			setLoginMessage(`Login failed: ${response.message}`);
+			toast.error(`Log in Failed! ${response.message}`, { id:toastId });
 		}
 	};
 	// View -------------------------------------------------------
 	return (
 		<>
-			<LoginForm onSubmit={handleLogin} loginMessage = {loginMessage} sessionExpired = {sessionExpired}/>
+			<LoginForm onSubmit={handleLogin} sessionExpired = {sessionExpired}/>
 		</>
 	);
 }
