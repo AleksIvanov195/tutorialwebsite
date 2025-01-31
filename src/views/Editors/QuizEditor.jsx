@@ -25,7 +25,7 @@ const QuizEditor = () => {
 	const [formType, setFormType] = useState(null);
 	const [updateMessage, setUpdateMessage] = useState('');
 	const [isReordering, setIsReordering] = useState(false);
-	let initialQuestions = useRef([]);
+	const initialQuestions = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
 		setUpdateMessage('');
@@ -133,8 +133,8 @@ const QuizEditor = () => {
 						</header>
 						<div className="quizEditorBody">
 							{isReordering ? (
-								<DndContext items={questions} onDragEnd={(event) => handleDragEnd(event, questions, setQuestions, 'QuestionID')} idField="QuestionID">
-									<ContentPanel title="List of Questions">
+								<DndContext items={questions} onDragEnd={(event) => handleDragEnd(event, questions, setQuestions, 'QuestionID')} idField="QuestionID" >
+									<ContentPanel title={isReordering ? 'Reordering Enabled' : 'List of Questions'}>
 										<ButtonTray>
 											<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
 											<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
