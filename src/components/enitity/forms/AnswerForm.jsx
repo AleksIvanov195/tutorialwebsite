@@ -1,7 +1,7 @@
 import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
 import { useAuth } from '../../../hooks/useAuth';
-const AnswerForm = ({ onSubmit, onClose, answerMessage, question, mode = 'Edit' }) =>{
+const AnswerForm = ({ header, onSubmit, onClose, answerMessage, question, mode = 'Edit' }) =>{
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
@@ -34,7 +34,7 @@ const AnswerForm = ({ onSubmit, onClose, answerMessage, question, mode = 'Edit' 
 					onClose={onClose}
 					onSubmit={handleFormSubmit}
 					apiResponse={answerMessage}
-					header='Edit Answers'
+					header= {header}
 					dynamicFields={dynamicField}
 				/>
 			}

@@ -25,7 +25,7 @@ const QuestionForm = ({ onSubmit, onClose, questionMessage, quiz, initialValues 
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
-	const header = mode === 'edit' ? 'Edit Quiz' : 'Create Quiz';
+	const header = 'Edit Question';
 	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} apiResponse={questionMessage}header={header}/>;
 };
 export default QuestionForm;

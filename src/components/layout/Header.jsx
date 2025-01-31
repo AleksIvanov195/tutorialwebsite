@@ -23,10 +23,10 @@ export default function Header() {
 					!authState.isLoggedIn
 						?
 						<ButtonTray className={'headerButtonTray'}>
-							<NavLink to="/login">
+							<NavLink to="/login" className={'noUnderline'}>
 								<Button className="headerButton">Log In</Button>
 							</NavLink>
-							<NavLink to="/register">
+							<NavLink to="/register" className={'noUnderline'}>
 								<Button className="headerButton">Register</Button>
 							</NavLink>
 						</ButtonTray>
