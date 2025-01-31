@@ -29,8 +29,8 @@ export default function CreatorDashboard() {
 	const handleNavigateToLessonEditor = (lessonID) =>{
 		navigate('/lessoneditor', { state: { lessonID } });
 	};
-	const handleNavigateToQuizEditor = (quizID) =>{
-		navigate('/quizeditor', { state: { quizID } });
+	const handleNavigateToQuizEditor = (quizID, quizName) =>{
+		navigate('/quizeditor', { state: { quizID, quizName } });
 	};
 	const openForm = (type) =>{
 		setShowForm({ show: !showForm.show, type });
@@ -52,7 +52,8 @@ export default function CreatorDashboard() {
 		const response = await API.post('/quizzes', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const quizID = response.result.data.QuizID;
-			navigate('/quizeditor', { state: { quizID } });
+			const quizName = response.result.data.Quizname;
+			navigate('/quizeditor', { state: { quizID, quizName } });
 		} else {
 			setMessages({ ...messages, quizMessage: `Quiz Creation failed: ${response.message}` });
 		}
@@ -114,7 +115,7 @@ export default function CreatorDashboard() {
 									<p>{quiz.QuizName}</p>
 									<p>{quiz.QuizDescription}</p>
 									<ButtonTray>
-										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID)}>Edit</Button>
+										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID, quiz.QuizName)}>Edit</Button>
 										<Button onClick={() => onDeleteQuiz(quiz.QuizID)}>Delete</Button>
 									</ButtonTray>
 								</Card>

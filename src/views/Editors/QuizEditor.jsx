@@ -13,12 +13,13 @@ import Animate from '../../components/UI/Animate';
 import DndContext from '../../components/UI/dnd/DndContext';
 import SortableItem from '../../components/UI/dnd/SortableItem';
 import handleDragEnd from '../../components/UI/dnd/handleDragEnd';
+import HoverMenu from '../../components/UI/HoverMenu';
 
 const QuizEditor = () => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	const location = useLocation();
-	const { quizID } = location.state || { quizID: null };
+	const { quizID, quizName } = location.state || { quizID: null, quizName: null };
 	// State ------------------------------------------------------
 	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -26,6 +27,7 @@ const QuizEditor = () => {
 	const [updateMessage, setUpdateMessage] = useState('');
 	const [isReordering, setIsReordering] = useState(false);
 	const initialQuestions = useRef([]);
+	console.log(quizName)
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
 		setUpdateMessage('');
@@ -41,6 +43,9 @@ const QuizEditor = () => {
 		setUpdateMessage('');
 		setFormType('answers');
 	};
+	const handleQuestionDisplay = () =>{
+		setSelected
+	}
 
 	const handleAddQuestion = async () => {
 		const newQuestion = {
@@ -129,7 +134,7 @@ const QuizEditor = () => {
 					:
 					<div className="quizEditor">
 						<header className="quizEditorHeader">
-							<h1>Quiz Editor</h1>
+							<h1>{quizName}</h1>
 						</header>
 						<div className="quizEditorBody">
 							{isReordering ? (
@@ -176,6 +181,14 @@ const QuizEditor = () => {
 								</ContentPanel>
 							)}
 							<div className={'quizEditorContent'}>
+								<HoverMenu label = "File">
+									Save as draft
+									Preview
+									Send for review
+									Publish
+									Edit Quiz Details
+									Delete Quiz
+								</HoverMenu>
 								<Animate.FadeIn on={formType}>
 									<div className={`quizEditorForm ${selectedQuestion && formType ? 'show' : ''}`}>
 										{selectedQuestion && formType === 'details' && (
@@ -194,7 +207,7 @@ const QuizEditor = () => {
 										)}
 										{selectedQuestion && formType === 'answers' && (
 											<AnswerForm
-												key={`${selectedQuestion.QuestionID}-answers`}
+												key={`${selectedQuestion.QuestionID}answers`}
 												question={selectedQuestion}
 												onSubmit={handleSubmitAnswers}
 												onClose={() => {
@@ -203,10 +216,15 @@ const QuizEditor = () => {
 												}}
 												answerMessage={updateMessage}
 												mode="edit"
+												header = {selectedQuestion.QuestionText}
 											/>
 										)}
 									</div>
 								</Animate.FadeIn>
+								<ButtonTray>
+									<Button className="headerButton">Previous</Button>
+									<Button className="headerButton">Next</Button>
+								</ButtonTray>
 							</div>
 						</div>
 					</div>
