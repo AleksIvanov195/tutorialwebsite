@@ -166,9 +166,11 @@ const QuizEditor = () => {
 		if (isReordering) {
 			// Revert to initial order if reordering is canceled
 			setQuestions(initialQuestions.current);
+			toast.error('Reordering cancelled.');
 		} else {
 			// Store the initial order before reordering
 			initialQuestions.current = questions;
+			toast.success('Reordering enabled.');
 		}
 		setIsReordering(!isReordering);
 	};
