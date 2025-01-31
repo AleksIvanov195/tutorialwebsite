@@ -57,9 +57,9 @@ export default function Form({ fields, defaultValues, onSubmit, onClose, apiResp
 				))}
 				{dynamicFields && <DynamicFields control={control} register={register} dynamicFields={dynamicFields} />}
 				{apiResponse && <p className="errorMessage">{apiResponse}</p>}
-				<ButtonTray>
-					<Button type="submit">Submit</Button>
-					{onClose && <Button onClick={onClose}>Close</Button> }
+				<ButtonTray className={'formButtonTray'}>
+					<Button type="submit" className={'formButton submitButton'}>Submit</Button>
+					{onClose && <Button onClick={onClose} className={'formButton cancelButton'}>Close</Button> }
 				</ButtonTray>
 			</form>
 		</>
