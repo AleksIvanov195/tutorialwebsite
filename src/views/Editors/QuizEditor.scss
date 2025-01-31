@@ -9,7 +9,27 @@
     padding: 10px;
     text-align: center;
     border-radius: 5px;
+	
+		.headerContainer {
+			display: flex;
+			align-items: center;
+			width: 100%;
+		}
+	
+		.headerContainer h1 {
+			flex-grow: 1;
+			text-align: center;
+			margin: 0;
+		}
+
+		.hoverButton{
+			background-color: $mixedColour;
+			&:hover{
+				background-color: darken($tertiaryColour, 10%);
+			}
+		}
   }
+
 
   .quizEditorBody {
     display: flex;

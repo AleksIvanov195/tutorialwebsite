@@ -20,6 +20,10 @@ export default function DynamicFields({ control, register, dynamicFields }) {
 							{...register(`${dynamicFields.name}[${index}].${dynamicFields.fieldName}`, { required: 'This field is required' })}
 							placeholder={dynamicFields.placeholder}
 						/>
+						<input
+							type="checkbox"
+							{...register(`${dynamicFields.name}[${index}].checked`)}
+						/>
 						<Button onClick={() => remove(index)} className={'formButton removeButton'} icon = {<Icons.Delete/>}/>
 					</div>
 				</div>

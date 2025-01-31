@@ -29,8 +29,8 @@ export default function CreatorDashboard() {
 	const handleNavigateToLessonEditor = (lessonID) =>{
 		navigate('/lessoneditor', { state: { lessonID } });
 	};
-	const handleNavigateToQuizEditor = (quizID, quizName) =>{
-		navigate('/quizeditor', { state: { quizID, quizName } });
+	const handleNavigateToQuizEditor = (quizID) =>{
+		navigate('/quizeditor', { state: { quizID } });
 	};
 	const openForm = (type) =>{
 		setShowForm({ show: !showForm.show, type });
@@ -52,8 +52,7 @@ export default function CreatorDashboard() {
 		const response = await API.post('/quizzes', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const quizID = response.result.data.QuizID;
-			const quizName = response.result.data.Quizname;
-			navigate('/quizeditor', { state: { quizID, quizName } });
+			navigate('/quizeditor', { state: { quizID } });
 		} else {
 			setMessages({ ...messages, quizMessage: `Quiz Creation failed: ${response.message}` });
 		}

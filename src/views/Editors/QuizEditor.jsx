@@ -14,24 +14,27 @@ import DndContext from '../../components/UI/dnd/DndContext';
 import SortableItem from '../../components/UI/dnd/SortableItem';
 import handleDragEnd from '../../components/UI/dnd/handleDragEnd';
 import HoverMenu from '../../components/UI/HoverMenu';
+import Modal from '../../components/UI/Modal';
+import QuizForm from '../../components/enitity/forms/QuizForm';
 
 const QuizEditor = () => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	const location = useLocation();
-	const { quizID, quizName } = location.state || { quizID: null, quizName: null };
+	const { quizID } = location.state || { quizID: null };
 	// State ------------------------------------------------------
+	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes?QuizID=${quizID}`, authState.isLoggedIn);
 	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [formType, setFormType] = useState(null);
 	const [updateMessage, setUpdateMessage] = useState('');
 	const [isReordering, setIsReordering] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 	const initialQuestions = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
 		setUpdateMessage('');
 		setSelectedQuestion(question);
-		setFormType(null);
 	};
 	const handleEditDetails = () => {
 		setUpdateMessage('');
@@ -122,12 +125,31 @@ const QuizEditor = () => {
 			response = await API.put(`/answers/${answer.AnswerID}`, answer, authState.isLoggedIn);
 		}
 		if (response.isSuccess || response === '') {
-			setSelectedQuestion(null);
+			setFormType('answers');
+			alert('Answers could not be updated');
 		} else {
 			setUpdateMessage(`Answers Update failed: ${response.message}`);
 		}
 	};
+	const handleSaveQuizDetails = async (data)=>{
+		const response = await API.put(`/quizzes/${quiz[0].QuizID}`, data, authState.isLoggedIn);
+		if (response.isSuccess) {
+			loadQuiz();
+			setUpdateMessage('Quiz details have been updated.');
+			openModal();
+		}else{
+			setUpdateMessage(`Quiz Update failed: ${response.message}`);
+		}
+	};
+	const changeQuizStatus = async (statusID) =>{
+		const quizData = { QuizPublicationstatusID: statusID };
+		const response = await API.put(`/quizzes/${quiz[0].QuizID}`, quizData, authState.isLoggedIn);
 
+	};
+	const openModal = () =>{
+		setShowModal(!showModal);
+		setUpdateMessage('');
+	};
 	const toggleReordering = () => {
 		if (isReordering) {
 			// Revert to initial order if reordering is canceled
@@ -148,9 +170,30 @@ const QuizEditor = () => {
 					:
 					<div className="quizEditor">
 						<header className="quizEditorHeader">
-							<h1>{quizName}</h1>
+							<div className="headerContainer">
+								<HoverMenu label="Options">
+									<a onClick = {() => changeQuizStatus(1)}><Icons.Draft/> &nbsp; Save as Draft</a>
+									<a ><Icons.Preview/>&nbsp;Preview</a>
+									<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
+									<a ><Icons.Discard/>&nbsp;Delete Quiz</a>
+									<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
+									<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Details</a>
+								</HoverMenu>
+								<h1>{!isQuizLoading && quiz[0].QuizName}</h1>
+							</div>
 						</header>
 						<div className="quizEditorBody">
+							{
+								showModal &&
+						<Modal>
+							<QuizForm
+								initialValues={{ QuizName: quiz[0].QuizName, QuizDescription: quiz[0].QuizDescription }}
+								quizMessage={updateMessage}
+								onSubmit={handleSaveQuizDetails }
+								onClose={openModal}
+								mode={'edit'}/>
+						</Modal>
+							}
 							{isReordering ? (
 								<DndContext items={questions} onDragEnd={(event) => handleDragEnd(event, questions, setQuestions, 'QuestionID')} idField="QuestionID" >
 									<ContentPanel title={isReordering ? 'Reordering Enabled' : 'List of Questions'}>
@@ -195,14 +238,6 @@ const QuizEditor = () => {
 								</ContentPanel>
 							)}
 							<div className={'quizEditorContent'}>
-								<HoverMenu label = "File">
-									Save as draft
-									Preview
-									Send for review
-									Publish
-									Edit Quiz Details
-									Delete Quiz
-								</HoverMenu>
 								<Animate.FadeIn on={formType}>
 									<div className={`quizEditorForm ${selectedQuestion && formType ? 'show' : ''}`}>
 										{selectedQuestion && formType === 'details' && (
