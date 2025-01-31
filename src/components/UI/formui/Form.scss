@@ -73,14 +73,17 @@
   }
 
   .dynamicInput {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
+		display: flex;
+		align-items: center;
+		gap: 10px;
 
-    input {
+    input[type="text"] {
       flex: 1;
     }
+		input[type="checkbox"] {
+			width: 20px;
+			height: 20px;
+		}
   }
 
 
