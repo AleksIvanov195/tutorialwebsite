@@ -68,7 +68,7 @@
 						background-color: $tertiaryColour;
 				}
 				&.delete:hover {
-					background-color: #a84232;
+					background-color: $warningColour;
 				}
 		}
 }
