@@ -16,6 +16,7 @@ import handleDragEnd from '../../components/UI/dnd/handleDragEnd';
 import HoverMenu from '../../components/UI/HoverMenu';
 import Modal from '../../components/UI/Modal';
 import QuizForm from '../../components/enitity/forms/QuizForm';
+import { toast } from 'react-hot-toast';
 
 const QuizEditor = () => {
 	// Inititalisation --------------------------------------------
@@ -27,22 +28,18 @@ const QuizEditor = () => {
 	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [formType, setFormType] = useState(null);
-	const [updateMessage, setUpdateMessage] = useState('');
 	const [isReordering, setIsReordering] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const initialQuestions = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
-		setUpdateMessage('');
 		setSelectedQuestion(question);
 	};
 	const handleEditDetails = () => {
-		setUpdateMessage('');
 		setFormType('details');
 	};
 
 	const handleEditAnswers = () => {
-		setUpdateMessage('');
 		setFormType('answers');
 	};
 	const handleGoToNextQuestion = () =>{
@@ -65,6 +62,7 @@ const QuizEditor = () => {
 	};
 
 	const handleAddQuestion = async () => {
+		const toastId = toast.loading('Adding Question...');
 		const newQuestion = {
 			QuestionText: `Question ${questions.length + 1}`,
 			QuestionFeedbacktext: 'No Feedback',
@@ -75,30 +73,36 @@ const QuizEditor = () => {
 		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
+			toast.success('Question Added.', { id:toastId });
 		} else {
-			alert('Question could not be added, please try again!');
+			toast.error(`Question could not be added. ${response.message}`, { id:toastId });
 		}
 	};
 	const handleEditQuestion = async (data) => {
+		const toastId = toast.loading('Updating Question...');
 		const response = await API.put(`/questions/${selectedQuestion.QuestionID}`, data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
+			toast.success('Question Updated.', { id:toastId });
 		} else {
-			setUpdateMessage(`Question Update failed: ${response.message}`);
+			toast.error(`Question could not be updated. ${response.message}`, { id:toastId });
 		}
 	};
 	const handleDeleteQuestion = async () => {
+		const toastId = toast.loading('Updating Question...');
 		const response = await API.delete(`/questions/${selectedQuestion.QuestionID}`, authState.isLoggedIn);
 		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
+			toast.success('Question Deleted.', { id:toastId });
 		} else {
-			alert('Question could not be deleted, please try again!');
+			toast.error(`Question could not be deleted. ${response.message}`, { id:toastId });
 		}
 	};
 
 	const handleSubmitReorderedQuestions = async () => {
+		const toastId = toast.loading('Updating Question...');
 		try{
 			await Promise.all(
 				questions.map((question, index) =>
@@ -107,13 +111,15 @@ const QuizEditor = () => {
 			);
 			setIsReordering(false);
 			loadQuestions();
+			toast.success('Questions Reordered.', { id:toastId });
 		}catch (error) {
 			setIsReordering(false);
-			alert('Something went wrong while reordering, please try again!', error);
+			toast.error(`Something went wrong while reordering, please try again!, ${error}`, { id:toastId });
 		}
 
 	};
 	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) => {
+		const toastId = toast.loading('Updating Question...');
 		let response = '';
 		for (const answer of addedAnswers) {
 			response = await API.post('/answers', { ...answer, AnswerQuestionID: selectedQuestion.QuestionID }, authState.isLoggedIn);
@@ -125,30 +131,36 @@ const QuizEditor = () => {
 			response = await API.put(`/answers/${answer.AnswerID}`, answer, authState.isLoggedIn);
 		}
 		if (response.isSuccess || response === '') {
-			setFormType('answers');
-			alert('Answers could not be updated');
+			setFormType('details');
+			toast.success('Answers Updated.', { id:toastId });
 		} else {
-			setUpdateMessage(`Answers Update failed: ${response.message}`);
+			toast.error(`Answers Failed to Update. ${response.message}`, { id:toastId });
 		}
 	};
 	const handleSaveQuizDetails = async (data)=>{
+		const toastId = toast.loading('Updating Question...');
 		const response = await API.put(`/quizzes/${quiz[0].QuizID}`, data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			loadQuiz();
-			setUpdateMessage('Quiz details have been updated.');
+			toast.success('Quiz Details Updated.', { id:toastId });
 			openModal();
 		}else{
-			setUpdateMessage(`Quiz Update failed: ${response.message}`);
+			toast.error(`Quiz Failed to Update. ${response.message}`, { id:toastId });
 		}
 	};
 	const changeQuizStatus = async (statusID) =>{
+		const toastId = toast.loading('Updating Question...');
 		const quizData = { QuizPublicationstatusID: statusID };
 		const response = await API.put(`/quizzes/${quiz[0].QuizID}`, quizData, authState.isLoggedIn);
+		if(response.isSuccess) {
+			toast.success('Quiz Status Updated.', { id:toastId });
+		}else{
+			toast.error(`Quiz Status Failed to Update. ${response.message}`, { id:toastId });
+		}
 
 	};
 	const openModal = () =>{
 		setShowModal(!showModal);
-		setUpdateMessage('');
 	};
 	const toggleReordering = () => {
 		if (isReordering) {
@@ -188,7 +200,6 @@ const QuizEditor = () => {
 						<Modal>
 							<QuizForm
 								initialValues={{ QuizName: quiz[0].QuizName, QuizDescription: quiz[0].QuizDescription }}
-								quizMessage={updateMessage}
 								onSubmit={handleSaveQuizDetails }
 								onClose={openModal}
 								mode={'edit'}/>
@@ -249,9 +260,7 @@ const QuizEditor = () => {
 													setSelectedQuestion(null);
 													setFormType(null);
 												}}
-												questionMessage={null}
 												quiz={{ QuizID: quizID }}
-												questionsMessage={updateMessage}
 											/>
 										)}
 										{selectedQuestion && formType === 'answers' && (
@@ -263,7 +272,6 @@ const QuizEditor = () => {
 													setSelectedQuestion(null);
 													setFormType(null);
 												}}
-												answerMessage={updateMessage}
 												mode="edit"
 												header = {selectedQuestion.QuestionText}
 											/>
