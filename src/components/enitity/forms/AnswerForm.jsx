@@ -7,13 +7,24 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 	// State ------------------------------------------------------
 	const [answers, setAnswers, answersMessage, isLoading, loadAnswers ] = useLoad(`/answers?AnswerQuestionID=${question.QuestionID}`, authState.isLoggedIn);
 	// Handlers ---------------------------------------------------
-	const handleFormSubmit = (data) =>{
-		const currentAnswers = data.answers.map(answer => {
-			const { checked, ...rest } = answer;
-			return {
-				...rest,
-				AnswerCorrect: checked,
-			};
+	const handleFormSubmit = (data) => {
+		const currentAnswers = data.answers.map((answer, index) => {
+			if (isMultipleChoice) {
+				// For multiple choice questions, use the checked value to set the AnswerCorrect
+				const { checked, ...rest } = answer;
+				return {
+					...rest,
+					AnswerCorrect: checked,
+				};
+			} else {
+				// For single choice questions use the index of the correct asnwer provided by the radio button to set the AnswerCorrect
+				const { checked, ...rest } = answer;
+				const isChecked = parseInt(data.answers.checked) === index;
+				return {
+					...rest,
+					AnswerCorrect: isChecked,
+				};
+			}
 		});
 		const addedAnswers = currentAnswers.filter(answer => !answer.AnswerID);
 		const removedAnswers = answers.filter(originalAnswer => !currentAnswers.some(answer => answer.AnswerID === originalAnswer.AnswerID));
@@ -22,7 +33,6 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 			&& originalAnswer.AnswerText !== answer.AnswerText
 			|| originalAnswer.AnswerCorrect !== answer.AnswerCorrect));
 		onSubmit({ addedAnswers, removedAnswers, updatedAnswers });
-
 	};
 
 	const transformedAnswers = answers.map(answer => ({
@@ -37,6 +47,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 		placeholder: 'Enter your answer',
 		defaultValue: { AnswerText: '', checked: false },
 	};
+	const isMultipleChoice = question.QuestionType === 'Multiple';
 	return(
 		<>
 			{isLoading ?
@@ -48,6 +59,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 					onSubmit={handleFormSubmit}
 					header= {header}
 					dynamicFields={dynamicField}
+					isMultipleChoice={isMultipleChoice}
 				/>
 			}
 		</>

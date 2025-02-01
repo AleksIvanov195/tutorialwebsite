@@ -4,7 +4,7 @@ import { Button, ButtonTray } from '../Buttons';
 import DynamicFields from './FormDynamicFields';
 import './Form.scss';
 
-export default function Form({ fields, defaultValues, onSubmit, onClose, apiResponse, header, dynamicFields }) {
+export default function Form({ fields, defaultValues, onSubmit, onClose, apiResponse, header, dynamicFields, isMultipleChoice }) {
 	// Inititalisation --------------------------------------------
 	const { register, handleSubmit, control, formState: { errors, isSubmitSuccessful }, reset } = useForm({ defaultValues });
 
@@ -55,7 +55,7 @@ export default function Form({ fields, defaultValues, onSubmit, onClose, apiResp
 						{errors[name] && <p className="errorMessage">{errors[name]?.message}</p>}
 					</div>
 				))}
-				{dynamicFields && <DynamicFields control={control} register={register} dynamicFields={dynamicFields} />}
+				{dynamicFields && <DynamicFields control={control} register={register} dynamicFields={dynamicFields} isMultipleChoice={isMultipleChoice} />}
 				{apiResponse && <p className="errorMessage">{apiResponse}</p>}
 				<ButtonTray className={'formButtonTray'}>
 					<Button type="submit" className={'formButton submitButton'}>Submit</Button>
