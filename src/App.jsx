@@ -6,6 +6,7 @@ import Homepage from './views/Homepage';
 import Course from './views/Course';
 import Login from './views/Login';
 import Register from './views/Register';
+import PreviewQuiz from './views/PreviewQuiz';
 import { Toaster } from 'react-hot-toast';
 import './App.scss';
 
@@ -97,6 +98,17 @@ const AppContent = () => {
 					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
 						<ErrorBoundary>
 							<PreviewRichTextContent/>
+						</ErrorBoundary>
+					</ProtectedRoute>
+				}
+			/>
+			<Route path="*" element={<Navigate to="/"/>} />
+			<Route
+				path="/previewquiz"
+				element = {
+					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
+						<ErrorBoundary>
+							<PreviewQuiz/>
 						</ErrorBoundary>
 					</ProtectedRoute>
 				}
