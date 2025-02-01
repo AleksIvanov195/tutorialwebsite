@@ -47,7 +47,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 		placeholder: 'Enter your answer',
 		defaultValue: { AnswerText: '', checked: false },
 	};
-	const isMultipleChoice = question.QuestionType === 'Multiple';
+	const isMultipleChoice = question.QuestionType === 'MultipleChoice';
 	return(
 		<>
 			{isLoading ?
