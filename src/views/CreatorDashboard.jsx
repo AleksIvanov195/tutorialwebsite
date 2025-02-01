@@ -43,6 +43,7 @@ export default function CreatorDashboard() {
 		if (response.isSuccess) {
 			const lessonID = response.result.data.LessonID;
 			navigate('/lessoneditor', { state: { lessonID } });
+			toast.success('Lesson Created.', { id:toastId });
 		} else {
 			toast.error(`Lesson could not be created. ${response.message}`, { id:toastId });
 		}
@@ -53,12 +54,13 @@ export default function CreatorDashboard() {
 		if (response.isSuccess) {
 			const quizID = response.result.data.QuizID;
 			navigate('/quizeditor', { state: { quizID } });
+			toast.success('Quiz Created.', { id:toastId });
 		} else {
 			toast.error(`Quiz could not be created. ${response.message}`, { id:toastId });
 		}
 	};
 	const onDeleteLesson = async (id) =>{
-		const toastId = toast.loading('Saving...');
+		const toastId = toast.loading('Deleting...');
 		const response = await API.delete(`/lessons/${id}`, authState.isLoggedIn);
 		if (response.isSuccess) {
 			loadLessons();
