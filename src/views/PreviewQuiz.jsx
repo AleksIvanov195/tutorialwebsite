@@ -7,10 +7,11 @@ import './PreviewQuiz.scss';
 
 const PreviewQuiz = () => {
 	// Initialisation --------------------------------------------
+	const quizID = sessionStorage.getItem('previewQuizID');
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
-	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad('/quizzes?QuizID=1', authState.isLoggedIn);
-	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad('/quizzes/1/questions-answers', authState.isLoggedIn);
+	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes?QuizID=${quizID}`, authState.isLoggedIn);
+	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers`, authState.isLoggedIn);
 
 	const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

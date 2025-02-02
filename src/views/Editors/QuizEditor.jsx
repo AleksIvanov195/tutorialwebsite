@@ -66,6 +66,7 @@ const QuizEditor = () => {
 		const newQuestion = {
 			QuestionText: `Question ${questions.length + 1}`,
 			QuestionFeedbacktext: 'No Feedback',
+			QuestionType: 'MultipleChoice',
 			QuestionOrdernumber: questions.length + 1,
 			QuestionQuizID: quizID,
 		};
@@ -159,6 +160,10 @@ const QuizEditor = () => {
 		}
 
 	};
+	const handlePreview = () => {
+		sessionStorage.setItem('previewQuizID', quiz[0].QuizID);
+		window.open('/previewquiz', '_blank');
+	};
 	const openModal = () =>{
 		setShowModal(!showModal);
 	};
@@ -187,7 +192,7 @@ const QuizEditor = () => {
 							<div className="headerContainer">
 								<HoverMenu label="Options">
 									<a onClick = {() => changeQuizStatus(1)}><Icons.Draft/> &nbsp; Save as Draft</a>
-									<a ><Icons.Preview/>&nbsp;Preview</a>
+									<a onClick={handlePreview}><Icons.Preview/>&nbsp;Preview</a>
 									<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
 									<a ><Icons.Discard/>&nbsp;Delete Quiz</a>
 									<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
