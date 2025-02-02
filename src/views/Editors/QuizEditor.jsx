@@ -24,7 +24,7 @@ const QuizEditor = () => {
 	const location = useLocation();
 	const { quizID } = location.state || { quizID: null };
 	// State ------------------------------------------------------
-	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes?QuizID=${quizID}`, authState.isLoggedIn);
+	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`, authState.isLoggedIn);
 	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [formType, setFormType] = useState(null);

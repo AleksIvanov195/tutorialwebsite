@@ -27,7 +27,7 @@ const LessonEditor = () => {
 		fontStyle: true,
 	};
 	// State ------------------------------------------------------
-	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons?LessonID=${lessonID}`, authState.isLoggedIn);
+	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`, authState.isLoggedIn);
 	const [showModal, setShowModal] = useState(false);
 	// Handlers ---------------------------------------------------
 	const handleSaveLessonContent = async (data, status) =>{
