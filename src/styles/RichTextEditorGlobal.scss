@@ -71,3 +71,10 @@ pre {
 .ProseMirror-focused{
 	outline: 1px solid lightblue;
 }
+.tiptap p.is-editor-empty:first-child::before {
+  color: #848a91;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

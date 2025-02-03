@@ -23,7 +23,7 @@ const LessonForm = ({ onSubmit, onClose, initialValues = {}, mode = 'create' }) 
 			},
 		},
 	];
-	const defaultContent = { 'type':'doc', 'content':[{ 'type':'paragraph', 'content':[{ 'type':'text', 'marks':[{ 'type':'textStyle', 'attrs':{ 'fontFamily':'Arial' } }], 'text':'Start writing your lesson here...' }] }] };
+	const defaultContent = { 'type':'doc', 'content':[{ 'type':'paragraph', 'content':[{ 'type':'text', 'marks':[{ 'type':'textStyle', 'attrs':{ 'fontFamily':'Arial' } }], 'text':'' }] }] };
 	const defaultValues = {
 		LessonName: '',
 		LessonDescription: '',

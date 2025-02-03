@@ -17,6 +17,7 @@ import ImageResize from 'tiptap-extension-resize-image';
 import Heading from '@tiptap/extension-heading';
 import TextStyle from '@tiptap/extension-text-style';
 import { FontFamily } from '@tiptap/extension-font-family';
+import Placeholder from '@tiptap/extension-placeholder';
 import { ButtonTray, Button } from './Buttons';
 import js from 'highlight.js/lib/languages/javascript';
 import Icons from './Icons';
@@ -84,14 +85,13 @@ const OptionsBar = ({ onEditDetails, editor, options, onSaveDraft, onPreview, on
 	];
 	return (
 		<div className='optionsBar'>
-			<HoverMenu label = 'File'>
+			<HoverMenu label = 'Options'>
 				<a onClick={onSaveDraft}><Icons.Draft/> &nbsp; Save as Draft</a>
-				<a onClick={onPreview}><Icons.Preview/>&nbsp;Preview</a>
 				<a onClick={onSaveReview}><Icons.Review/>&nbsp;Send for Review</a>
-				<a onClick={onDiscard}><Icons.Discard/>&nbsp;Discard</a>
 				<a onClick={onSavePublish}><Icons.Publish/>&nbsp;Publish</a>
 				<a onClick={onEditDetails}><Icons.Edit/>&nbsp;Edit Details</a>
 			</HoverMenu>
+			<Button className={'optionsBarButton'} onClick={onPreview} icon ={<Icons.Preview size = {25}/>} title = 'Preview Text'/>
 			<Button
 				icon = {<Icons.Discard/>}
 				onClick={onDiscard}
@@ -208,8 +208,12 @@ const RichTextEditor = ({ handleEditContentDetails, initialContent, options, han
 			Heading,
 			TextStyle,
 			FontFamily,
+			Placeholder.configure({
+				placeholder: 'Start writing your content here...',
+				showOnlyWhenEditable: true,
+			}),
 		],
-		content: initialContent || '<p>Start writing your lesson here...</p>',
+		content: initialContent || '',
 	});
 	// State ------------------------------------------------------
 	// Handlers ---------------------------------------------------
@@ -231,7 +235,6 @@ const RichTextEditor = ({ handleEditContentDetails, initialContent, options, han
 		const confirmDiscard = window.confirm('Are you sure you want to discard all content?');
 		if (confirmDiscard) {
 			editor.commands.clearContent();
-			editor.commands.setContent({ 'type':'doc', 'content':[{ 'type':'paragraph', 'content':[{ 'type':'text', 'marks':[{ 'type':'textStyle', 'attrs':{ 'fontFamily':'Arial' } }], 'text':'Editor has been cleared, please start typing here...' }] }] });
 		}
 	};
 	// View -------------------------------------------------------
