@@ -8,7 +8,6 @@ import Login from './views/Login';
 import Register from './views/Register';
 import PreviewQuiz from './views/PreviewQuiz';
 import { Toaster } from 'react-hot-toast';
-import './App.scss';
 
 // Lazy load components
 const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
