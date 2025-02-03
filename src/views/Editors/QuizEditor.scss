@@ -21,13 +21,18 @@
 			text-align: center;
 			margin: 0;
 		}
-
-		.hoverButton{
+		// Modify button styling
+		.hoverButton, .defaultStyle{
 			background-color: $mixedColour;
+			padding: 8px 12px;
 			&:hover{
 				background-color: darken($tertiaryColour, 10%);
 			}
 		}
+		.defaultStyle{
+			padding: 0 10px;
+		}
+		
   }
 
 

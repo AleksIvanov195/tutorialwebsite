@@ -190,14 +190,16 @@ const QuizEditor = () => {
 					<div className="quizEditor">
 						<header className="quizEditorHeader">
 							<div className="headerContainer">
-								<HoverMenu label="Options">
-									<a onClick = {() => changeQuizStatus(1)}><Icons.Draft/> &nbsp; Save as Draft</a>
-									<a onClick={handlePreview}><Icons.Preview/>&nbsp;Preview</a>
-									<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
-									<a ><Icons.Discard/>&nbsp;Delete Quiz</a>
-									<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
-									<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Details</a>
-								</HoverMenu>
+								<ButtonTray className={'headerButtonTray'}>
+									<HoverMenu label="Options">
+										<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
+										<a ><Icons.Discard/>&nbsp;Delete</a>
+										<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
+										<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Quiz</a>
+									</HoverMenu>
+									<Button onClick={() => changeQuizStatus(1)} icon = {<Icons.Draft size = {28}/>} title = 'Save Quiz as Draft'/>
+									<Button onClick={handlePreview} icon = {<Icons.Preview size = {30}/>} title = 'Preview Quiz'/>
+								</ButtonTray>
 								<h1>{!isQuizLoading && quiz[0].QuizName}</h1>
 							</div>
 						</header>
@@ -244,8 +246,8 @@ const QuizEditor = () => {
 											onClick={() => handleItemClick(question)}
 											isSelected={selectedQuestion?.QuestionID === question.QuestionID}
 										>
-											<span className="option" onClick={handleEditDetails}><Icons.Edit />Edit Question Details</span>
-											<span className="option" onClick={handleEditAnswers}><Icons.Edit />Edit Question Answers</span>
+											<span className="option" onClick={handleEditDetails}><Icons.Edit />Edit Question</span>
+											<span className="option" onClick={handleEditAnswers}><Icons.Edit />Edit Answers</span>
 											<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete />Delete Question</span>
 										</ContentItem>
 									))}
@@ -286,8 +288,8 @@ const QuizEditor = () => {
 									</div>
 								</Animate.FadeIn>
 								<ButtonTray>
-									<Button onClick={handleGoToPreviousQuestion} className="headerButton" icon = {<Icons.Previous/>}/>
-									<Button onClick={handleGoToNextQuestion} className="headerButton" icon = {<Icons.Next/>}/>
+									<Button onClick={handleGoToPreviousQuestion} className="headerButton" icon = {<Icons.Previous/>} title = 'Previous Question' />
+									<Button onClick={handleGoToNextQuestion} className="headerButton" icon = {<Icons.Next/>} title = 'Next Question'/>
 								</ButtonTray>
 							</div>
 						</div>
