@@ -6,7 +6,6 @@ import Homepage from './views/Homepage';
 import Course from './views/Course';
 import Login from './views/Login';
 import Register from './views/Register';
-import PreviewQuiz from './views/PreviewQuiz';
 import { Toaster } from 'react-hot-toast';
 
 // Lazy load components
@@ -14,6 +13,7 @@ const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
 const CreateCourse = lazy(() => import('./views/CreateCourse'));
 const LessonEditor = lazy(() => import('./views/editors/LessonEditor'));
 const QuizEditor = lazy(() => import('./views/editors/QuizEditor'));
+const PreviewQuiz = lazy(() => import('./views/PreviewQuiz'));
 const PreviewRichTextContent = lazy(() => import('./views/PreviewRichTextContent'));
 
 // Error boundary for lazy loaded components
