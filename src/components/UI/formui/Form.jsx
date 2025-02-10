@@ -4,14 +4,14 @@ import { Button, ButtonTray } from '../Buttons';
 import DynamicFields from './FormDynamicFields';
 import './Form.scss';
 
-export default function Form({ fields, defaultValues, onSubmit, onClose, apiResponse, header, dynamicFields, isMultipleChoice }) {
+export default function Form({ fields, defaultValues, onSubmit, onClose, apiResponse, header, dynamicFields, isMultipleChoice, resetOnSubmit = true }) {
 	// Inititalisation --------------------------------------------
 	const { register, handleSubmit, control, formState: { errors, isSubmitSuccessful }, reset } = useForm({ defaultValues });
 
 	// State ------------------------------------------------------
 	// Reset the form when submission is successful
 	useEffect(() => {
-		if (isSubmitSuccessful) {
+		if (isSubmitSuccessful && resetOnSubmit) {
 			reset(defaultValues);
 		}
 	}, [isSubmitSuccessful, reset, defaultValues]);
