@@ -64,8 +64,8 @@ const QuizEditor = () => {
 	const handleAddQuestion = async () => {
 		const toastId = toast.loading('Adding Question...');
 		const newQuestion = {
-			QuestionText: `Question ${questions.length + 1}`,
-			QuestionFeedbacktext: 'No Feedback',
+			QuestionText: '',
+			QuestionFeedbacktext: '',
 			QuestionType: 'MultipleChoice',
 			QuestionOrdernumber: questions.length + 1,
 			QuestionQuizID: quizID,

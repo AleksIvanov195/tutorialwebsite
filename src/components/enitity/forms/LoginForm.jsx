@@ -29,6 +29,11 @@ export default function LoginForm({ onSubmit }) {
 
 	const header = 'Log In';
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} header={header}/>;
+	return <Form
+		fields={fields}
+		defaultValues={defaultValues}
+		onSubmit={onSubmit}
+		header={header}
+		submitButtonText='Log In'/>;
 
 }

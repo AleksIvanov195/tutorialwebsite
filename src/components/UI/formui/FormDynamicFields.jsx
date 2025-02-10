@@ -33,7 +33,7 @@ export default function DynamicFields({ control, register, dynamicFields, isMult
 								defaultChecked={field.checked}
 							/>
 						)}
-						<Button onClick={() => remove(index)} className={'formButton removeButton'} icon={<Icons.Delete />} />
+						<Button onClick={() => remove(index)} className={'formButton removeButton'} icon={<Icons.Delete />} title = 'Remove Item'/>
 					</div>
 				</div>
 			))}

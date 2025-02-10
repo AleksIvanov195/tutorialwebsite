@@ -68,6 +68,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 					dynamicFields={dynamicField}
 					isMultipleChoice={isMultipleChoice}
 					resetOnSubmit = {false}
+					submitButtonText='Save Changes'
 				/>
 			}
 		</>

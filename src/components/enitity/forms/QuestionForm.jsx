@@ -7,7 +7,7 @@ const QuestionForm = ({ onSubmit, onClose, quiz, initialValues = {}, mode = 'edi
 			label: 'Question',
 			type: 'text',
 			validation: { required: 'Question is required' },
-			placeholder: 'Enter your question',
+			placeholder: 'Enter your question, e.g., What is the capital of the UK?',
 		},
 		{
 			name: 'QuestionFeedbacktext',
@@ -38,6 +38,12 @@ const QuestionForm = ({ onSubmit, onClose, quiz, initialValues = {}, mode = 'edi
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
 	const header = 'Edit Question';
-	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} header={header}/>;
+	return <Form
+		fields={fields}
+		defaultValues={initialFormValues}
+		onClose = {onClose}
+		onSubmit={onSubmit}
+		header={header}
+		submitButtonText='Save Changes'/>;
 };
 export default QuestionForm;

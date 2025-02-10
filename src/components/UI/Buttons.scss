@@ -70,7 +70,8 @@
 		background-color: $primaryColour;
 		color: $headerButtonTextColour;
 		border-radius: 6px;
-		padding: 10px 15px;
+		padding: 5px 7px;
+
 		&:hover {
 			background-color: $warningColour;
 		}
@@ -79,9 +80,9 @@
 		background-color: $primaryColour;
 		color: $headerButtonTextColour;
 		border-radius: 6px;
-		padding: 10px 15px;
+		padding: 7px 12px;
 		&:hover {
-			background-color: darken($primaryColour, 10%);
+			background-color: mix($primaryColour, $successColour, 50%);
 		}
 	}
 }

@@ -46,7 +46,11 @@ export default function RegisterForm({ onSubmit }) {
 
 	const header = 'Sign Up';
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} header={header}/>;
-
+	return <Form
+		fields={fields}
+		defaultValues={defaultValues}
+		onSubmit={onSubmit}
+		header={header}
+		submitButtonText='Register Now'/>;
 
 }
