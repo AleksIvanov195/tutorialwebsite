@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast';
 
 // Lazy load components
 const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
-const CreateCourse = lazy(() => import('./views/CreateCourse'));
+const CourseEditor = lazy(() => import('./views/editors/CourseEditor'));
 const LessonEditor = lazy(() => import('./views/editors/LessonEditor'));
 const QuizEditor = lazy(() => import('./views/editors/QuizEditor'));
 const Quiz = lazy(() => import('./views/quizviews/Quiz'));
@@ -61,11 +61,11 @@ const AppContent = () => {
 				}
 			/>
 			<Route
-				path="/createcourse"
+				path="/courseeditor"
 				element={
 					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
 						<ErrorBoundary>
-							<CreateCourse />
+							<CourseEditor />
 						</ErrorBoundary>
 					</ProtectedRoute>
 				}

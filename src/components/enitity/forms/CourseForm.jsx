@@ -1,10 +1,10 @@
 import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
 import { useAuth } from '../../../hooks/useAuth';
-export default function CourseForm({ onSubmit }) {
+export default function CourseForm({ onSubmit, onClose }) {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
-	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategory', authState.isLoggedIn);
+	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategories', authState.isLoggedIn);
 
 	// Specify fields with name (match default values), label, type, placeholder, validation
 	const fields = [
@@ -44,28 +44,21 @@ export default function CourseForm({ onSubmit }) {
 					: [{ value: '', label: 'No categories available' }],
 			validation: { required: 'Course Category is required' },
 		},
-		{
-			name: 'CoursePublicationstatusID',
-			label: 'Course Publication',
-			type: 'select',
-			options: [
-				{ value: '', label: 'Select a status' },
-				{ value: 1, label: 'Draft' },
-				{ value: 2, label: 'Submit for Review' },
-				{ value: 4, label: 'Publish' },
-			],
-			validation: { required: 'Course Publication is required' },
-		},
 	];
 
 	const defaultValues = {
 		CourseName: '',
 		CourseDescription: '',
 		CourseCoursecategoryID: '',
-		CoursePublicationstatusID: '',
+		CoursePublicationstatusID: 1,
 	};
 
 	const header = 'Create Course';
 
-	return <Form fields={fields} defaultValues={defaultValues} onSubmit={onSubmit} header={header} />;
+	return <Form
+		fields={fields}
+		defaultValues={defaultValues}
+		onSubmit={onSubmit}
+		header={header}
+		onClose = {onClose} />;
 }

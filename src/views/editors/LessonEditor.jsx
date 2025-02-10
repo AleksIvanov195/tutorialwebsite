@@ -56,18 +56,19 @@ const LessonEditor = () => {
 		setShowModal(!showModal);
 	};
 	// View -------------------------------------------------------
+	if(isLoading) {
+		return(
+			<>
+				<h1>Lesson Editor</h1>
+				<p>Loading lesson content...</p>
+			</>
+		);
+	}
 	return (
 		<div>
-			{isLoading ? (
-				<>
-					<h1>Lesson Editor</h1>
-					<p>Loading lesson content...</p>
-				</>
-			) : (
-				<>
-					<h1>Editing {lesson[0].LessonName}</h1>
-					{
-						showModal &&
+			<h1>Editing {lesson[0].LessonName}</h1>
+			{
+				showModal &&
 						<Modal>
 							<LessonForm
 								initialValues={{ LessonName: lesson[0].LessonName, LessonDescription: lesson[0].LessonDescription }}
@@ -75,15 +76,12 @@ const LessonEditor = () => {
 								onClose={openModal}
 								mode={'edit'}/>
 						</Modal>
-					}
-					<RichTextEditor
-						options = {editorOptions}
-						handleSave = {handleSaveLessonContent}
-						handleEditContentDetails = {openModal}
-						initialContent={JSON.parse(lesson[0].LessonContentJSON)}/>
-				</>
-			)}
-
+			}
+			<RichTextEditor
+				options = {editorOptions}
+				handleSave = {handleSaveLessonContent}
+				handleEditContentDetails = {openModal}
+				initialContent={JSON.parse(lesson[0].LessonContentJSON)}/>
 		</div>
 	);
 };

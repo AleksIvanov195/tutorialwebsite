@@ -181,31 +181,34 @@ const QuizEditor = () => {
 	};
 
 	// View -------------------------------------------------------
+	if(isLoading) {
+		return(
+			<>
+				<p>Loading content...</p>
+			</>
+		);
+	}
 	return (
 		<>
-			{
-				isLoading ?
-					<p>{questionsMessage}</p>
-					:
-					<div className="quizEditor">
-						<header className="quizEditorHeader">
-							<div className="headerContainer">
-								<ButtonTray className={'headerButtonTray'}>
-									<HoverMenu label="Options">
-										<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
-										<a ><Icons.Discard/>&nbsp;Delete</a>
-										<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
-										<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Quiz</a>
-									</HoverMenu>
-									<Button onClick={() => changeQuizStatus(1)} icon = {<Icons.Draft size = {28}/>} title = 'Save Quiz as Draft'/>
-									<Button onClick={handlePreview} icon = {<Icons.Preview size = {30}/>} title = 'Preview Quiz'/>
-								</ButtonTray>
-								<h1>{!isQuizLoading && quiz[0].QuizName}</h1>
-							</div>
-						</header>
-						<div className="quizEditorBody">
-							{
-								showModal &&
+			<div className="quizEditor">
+				<header className="quizEditorHeader">
+					<div className="headerContainer">
+						<ButtonTray className={'headerButtonTray'}>
+							<HoverMenu label="Options">
+								<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
+								<a ><Icons.Discard/>&nbsp;Delete</a>
+								<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
+								<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Quiz</a>
+							</HoverMenu>
+							<Button onClick={() => changeQuizStatus(1)} icon = {<Icons.Draft size = {28}/>} title = 'Save Quiz as Draft'/>
+							<Button onClick={handlePreview} icon = {<Icons.Preview size = {30}/>} title = 'Preview Quiz'/>
+						</ButtonTray>
+						<h1>{!isQuizLoading && quiz[0].QuizName}</h1>
+					</div>
+				</header>
+				<div className="quizEditorBody">
+					{
+						showModal &&
 						<Modal>
 							<QuizForm
 								initialValues={{ QuizName: quiz[0].QuizName, QuizDescription: quiz[0].QuizDescription }}
@@ -213,88 +216,88 @@ const QuizEditor = () => {
 								onClose={openModal}
 								mode={'edit'}/>
 						</Modal>
-							}
-							{isReordering ? (
-								<DndContext items={questions} onDragEnd={(event) => handleDragEnd(event, questions, setQuestions, 'QuestionID')} idField="QuestionID" >
-									<ContentPanel title={isReordering ? 'Reordering Enabled' : 'List of Questions'}>
-										<ButtonTray>
-											<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
-											<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
-										</ButtonTray>
-										{questions.map((question) => (
-											<SortableItem key={question.QuestionID} id={question.QuestionID}>
-												<ContentItem title={question.QuestionText}>
-												</ContentItem>
-											</SortableItem>
-										))}
-										<ButtonTray>
-											<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
-											<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
-										</ButtonTray>
-									</ContentPanel>
-								</DndContext>
-							) : (
-								<ContentPanel title="List of Questions">
-									<ButtonTray>
-										<Button icon={<Icons.Add size={25} />} onClick={handleAddQuestion} title="Add new question" />
-										<Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
-									</ButtonTray>
-									{questions.map((question) => (
-										<ContentItem
-											key={question.QuestionID}
-											title={question.QuestionText}
-											onClick={() => handleItemClick(question)}
-											isSelected={selectedQuestion?.QuestionID === question.QuestionID}
-										>
-											<span className="option" onClick={handleEditDetails}><Icons.Edit />Edit Question</span>
-											<span className="option" onClick={handleEditAnswers}><Icons.Edit />Edit Answers</span>
-											<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete />Delete Question</span>
-										</ContentItem>
-									))}
-									<ButtonTray>
-										<Button icon={<Icons.Add size={25} />} onClick={handleAddQuestion} title="Add new question" />
-										<Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
-									</ButtonTray>
-								</ContentPanel>
-							)}
-							<div className={'quizEditorContent'}>
-								<Animate.FadeIn on={formType}>
-									<div className={`quizEditorForm ${selectedQuestion && formType ? 'show' : ''}`}>
-										{selectedQuestion && formType === 'details' && (
-											<QuestionForm
-												key={`${selectedQuestion.QuestionID}details`}
-												initialValues={selectedQuestion}
-												onSubmit={handleEditQuestion}
-												onClose={() => {
-													setSelectedQuestion(null);
-													setFormType(null);
-												}}
-												quiz={{ QuizID: quizID }}
-											/>
-										)}
-										{selectedQuestion && formType === 'answers' && (
-											<AnswerForm
-												key={`${selectedQuestion.QuestionID}answers`}
-												question={selectedQuestion}
-												onSubmit={handleSubmitAnswers}
-												onClose={() => {
-													setSelectedQuestion(null);
-													setFormType(null);
-												}}
-												mode="edit"
-												header = {selectedQuestion.QuestionText}
-											/>
-										)}
-									</div>
-								</Animate.FadeIn>
+					}
+					{isReordering ? (
+						<DndContext items={questions} onDragEnd={(event) => handleDragEnd(event, questions, setQuestions, 'QuestionID')} idField="QuestionID" >
+							<ContentPanel title={isReordering ? 'Reordering Enabled' : 'List of Questions'}>
 								<ButtonTray>
-									<Button onClick={handleGoToPreviousQuestion} className="headerButton" icon = {<Icons.Previous/>} title = 'Previous Question' />
-									<Button onClick={handleGoToNextQuestion} className="headerButton" icon = {<Icons.Next/>} title = 'Next Question'/>
+									<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
+									<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
 								</ButtonTray>
+								{questions.map((question) => (
+									<SortableItem key={question.QuestionID} id={question.QuestionID}>
+										<ContentItem title={question.QuestionText}>
+										</ContentItem>
+									</SortableItem>
+								))}
+								<ButtonTray>
+									<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedQuestions} title="Save changes" />
+									<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
+								</ButtonTray>
+							</ContentPanel>
+						</DndContext>
+					) : (
+						<ContentPanel title="List of Questions">
+							<ButtonTray>
+								<Button icon={<Icons.Add size={25} />} onClick={handleAddQuestion} title="Add new question" />
+								<Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
+							</ButtonTray>
+							{questions.map((question) => (
+								<ContentItem
+									key={question.QuestionID}
+									title={question.QuestionText}
+									onClick={() => handleItemClick(question)}
+									isSelected={selectedQuestion?.QuestionID === question.QuestionID}
+								>
+									<span className="option" onClick={handleEditDetails}><Icons.Edit />Edit Question</span>
+									<span className="option" onClick={handleEditAnswers}><Icons.Edit />Edit Answers</span>
+									<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete />Delete Question</span>
+								</ContentItem>
+							))}
+							<ButtonTray>
+								<Button icon={<Icons.Add size={25} />} onClick={handleAddQuestion} title="Add new question" />
+								<Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
+							</ButtonTray>
+						</ContentPanel>
+					)}
+					<div className={'quizEditorContent'}>
+						<Animate.FadeIn on={formType}>
+							<div className={`quizEditorForm ${selectedQuestion && formType ? 'show' : ''}`}>
+								{selectedQuestion && formType === 'details' && (
+									<QuestionForm
+										key={`${selectedQuestion.QuestionID}details`}
+										initialValues={selectedQuestion}
+										onSubmit={handleEditQuestion}
+										onClose={() => {
+											setSelectedQuestion(null);
+											setFormType(null);
+										}}
+										quiz={{ QuizID: quizID }}
+									/>
+								)}
+								{selectedQuestion && formType === 'answers' && (
+									<AnswerForm
+										key={`${selectedQuestion.QuestionID}answers`}
+										question={selectedQuestion}
+										onSubmit={handleSubmitAnswers}
+										onClose={() => {
+											setSelectedQuestion(null);
+											setFormType(null);
+										}}
+										mode="edit"
+										header = {selectedQuestion.QuestionText}
+									/>
+								)}
 							</div>
-						</div>
+						</Animate.FadeIn>
+						<ButtonTray>
+							<Button onClick={handleGoToPreviousQuestion} className="headerButton" icon = {<Icons.Previous/>} title = 'Previous Question' />
+							<Button onClick={handleGoToNextQuestion} className="headerButton" icon = {<Icons.Next/>} title = 'Next Question'/>
+						</ButtonTray>
 					</div>
-			}
+				</div>
+			</div>
+
 		</>
 	);
 };

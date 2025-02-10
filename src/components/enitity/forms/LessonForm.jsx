@@ -36,6 +36,11 @@ const LessonForm = ({ onSubmit, onClose, initialValues = {}, mode = 'create' }) 
 
 	// View -------------------------------------------------------
 	const header = mode === 'edit' ? 'Edit Lesson' : 'Create Lesson';
-	return <Form fields={fields} defaultValues={initialFormValues} onClose = {onClose} onSubmit={onSubmit} header={header}/>;
+	return <Form
+		fields={fields}
+		defaultValues={initialFormValues}
+		onClose = {onClose}
+		onSubmit={onSubmit}
+		header={header}/>;
 };
 export default LessonForm;

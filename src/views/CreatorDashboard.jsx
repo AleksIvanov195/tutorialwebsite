@@ -10,6 +10,7 @@ import QuizForm from '../components/enitity/forms/QuizForm';
 import Modal from '../components/UI/Modal';
 import toast from 'react-hot-toast';
 import API from '../api/API';
+import CourseForm from '../components/enitity/forms/CourseForm';
 
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
@@ -24,25 +25,31 @@ export default function CreatorDashboard() {
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
 	// Handlers ---------------------------------------------------
 
-	const handleNavigateToCreateCourse = () =>{
-		navigate('/createcourse');
-	};
+	// Navigation ------------------------------------
+
 	const handleNavigateToLessonEditor = (lessonID) =>{
 		navigate('/lessoneditor', { state: { lessonID } });
 	};
+
 	const handleNavigateToQuizEditor = (quizID) =>{
 		navigate('/quizeditor', { state: { quizID } });
 	};
+
+	const handleNavigateToCourseEditor = (courseID) =>{
+		navigate('/courseeditor', { state: { courseID } });
+	};
+
 	const openForm = (type) =>{
 		setShowForm({ show: !showForm.show, type });
 	};
 
+	// Submission ------------------------------------
 	const handleLessonSubmit = async (data) => {
 		const toastId = toast.loading('Saving...');
 		const response = await API.post('/lessons', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const lessonID = response.result.data.LessonID;
-			navigate('/lessoneditor', { state: { lessonID } });
+			handleNavigateToLessonEditor(lessonID);
 			toast.success('Lesson Created.', { id:toastId });
 		} else {
 			toast.error(`Lesson could not be created. ${response.message}`, { id:toastId });
@@ -53,12 +60,24 @@ export default function CreatorDashboard() {
 		const response = await API.post('/quizzes', data, authState.isLoggedIn);
 		if (response.isSuccess) {
 			const quizID = response.result.data.QuizID;
-			navigate('/quizeditor', { state: { quizID } });
+			handleNavigateToQuizEditor(quizID);
 			toast.success('Quiz Created.', { id:toastId });
 		} else {
 			toast.error(`Quiz could not be created. ${response.message}`, { id:toastId });
 		}
 	};
+	const handleCourseSubmit = async (data) => {
+		const toastId = toast.loading('Saving...');
+		const response = await API.post('/courses', data, authState.isLoggedIn);
+		if (response.isSuccess) {
+			const courseID = response.result.data.CourseID;
+			handleNavigateToCourseEditor(courseID);
+			toast.success('Course successfully created!', { id:toastId });
+		} else {
+			toast.error(`Course Creation failed! ${response.message}`, { id:toastId });
+		}
+	};
+	// Deletion ------------------------------------
 	const onDeleteLesson = async (id) =>{
 		const toastId = toast.loading('Deleting...');
 		const response = await API.delete(`/lessons/${id}`, authState.isLoggedIn);
@@ -70,13 +89,16 @@ export default function CreatorDashboard() {
 		}
 	};
 	const onDeleteQuiz = async (id) =>{
-		//const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
+		// const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
+	};
+	const onDeleteCourse = async (id) =>{
+		// const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
 	};
 	// View -------------------------------------------------------
 	return (
 		<>
 			<ButtonTray>
-				<Button onClick={handleNavigateToCreateCourse}>Create Course</Button>
+				<Button onClick={() => openForm('course') }>Create Course</Button>
 				<Button onClick={() => openForm('lesson') }>Create Lesson</Button>
 				<Button onClick={() => openForm('quiz') }>Create Quiz</Button>
 			</ButtonTray>
@@ -90,6 +112,12 @@ export default function CreatorDashboard() {
 				showForm.show && showForm.type === 'quiz' &&
 				<Modal>
 					<QuizForm onClose={() => openForm('quiz')} onSubmit={handleQuizSubmit}/>
+				</Modal>
+			}
+			{
+				showForm.show && showForm.type === 'course' &&
+				<Modal>
+					<CourseForm onClose={() => openForm('course')} onSubmit={handleCourseSubmit}/>
 				</Modal>
 			}
 			<CollapsiblePanel header={`My Lessons (${lessons.length})`}>
@@ -119,7 +147,7 @@ export default function CreatorDashboard() {
 									<p>{quiz.QuizName}</p>
 									<p>{quiz.QuizDescription}</p>
 									<ButtonTray>
-										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID, quiz.QuizName)}>Edit</Button>
+										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID)}>Edit</Button>
 										<Button onClick={() => onDeleteQuiz(quiz.QuizID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
