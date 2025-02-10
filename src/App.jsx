@@ -13,7 +13,7 @@ const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
 const CreateCourse = lazy(() => import('./views/CreateCourse'));
 const LessonEditor = lazy(() => import('./views/editors/LessonEditor'));
 const QuizEditor = lazy(() => import('./views/editors/QuizEditor'));
-const PreviewQuiz = lazy(() => import('./views/PreviewQuiz'));
+const Quiz = lazy(() => import('./views/quizviews/Quiz'));
 const PreviewRichTextContent = lazy(() => import('./views/PreviewRichTextContent'));
 
 // Error boundary for lazy loaded components
@@ -24,7 +24,6 @@ const ErrorBoundary = ({ children }) => {
 		</Suspense>
 	);
 };
-
 // Protected route component
 const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
 	if (!isAllowed) {
@@ -101,13 +100,12 @@ const AppContent = () => {
 					</ProtectedRoute>
 				}
 			/>
-			<Route path="*" element={<Navigate to="/"/>} />
 			<Route
 				path="/previewquiz"
 				element = {
 					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
 						<ErrorBoundary>
-							<PreviewQuiz/>
+							<Quiz/>
 						</ErrorBoundary>
 					</ProtectedRoute>
 				}

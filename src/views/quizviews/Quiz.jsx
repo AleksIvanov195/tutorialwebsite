@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import useLoad from '../api/useLoad';
-import { useAuth } from '../hooks/useAuth';
-import { Button, ButtonTray } from '../components/UI/Buttons';
-import Icons from '../components/UI/Icons';
-import './PreviewQuiz.scss';
+import useLoad from '../../api/useLoad';
+import { useAuth } from '../../hooks/useAuth';
+import Question from './Question';
+import { Button, ButtonTray } from '../../components/UI/Buttons';
+import './Quiz.scss';
 
-const PreviewQuiz = () => {
+const Quiz = () => {
 	// Initialisation --------------------------------------------
 	const quizID = sessionStorage.getItem('previewQuizID');
 	const { authState } = useAuth();
+
 	// State ------------------------------------------------------
 	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`, authState.isLoggedIn);
 	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers`, authState.isLoggedIn);
@@ -27,6 +28,7 @@ const PreviewQuiz = () => {
 			setQuestionsAndAnswers(questionAndAnswers);
 		}
 	}, [questionsData]);
+
 	// Handlers ---------------------------------------------------
 	const breakDownQuestionsData = () => {
 		const questionAndAnswers = {};
@@ -78,6 +80,7 @@ const PreviewQuiz = () => {
 			}
 		}
 	};
+
 	const handleNext = () => {
 		setIsSubmitted(false);
 		setSelectedAnswers([]);
@@ -87,12 +90,14 @@ const PreviewQuiz = () => {
 			setQuizFinished(true);
 		}
 	};
+
 	const arraysMatch = (arr1, arr2) => {
 		if (arr1.length !== arr2.length) return false;
 		const sortedA = [...arr1].sort();
 		const sortedB = [...arr2].sort();
 		return sortedA.every((value, index) => value === sortedB[index]);
 	};
+
 	// View -------------------------------------------------------
 	if (isLoading || isQuizLoading) return <p>Loading...</p>;
 	if (questionsAndAnswers.length === 0) return <p>No questions available.</p>;
@@ -100,39 +105,29 @@ const PreviewQuiz = () => {
 	if (quizFinished) {
 		return (
 			<div className="quizContainer">
-				<h2>You completed the QUIZ!</h2>
+				<h2>You completed {quiz[0].QuizName}!</h2>
 				<p>Your final score: {score} / {questionsAndAnswers.length}</p>
 				<Button onClick={() => window.location.reload()}>Restart Quiz</Button>
 			</div>
 		);
 	}
+
 	const currentQuestion = questionsAndAnswers[currentQuestionIndex];
+
 	return (
 		<div className="quizContainer">
 			<h2 className="quizHeader">Question {currentQuestionIndex + 1}:</h2>
-			<p className="questionText">{currentQuestion.question}</p>
-			<div className="answers">
-				{currentQuestion.answers.map((answer) => (
-					<label key={answer.answerID} className="answer">
-						<input
-							type={currentQuestion.type === 'MultipleChoice' ? 'checkbox' : 'radio'}
-							name="answer"
-							value={answer.answerID}
-							checked={selectedAnswers.includes(answer.answerID)}
-							onChange={() => handleSelectAnswer(answer.answerID)}
-							disabled={isSubmitted}
-						/>
-						{answer.text}
-						{isSubmitted && (answer.correct === 1 ? <Icons.Check color="green" /> : <Icons.Close color="red" />)}
-					</label>
-				))}
-			</div>
+			<Question
+				question={currentQuestion}
+				selectedAnswers={selectedAnswers}
+				onSelectAnswer={handleSelectAnswer}
+				isSubmitted={isSubmitted}
+			/>
 			{isSubmitted && (
 				<p className={`feedback ${isCorrect ? 'correct' : 'wrong'}`}>
 					{isCorrect ? 'Correct!' : `Wrong! ${currentQuestion.feedback}`}
 				</p>
 			)}
-
 			<ButtonTray>
 				<Button onClick={handleSubmit} disabled={isSubmitted || selectedAnswers === null}>Submit</Button>
 				{isSubmitted && (
@@ -145,4 +140,4 @@ const PreviewQuiz = () => {
 	);
 };
 
-export default PreviewQuiz;
+export default Quiz;
