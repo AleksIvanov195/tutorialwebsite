@@ -234,8 +234,8 @@ const QuizEditor = () => {
 					items={questions}
 					setItems={setQuestions}
 					idField="QuestionID"
-					isReordering={isReordering}
-				>
+					isReordering={isReordering}>
+
 					{panelButtons}
 					{questions.map((question) => (
 						<SortableContentItem key={question.QuestionID} id={question.QuestionID}
