@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { SortableContentItem, SortableContentPanel } from '../../components/UI/contentpanel/SortableContentPanel';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import LessonPreview from '../userpreviews/lessonpreview';
+import QuizUserView from '../userpreviews/QuizUserView';
 import Icons from '../../components/UI/Icons';
 import toast from 'react-hot-toast';
 import './CourseEditor.scss';
@@ -74,6 +75,14 @@ const CourseEditor = () =>{
 		setIsReordering(!isReordering);
 	};
 	// View -------------------------------------------------------
+	const contentView = () => {
+		if (selectedCourseContent.ContentType === 'Lesson') {
+			return <LessonPreview lessonID={selectedCourseContent.ContentID} />;
+		} else if (selectedCourseContent.ContentType === 'Quiz') {
+			return <QuizUserView quizID={selectedCourseContent.ContentID} />;
+		}
+		return null;
+	};
 	if(isLoading) {
 		return(
 			<>
@@ -117,12 +126,7 @@ const CourseEditor = () =>{
 				</SortableContentPanel>
 
 				<div className="courseEditorContent">
-					{
-						selectedCourseContent &&
-					  selectedCourseContent.ContentType == 'Lesson'
-						&&
-						<LessonPreview lessonID = {selectedCourseContent.ContentID}/>
-					}
+					{selectedCourseContent && contentView()}
 				</div>
 			</div>
 		</div>
