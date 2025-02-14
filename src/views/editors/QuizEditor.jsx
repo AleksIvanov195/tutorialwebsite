@@ -10,7 +10,7 @@ import './QuizEditor.scss';
 import Icons from '../../components/UI/Icons';
 import Animate from '../../components/UI/Animate';
 import HoverMenu from '../../components/UI/HoverMenu';
-import Modal from '../../components/UI/Modal';
+import Modal from '../../components/UI/modal/Modal';
 import QuizForm from '../../components/enitity/forms/QuizForm';
 import { SortableContentItem, SortableContentPanel } from '../../components/UI/contentpanel/SortableContentPanel';
 import { toast } from 'react-hot-toast';
@@ -101,20 +101,22 @@ const QuizEditor = () => {
 
 	const handleSubmitReorderedQuestions = async () => {
 		const toastId = toast.loading('Updating Question...');
-		try{
-			await Promise.all(
-				questions.map((question, index) =>
-					API.put(`/questions/${question.QuestionID}`, { QuestionOrdernumber: index + 1 }, authState.isLoggedIn),
-				),
-			);
-			setIsReordering(false);
-			loadQuestions();
-			toast.success('Questions Reordered.', { id:toastId });
-		}catch (error) {
-			setIsReordering(false);
-			toast.error(`Something went wrong while reordering, please try again!, ${error}`, { id:toastId });
-		}
+		const responses = await Promise.all(
+			questions.map((question, index) =>
+				API.put(`/questions/${question.QuestionID}`, { QuestionOrdernumber: index + 1 }, authState.isLoggedIn),
+			),
+		);
+		const success = responses.every(response => response.isSuccess);
 
+		setIsReordering(false);
+		loadQuestions();
+
+		if (success) {
+			toast.success('Questions Reordered.', { id: toastId });
+		} else {
+			const errorMessage = responses.find(response => !response.isSuccess).message;
+			toast.error(`Something went wrong while reordering, please try again! ${errorMessage}`, { id: toastId });
+		}
 	};
 	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) => {
 		const toastId = toast.loading('Updating Question...');
