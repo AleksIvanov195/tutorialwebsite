@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { ButtonTray, Button } from '../components/UI/Buttons';
 import LessonForm from '../components/enitity/forms/LessonForm';
 import QuizForm from '../components/enitity/forms/QuizForm';
-import Modal from '../components/UI/Modal';
+import Modal from '../components/UI/modal/Modal';
 import toast from 'react-hot-toast';
 import API from '../api/API';
 import CourseForm from '../components/enitity/forms/CourseForm';

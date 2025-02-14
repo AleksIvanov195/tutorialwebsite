@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import API from '../../api/API';
 import useLoad from '../../api/useLoad';
 import LessonForm from '../../components/enitity/forms/LessonForm';
-import Modal from '../../components/UI/Modal';
+import Modal from '../../components/UI/modal/Modal';
 import toast from 'react-hot-toast';
 const LessonEditor = () => {
 	// Inititalisation --------------------------------------------

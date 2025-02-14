@@ -1,0 +1,20 @@
+@import '../../styles/variables.scss';
+.searchBar {
+	display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  input {
+    width: 90%;
+    padding: 10px;
+		border: 1px solid mix($secondaryColour, $bgColour, 20%);
+		border-radius: 8px;
+    background-color: $bgColour;
+    color: $secondaryColour;
+		font-size: 15px;
+		&:focus {
+      border-color: $primaryColour;
+      box-shadow: 0 0 0 3px rgba($primaryColour, 0.1);
+      outline: none;
+    }
+  }
+}

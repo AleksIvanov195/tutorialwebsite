@@ -3,11 +3,10 @@
   position: relative;
   display: inline-block;
 
-
   .arrow {
-    display: inline-block;
-    transition: transform 0.3s ease;
-  }
+		display: inline-block;
+		transition: transform 0.3s ease;
+	}
 
   &:hover .arrow {
     transform: rotate(90deg);
@@ -16,7 +15,7 @@
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-		width:170px;
+		width: auto;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
@@ -29,7 +28,8 @@
       text-decoration: none;
       display: flex;
       transition: background-color 0.3s;
-
+			white-space: nowrap;
+			
       &:hover {
         background-color: #f1f1f1;
       }
@@ -38,8 +38,5 @@
 
   &:hover .content {
     display: block;
-  }
-  &:hover .hoverButton .arrow {
-    transform: rotate(90deg);
   }
 }

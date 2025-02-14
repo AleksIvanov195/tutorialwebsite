@@ -11,6 +11,7 @@
   align-items: center;
   gap: 8px;
 	color: $bgColour;
+	line-height: 1;
 
   &:hover {
     transform: translateY(-1px);
@@ -21,7 +22,7 @@
 .defaultStyle {
   @extend %baseButton;
   background-color: $primaryColour;
-
+	max-height: 40px;
 	&:hover {
 		background-color: darken($primaryColour, 10%);
 	}
@@ -106,7 +107,8 @@
 	@extend %baseButton;
 	background-color: $primaryColour;
 	font-weight: bold;
-	padding: 9px 12px;
+	padding: 8px 12px;
+	min-height: 40px;
 
 	&:hover {
 		background-color: $mixedColour;
