@@ -1,0 +1,30 @@
+@import '../../../styles/variables.scss';
+.contentSelectorContainer{
+	max-width: 600px;
+	margin: 20px auto;
+	padding: 25px;
+	background-color: $bgColour;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s ease;
+	justify-content: center;
+
+	ul {
+		list-style-type: none;
+		padding-left: 0;
+		li {
+			padding: 15px;
+			border-bottom: 1px solid $mixedColour;
+			cursor: pointer;
+
+			input[type='checkbox'] {
+				margin-right: 10px;
+				accent-color: $primaryColour;
+			}
+			&:hover {
+				background-color: $mixedColour;
+				color: white;
+			}
+		}
+	}
+}
