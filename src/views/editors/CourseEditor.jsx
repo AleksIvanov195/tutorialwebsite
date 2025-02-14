@@ -7,6 +7,8 @@ import { SortableContentItem, SortableContentPanel } from '../../components/UI/c
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import LessonPreview from '../userpreviews/lessonpreview';
 import QuizUserView from '../userpreviews/QuizUserView';
+import HoverMenu from '../../components/UI/HoverMenu';
+import ContentSelectorModal from '../../components/UI/modal/ContentSelectorModal';
 import Icons from '../../components/UI/Icons';
 import toast from 'react-hot-toast';
 import './CourseEditor.scss';
@@ -20,6 +22,8 @@ const CourseEditor = () =>{
 	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad('/coursecontents/simplified?CoursecontentCourseID=1&orderby=CoursecontentOrder,ASC', authState.isLoggedIn);
 	const [selectedCourseContent, setSelectedCourseContent] = useState(null);
 	const [isReordering, setIsReordering] = useState(false);
+	const [showLessonModal, setShowLessonModal] = useState(false);
+	const [showQuizModal, setShowQuizModal] = useState(false);
 	const initialCourseContent = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (content) => {
@@ -47,20 +51,40 @@ const CourseEditor = () =>{
 	};
 	const handleSubmitReorderedContent = async () => {
 		const toastId = toast.loading('Updating Content...');
-		try{
-			await Promise.all(
-				courseContent.map((content, index) =>
-					API.put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder : index + 1 }, authState.isLoggedIn),
-				),
-			);
-			setIsReordering(false);
-			loadCourseContent();
-			toast.success('Content Reordered.', { id:toastId });
-		}catch (error) {
-			setIsReordering(false);
-			toast.error(`Something went wrong while reordering, please try again!, ${error}`, { id:toastId });
-		}
+		const responses = await Promise.all(
+			courseContent.map((content, index) =>
+				API.put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, authState.isLoggedIn),
+			),
+		);
+		const success = responses.every(response => response.isSuccess);
+		setIsReordering(false);
+		loadCourseContent();
 
+		if (success) {
+			toast.success('Content Reordered.', { id: toastId });
+		} else {
+			const errorMessage = responses.find(response => !response.isSuccess).message;
+			toast.error(`Something went wrong while reordering, please try again! ${errorMessage}`, { id: toastId });
+		}
+	};
+	const handleAddExistingContent = async (ids) => {
+		const CourseContentObj = {
+			CoursecontentCourseID: 1,
+			CoursecontentLessonID: null,
+			CoursecontentQuizID: null,
+			CoursecontentOrder: 0,
+		};
+		const currentIndex = courseContent[courseContent.length - 1].CoursecontentOrder;
+		if(showLessonModal) {
+			await Promise.all(
+				ids.map((id, index) =>{
+					CourseContentObj.CoursecontentLessonID = id;
+					CourseContentObj.CoursecontentOrder = currentIndex + index;
+					API.post('/coursecontents', CourseContentObj, authState.isLoggedIn);
+				}),
+			);
+
+		}
 	};
 	const toggleReordering = () => {
 		if (isReordering) {
@@ -85,9 +109,7 @@ const CourseEditor = () =>{
 	};
 	if(isLoading) {
 		return(
-			<>
-				<p>Loading content...</p>
-			</>
+			<p>Loading content...</p>
 		);
 	}
 	return(
@@ -103,8 +125,23 @@ const CourseEditor = () =>{
 					idField="CoursecontentID"
 					isReordering={isReordering}>
 					<ButtonTray>
-						<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedContent} title="Save changes" />
-						<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
+						{
+							isReordering
+								?
+								<>
+									<Button icon={<Icons.Publish size={25} />} onClick={handleSubmitReorderedContent} title="Save changes" />
+									<Button icon={<Icons.Close size={25} />} onClick={toggleReordering} title="Cancel Reordering" />
+								</>
+								:
+								<>
+									<HoverMenu label="Add">
+										<a onClick={() => setShowLessonModal(true)}><Icons.Review />&nbsp;Existing Lesson</a>
+										<a onClick={() => setShowQuizModal(true)}><Icons.Discard />&nbsp;Existing Quiz</a>
+										<a><Icons.Publish />&nbsp;New Lesson</a>
+										<a><Icons.Edit />&nbsp;New Quiz</a>
+									</HoverMenu><Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
+								</>
+						}
 					</ButtonTray>
 					{courseContent.map((content) => (
 						<SortableContentItem
@@ -118,17 +155,31 @@ const CourseEditor = () =>{
 							<span className="option delete" onClick={handleRemoveContentFromCourse}><Icons.Delete />Remove {content.ContentType}</span>
 						</SortableContentItem>
 					))}
-					{
-						// TO DO: Options below each item, remove from course, option to edit the item if quiz go to quiz editor if lesson go to lesson editor
-						// When you click on a item the options appear below the item and the item is loaded on the right side of the screen.
-					}
-
 				</SortableContentPanel>
 
 				<div className="courseEditorContent">
 					{selectedCourseContent && contentView()}
 				</div>
 			</div>
+			{showLessonModal && (
+				<ContentSelectorModal
+					endpoint="/lessons"
+					idField="LessonID"
+					textField="LessonName"
+					onClose={() => setShowLessonModal(false)}
+					onSave={handleAddExistingContent}
+				/>
+			)}
+
+			{showQuizModal && (
+				<ContentSelectorModal
+					endpoint="/quizzes"
+					idField="QuizID"
+					textField="QuizName"
+					onClose={() => setShowQuizModal(false)}
+					onSave={handleAddExistingContent}
+				/>
+			)}
 		</div>
 
 	);
