@@ -1,6 +1,5 @@
-import { useAuth } from '../../hooks/useAuth';
+import useApiActions from '../../hooks/useApiActions';
 import useLoad from '../../api/useLoad';
-import API from '../../api/API';
 import { useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SortableContentItem, SortableContentPanel } from '../../components/UI/contentpanel/SortableContentPanel';
@@ -14,12 +13,12 @@ import toast from 'react-hot-toast';
 import './CourseEditor.scss';
 const CourseEditor = () =>{
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
+	const { post, put, delete: deleteRequest } = useApiActions();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
-	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad('/coursecontents/simplified?CoursecontentCourseID=1&orderby=CoursecontentOrder,ASC', authState.isLoggedIn);
+	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad('/coursecontents/simplified?CoursecontentCourseID=1&orderby=CoursecontentOrder,ASC');
 	const [selectedCourseContent, setSelectedCourseContent] = useState(null);
 	const [isReordering, setIsReordering] = useState(false);
 	const [showLessonModal, setShowLessonModal] = useState(false);
@@ -40,7 +39,7 @@ const CourseEditor = () =>{
 	};
 	const handleRemoveContentFromCourse = async () => {
 		const toastId = toast.loading(`Removing ${selectedCourseContent.ContentType}...`);
-		const response = await API.delete(`/coursecontents/${selectedCourseContent.CoursecontentID}`);
+		const response = await deleteRequest(`/coursecontents/${selectedCourseContent.CoursecontentID}`);
 		if (response.isSuccess) {
 			loadCourseContent();
 			toast.success(`${selectedCourseContent.ContentType} has been removed.`, { id:toastId });
@@ -53,7 +52,7 @@ const CourseEditor = () =>{
 		const toastId = toast.loading('Updating Content...');
 		const responses = await Promise.all(
 			courseContent.map((content, index) =>
-				API.put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, authState.isLoggedIn),
+				put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }),
 			),
 		);
 		const success = responses.every(response => response.isSuccess);
@@ -80,11 +79,20 @@ const CourseEditor = () =>{
 				ids.map((id, index) =>{
 					CourseContentObj.CoursecontentLessonID = id;
 					CourseContentObj.CoursecontentOrder = currentIndex + index;
-					API.post('/coursecontents', CourseContentObj, authState.isLoggedIn);
+					post('/coursecontents', CourseContentObj);
 				}),
 			);
-
 		}
+		if(showQuizModal) {
+			await Promise.all(
+				ids.map((id, index) =>{
+					CourseContentObj.CoursecontentQuizID = id;
+					CourseContentObj.CoursecontentOrder = currentIndex + index;
+					post('/coursecontents', CourseContentObj);
+				}),
+			);
+		}
+		loadCourseContent();
 	};
 	const toggleReordering = () => {
 		if (isReordering) {
