@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import API from './API';
+import { useAuth } from '../hooks/useAuth';
 
-const useLoad = (endpoint, isLoggedIn) =>{
+const useLoad = (endpoint) =>{
+	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const [records, setRecords] = useState([]);
 	const [loadingMessage, setLoadingMessage] = useState('Loading records...');
 	const [isLoading, setIsLoading] = useState(true);
 	// Methods ---------------------------------------------------
 	const loadRecords = async () => {
-	
-		const response = await API.get(endpoint, isLoggedIn);
+		const response = await API.get(endpoint, authState.isLoggedIn);
 		setIsLoading(false);
 		if (response.isSuccess) {
 			setRecords(response.result || []);
