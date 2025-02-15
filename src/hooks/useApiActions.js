@@ -5,22 +5,24 @@ import toast from 'react-hot-toast';
 const useApiActions = () => {
 	const { authState } = useAuth();
 
-	const handleApiCall = async (apiMethod, endpoint, data = null) => {
-		const toastId = toast.loading('Processing request...');
+	const handleApiCall = async (apiMethod, endpoint, data = null, showToast = true) => {
+		const toastId = showToast ? toast.loading('Processing...') : null;
 		const response = await apiMethod(endpoint, data, authState.isLoggedIn);
 
-		if (response.isSuccess) {
-			toast.success('Request completed successfully!', { id: toastId });
-		} else {
-			toast.error(response.message || 'An error occurred.', { id: toastId });
+		if (showToast) {
+			if (response.isSuccess) {
+				toast.success('Request completed successfully!', { id: toastId });
+			} else {
+				toast.error(response.message || 'An error occurred.', { id: toastId });
+			}
 		}
 
 		return response;
 	};
 
-	const post = async (endpoint, data) => handleApiCall(API.post, endpoint, data);
-	const put = async (endpoint, data) => handleApiCall(API.put, endpoint, data);
-	const deleteRequest = async (endpoint) => handleApiCall(API.delete, endpoint);
+	const post = async (endpoint, data, showToast = true) => handleApiCall(API.post, endpoint, data, showToast);
+	const put = async (endpoint, data, showToast = true) => handleApiCall(API.put, endpoint, data, showToast);
+	const deleteRequest = async (endpoint, showToast = true) => handleApiCall(API.delete, endpoint, null, showToast);
 
 	// Batch API calls
 	const batchRequests = async (requests) => {

@@ -44,7 +44,7 @@ const CourseEditor = () =>{
 	};
 	const handleSubmitReorderedContent = async () => {
 		const requests = courseContent.map((content, index) =>
-			put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }),
+			put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, false),
 		);
 		await batchRequests(requests);
 		setIsReordering(false);
@@ -59,7 +59,7 @@ const CourseEditor = () =>{
 				CoursecontentLessonID: showLessonModal ? id : null,
 				CoursecontentQuizID: showQuizModal ? id : null,
 				CoursecontentOrder: currentIndex + index + 1,
-			}),
+			}, false),
 		);
 		await batchRequests(requests);
 		loadCourseContent();
