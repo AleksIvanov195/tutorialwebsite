@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import './CourseEditor.scss';
 const CourseEditor = () =>{
 	// Inititalisation --------------------------------------------
-	const { post, put, delete: deleteRequest } = useApiActions();
+	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { courseID } = location.state || { courseID: null };
@@ -38,60 +38,30 @@ const CourseEditor = () =>{
 		}
 	};
 	const handleRemoveContentFromCourse = async () => {
-		const toastId = toast.loading(`Removing ${selectedCourseContent.ContentType}...`);
-		const response = await deleteRequest(`/coursecontents/${selectedCourseContent.CoursecontentID}`);
-		if (response.isSuccess) {
-			loadCourseContent();
-			toast.success(`${selectedCourseContent.ContentType} has been removed.`, { id:toastId });
-			setSelectedCourseContent(null);
-		}else {
-			toast.error(`${selectedCourseContent.ContentType} could not be removed. ${response.message}`, { id:toastId });
-		}
+		await deleteRequest(`/coursecontents/${selectedCourseContent.CoursecontentID}`);
+		loadCourseContent();
+		setSelectedCourseContent(null);
 	};
 	const handleSubmitReorderedContent = async () => {
-		const toastId = toast.loading('Updating Content...');
-		const responses = await Promise.all(
-			courseContent.map((content, index) =>
-				put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }),
-			),
+		const requests = courseContent.map((content, index) =>
+			put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }),
 		);
-		const success = responses.every(response => response.isSuccess);
+		await batchRequests(requests);
 		setIsReordering(false);
 		loadCourseContent();
-
-		if (success) {
-			toast.success('Content Reordered.', { id: toastId });
-		} else {
-			const errorMessage = responses.find(response => !response.isSuccess).message;
-			toast.error(`Something went wrong while reordering, please try again! ${errorMessage}`, { id: toastId });
-		}
 	};
 	const handleAddExistingContent = async (ids) => {
-		const CourseContentObj = {
-			CoursecontentCourseID: 1,
-			CoursecontentLessonID: null,
-			CoursecontentQuizID: null,
-			CoursecontentOrder: 0,
-		};
-		const currentIndex = courseContent[courseContent.length - 1].CoursecontentOrder;
-		if(showLessonModal) {
-			await Promise.all(
-				ids.map((id, index) =>{
-					CourseContentObj.CoursecontentLessonID = id;
-					CourseContentObj.CoursecontentOrder = currentIndex + index;
-					post('/coursecontents', CourseContentObj);
-				}),
-			);
-		}
-		if(showQuizModal) {
-			await Promise.all(
-				ids.map((id, index) =>{
-					CourseContentObj.CoursecontentQuizID = id;
-					CourseContentObj.CoursecontentOrder = currentIndex + index;
-					post('/coursecontents', CourseContentObj);
-				}),
-			);
-		}
+		const currentIndex = courseContent[courseContent.length - 1]?.CoursecontentOrder || 0;
+
+		const requests = ids.map((id, index) =>
+			post('/coursecontents', {
+				CoursecontentCourseID: 1,
+				CoursecontentLessonID: showLessonModal ? id : null,
+				CoursecontentQuizID: showQuizModal ? id : null,
+				CoursecontentOrder: currentIndex + index + 1,
+			}),
+		);
+		await batchRequests(requests);
 		loadCourseContent();
 	};
 	const toggleReordering = () => {
