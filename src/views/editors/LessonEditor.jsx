@@ -1,15 +1,12 @@
 import RichTextEditor from '../../components/UI/RichTextEditor';
-import { useAuth } from '../../hooks/useAuth';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import API from '../../api/API';
+import useApiActions from '../../hooks/useApiActions';
 import useLoad from '../../api/useLoad';
 import LessonForm from '../../components/enitity/forms/LessonForm';
 import Modal from '../../components/UI/modal/Modal';
-import toast from 'react-hot-toast';
 const LessonEditor = () => {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
 	const location = useLocation();
 	const { lessonID } = location.state || { lessonID: null };
 	const editorOptions = {
@@ -26,30 +23,27 @@ const LessonEditor = () => {
 		heading: true,
 		fontStyle: true,
 	};
+	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	// State ------------------------------------------------------
-	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`, authState.isLoggedIn);
+	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`);
 	const [showModal, setShowModal] = useState(false);
 	// Handlers ---------------------------------------------------
-	const handleSaveLessonContent = async (data, status) =>{
-		const toastId = toast.loading('Saving...');
-		const lessonData = { LessonContentJSON: data, LessonPublicationstatusID: status };
-		const response = await API.put(`/lessons/${lesson[0].LessonID}/content-status`, lessonData, authState.isLoggedIn);
-		if(response.isSuccess) {
-			toast.success('Lesson Saved.', { id:toastId });
-		}else{
-			toast.error(`Lesson could not be saved. ${response.message}`, { id:toastId });
-		}
+	const handleSaveLessonContent = async (data, status) => {
+		await put(`/lessons/${lesson[0].LessonID}/content-status`,
+			{ LessonContentJSON: data, LessonPublicationstatusID: status },
+			{
+				successMessage: 'Lesson Saved.',
+				errorMessage: 'Lesson could not be saved.',
+			},
+		);
 	};
-	const handleSaveLessonDetails = async (data)=>{
-		const toastId = toast.loading('Saving...');
-		const response = await API.put(`/lessons/${lesson[0].LessonID}/name-description`, data, authState.isLoggedIn);
+	const handleSaveLessonDetails = async (data) => {
+		const response = await put(`/lessons/${lesson[0].LessonID}/name-description`, data, {
+			successMessage: 'Lesson details have been updated.',
+			errorMessage: 'Lesson details could not be updated.',
+		});
 		if (response.isSuccess) {
-			setLesson([
-				{ ...lesson[0], LessonName: data.LessonName, LessonDescription: data.LessonDescription },
-			]);
-			toast.success('Lesson details have been updated.', { id:toastId });
-		}else{
-			toast.error(`Lesson detail could not be updated. ${response.message}`, { id:toastId });
+			setLesson([{ ...lesson[0], LessonName: data.LessonName, LessonDescription: data.LessonDescription }]);
 		}
 	};
 	const openModal = () =>{

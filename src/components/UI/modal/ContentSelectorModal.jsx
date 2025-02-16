@@ -7,7 +7,7 @@ import './ContentSelectorModal.scss';
 const ContentSelectorModal = ({ endpoint, idField, textField, onClose, onSave }) => {
 	// State ------------------------------------------------------
 	const [searchString, setSearchString] = useState('');
-	const [items] = useLoad(`${endpoint}?search=${searchString}&searchFields=${textField}`);
+	const [items] = useLoad(`${endpoint}?search=${searchString}&searchFields=${textField}&orderby=${textField}`);
 	const [selectedItems, setSelectedItems] = useState([]);
 	// Handlers ---------------------------------------------------
 	const addItem = (itemID) => setSelectedItems((prev) => [...prev, itemID]);
@@ -27,7 +27,6 @@ const ContentSelectorModal = ({ endpoint, idField, textField, onClose, onSave })
 							<input
 								type="checkbox"
 								checked={selectedItems.includes(item[idField])}
-								onChange={() => handleSelect(item[idField])}
 								id={`checkbox-${item[idField]}`}
 							/>
 							<span>{item[textField]}</span>

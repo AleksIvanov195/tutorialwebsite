@@ -1,10 +1,8 @@
 import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
-import { useAuth } from '../../../hooks/useAuth';
 export default function CourseForm({ onSubmit, onClose }) {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
-	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategories', authState.isLoggedIn);
+	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategories');
 
 	// Specify fields with name (match default values), label, type, placeholder, validation
 	const fields = [

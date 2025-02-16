@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 import useLoad from '../../api/useLoad';
-import { useAuth } from '../../hooks/useAuth';
 import Question from '../quizviews/Question';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import '../quizviews/Quiz.scss';
 
 const QuizUserView = ({ quizID }) => {
 	// Initialisation --------------------------------------------
-	const { authState } = useAuth();
-
 	// State ------------------------------------------------------
-	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`, authState.isLoggedIn);
-	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers?orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
+	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
+	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers?orderby=QuestionOrdernumber,ASC`);
 
 	const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react';
-import { useAuth } from '../../hooks/useAuth';
 import { useLocation } from 'react-router-dom';
 import useLoad from '../../api/useLoad';
-import API from '../../api/API';
+import useApiActions from '../../hooks/useApiActions';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import QuestionForm from '../../components/enitity/forms/QuestionForm';
 import AnswerForm from '../../components/enitity/forms/AnswerForm';
@@ -17,12 +16,12 @@ import { toast } from 'react-hot-toast';
 
 const QuizEditor = () => {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
+	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const location = useLocation();
 	const { quizID } = location.state || { quizID: null };
 	// State ------------------------------------------------------
-	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`, authState.isLoggedIn);
-	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`, authState.isLoggedIn);
+	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
+	const [questions, setQuestions, questionsMessage, isLoading, loadQuestions] = useLoad(`/questions?QuestionQuizID=${quizID}&orderby=QuestionOrdernumber,ASC`);
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [formType, setFormType] = useState(null);
 	const [isReordering, setIsReordering] = useState(false);
@@ -59,7 +58,6 @@ const QuizEditor = () => {
 	};
 
 	const handleAddQuestion = async () => {
-		const toastId = toast.loading('Adding Question...');
 		const newQuestion = {
 			QuestionText: '',
 			QuestionFeedbacktext: '',
@@ -67,97 +65,83 @@ const QuizEditor = () => {
 			QuestionOrdernumber: questions.length + 1,
 			QuestionQuizID: quizID,
 		};
-		const response = await API.post('/questions', newQuestion, authState.isLoggedIn);
+
+		const response = await post('/questions', newQuestion, {
+			successMessage: 'Question Added.',
+			errorMessage: 'Question could not be added.',
+		});
 		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
-			toast.success('Question Added.', { id:toastId });
-		} else {
-			toast.error(`Question could not be added. ${response.message}`, { id:toastId });
 		}
 	};
 	const handleEditQuestion = async (data) => {
-		const toastId = toast.loading('Updating Question...');
-		const response = await API.put(`/questions/${selectedQuestion.QuestionID}`, data, authState.isLoggedIn);
+		const response = await put(`/questions/${selectedQuestion.QuestionID}`, data, {
+			successMessage: 'Question Updated.',
+			errorMessage: 'Question could not be updated.',
+		});
 		if (response.isSuccess) {
 			loadQuestions();
 			setSelectedQuestion(response.result.data);
-			toast.success('Question Updated.', { id:toastId });
-		} else {
-			toast.error(`Question could not be updated. ${response.message}`, { id:toastId });
 		}
 	};
 	const handleDeleteQuestion = async () => {
-		const toastId = toast.loading('Updating Question...');
-		const response = await API.delete(`/questions/${selectedQuestion.QuestionID}`, authState.isLoggedIn);
+		const response = await deleteRequest(`/questions/${selectedQuestion.QuestionID}`, {
+			successMessage: 'Question Deleted.',
+			errorMessage: 'Question could not be deleted.',
+		});
 		if (response.isSuccess) {
 			loadQuestions();
-			setSelectedQuestion(response.result.data);
-			toast.success('Question Deleted.', { id:toastId });
-		} else {
-			toast.error(`Question could not be deleted. ${response.message}`, { id:toastId });
+			setSelectedQuestion(null);
 		}
 	};
 
 	const handleSubmitReorderedQuestions = async () => {
-		const toastId = toast.loading('Updating Question...');
-		const responses = await Promise.all(
-			questions.map((question, index) =>
-				API.put(`/questions/${question.QuestionID}`, { QuestionOrdernumber: index + 1 }, authState.isLoggedIn),
-			),
+		const requests = questions.map((question, index) =>
+			put(`/questions/${question.QuestionID}`, { QuestionOrdernumber: index + 1 }, { showToast: false }),
 		);
-		const success = responses.every(response => response.isSuccess);
-
+		await batchRequests(requests, {
+			successMessage: 'Questions Reordered.',
+			errorMessage: 'Something went wrong while reordering, please try again!',
+		});
 		setIsReordering(false);
 		loadQuestions();
-
-		if (success) {
-			toast.success('Questions Reordered.', { id: toastId });
-		} else {
-			const errorMessage = responses.find(response => !response.isSuccess).message;
-			toast.error(`Something went wrong while reordering, please try again! ${errorMessage}`, { id: toastId });
-		}
 	};
 	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) => {
-		const toastId = toast.loading('Updating Question...');
-		let response = '';
-		for (const answer of addedAnswers) {
-			response = await API.post('/answers', { ...answer, AnswerQuestionID: selectedQuestion.QuestionID }, authState.isLoggedIn);
-		}
-		for (const answer of removedAnswers) {
-			response = await API.delete(`/answers/${answer.AnswerID}`, authState.isLoggedIn);
-		}
-		for (const answer of updatedAnswers) {
-			response = await API.put(`/answers/${answer.AnswerID}`, answer, authState.isLoggedIn);
-		}
-		if (response.isSuccess || response === '') {
-			setFormType('details');
-			toast.success('Answers Updated.', { id:toastId });
-		} else {
-			toast.error(`Answers Failed to Update. ${response.message}`, { id:toastId });
-		}
+		let requests = [];
+		requests = requests.concat(addedAnswers.map(answer =>
+			post('/answers', { ...answer, AnswerQuestionID: selectedQuestion.QuestionID }, { showToast: false }),
+		));
+
+		requests = requests.concat(removedAnswers.map(answer =>
+			deleteRequest(`/answers/${answer.AnswerID}`, { showToast: false }),
+		));
+
+		requests = requests.concat(updatedAnswers.map(answer =>
+			put(`/answers/${answer.AnswerID}`, answer, { showToast: false }),
+		));
+
+		await batchRequests(requests, {
+			successMessage: 'Answers Updated.',
+			errorMessage: 'Answers Failed to Update.',
+		});
+		setFormType('details');
 	};
-	const handleSaveQuizDetails = async (data)=>{
-		const toastId = toast.loading('Updating Question...');
-		const response = await API.put(`/quizzes/${quiz[0].QuizID}`, data, authState.isLoggedIn);
+	const handleSaveQuizDetails = async (data) => {
+		const response = await put(`/quizzes/${quiz[0].QuizID}`, data, {
+			successMessage: 'Quiz Details Updated.',
+			errorMessage: 'Quiz Failed to Update.',
+		});
 		if (response.isSuccess) {
 			loadQuiz();
-			toast.success('Quiz Details Updated.', { id:toastId });
 			openModal();
-		}else{
-			toast.error(`Quiz Failed to Update. ${response.message}`, { id:toastId });
 		}
 	};
-	const changeQuizStatus = async (statusID) =>{
-		const toastId = toast.loading('Updating Question...');
-		const quizData = { QuizPublicationstatusID: statusID };
-		const response = await API.put(`/quizzes/${quiz[0].QuizID}`, quizData, authState.isLoggedIn);
-		if(response.isSuccess) {
-			toast.success('Quiz Status Updated.', { id:toastId });
-		}else{
-			toast.error(`Quiz Status Failed to Update. ${response.message}`, { id:toastId });
-		}
-
+	const changeQuizStatus = async (statusID) => {
+		await put(`/quizzes/${quiz[0].QuizID}`, { QuizPublicationstatusID: statusID }, {
+			successMessage: 'Quiz Status Updated.',
+			errorMessage: 'Quiz Status Failed to Update.',
+		});
 	};
 	const handlePreview = () => {
 		sessionStorage.setItem('previewQuizID', quiz[0].QuizID);
@@ -180,6 +164,13 @@ const QuizEditor = () => {
 	};
 
 	// View -------------------------------------------------------
+	if(isLoading) {
+		return(
+			<>
+				<p>Loading content...</p>
+			</>
+		);
+	}
 	const panelButtons =
 	<ButtonTray>
 		{isReordering ?
@@ -194,15 +185,6 @@ const QuizEditor = () => {
 			</>
 		}
 	</ButtonTray>;
-
-	if(isLoading) {
-		return(
-			<>
-				<p>Loading content...</p>
-			</>
-		);
-	}
-
 	return (
 		<div className="quizEditor">
 			<header className="quizEditorHeader">

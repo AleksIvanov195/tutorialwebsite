@@ -1,12 +1,10 @@
 import useLoad from '../api/useLoad';
 import { Card, CardContainer } from '../components/UI/Card';
-import { useAuth } from '../hooks/useAuth';
 
 export default function Course() {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
 	// State ------------------------------------------------------
-	const [courses, , coursesMessage, isLoading] = useLoad('/courses', authState.isLoggedIn);
+	const [courses, , coursesMessage, isLoading] = useLoad('/courses');
 
 	// View
 	return (

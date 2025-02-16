@@ -1,12 +1,10 @@
 import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
-import { useAuth } from '../../../hooks/useAuth';
 import toast from 'react-hot-toast';
 const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
 	// State ------------------------------------------------------
-	const [answers, setAnswers, answersMessage, isLoading, loadAnswers ] = useLoad(`/answers?AnswerQuestionID=${question.QuestionID}`, authState.isLoggedIn);
+	const [answers, setAnswers, answersMessage, isLoading, loadAnswers ] = useLoad(`/answers?AnswerQuestionID=${question.QuestionID}`);
 	// Handlers ---------------------------------------------------
 	const handleFormSubmit = (data) => {
 		const hasCorrectAnswer = data.answers.some(answer => answer.checked);

@@ -3,25 +3,23 @@ import { useState } from 'react';
 import { Card, CardContainer } from '../components/UI/Card';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import { ButtonTray, Button } from '../components/UI/Buttons';
 import LessonForm from '../components/enitity/forms/LessonForm';
 import QuizForm from '../components/enitity/forms/QuizForm';
 import Modal from '../components/UI/modal/Modal';
-import toast from 'react-hot-toast';
-import API from '../api/API';
+import useApiActions from '../hooks/useApiActions';
 import CourseForm from '../components/enitity/forms/CourseForm';
 
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
+	const { post, put, delete: deleteRequest } = useApiActions();
 	const navigate = useNavigate();
 	// State ------------------------------------------------------
-	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1', authState.isLoggedIn);
-	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4', authState.isLoggedIn);
-	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3', authState.isLoggedIn);
-	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons', authState.isLoggedIn);
-	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes', authState.isLoggedIn);
+	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1');
+	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4');
+	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3');
+	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons');
+	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes');
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
 	// Handlers ---------------------------------------------------
 
@@ -45,48 +43,42 @@ export default function CreatorDashboard() {
 
 	// Submission ------------------------------------
 	const handleLessonSubmit = async (data) => {
-		const toastId = toast.loading('Saving...');
-		const response = await API.post('/lessons', data, authState.isLoggedIn);
+		const response = await post('/lessons', data, {
+			successMessage: 'Lesson Created.',
+			errorMessage: 'Lesson could not be created.',
+		});
+
 		if (response.isSuccess) {
-			const lessonID = response.result.data.LessonID;
-			handleNavigateToLessonEditor(lessonID);
-			toast.success('Lesson Created.', { id:toastId });
-		} else {
-			toast.error(`Lesson could not be created. ${response.message}`, { id:toastId });
+			handleNavigateToLessonEditor(response.result.data.LessonID);
 		}
 	};
 	const handleQuizSubmit = async (data) => {
-		const toastId = toast.loading('Saving...');
-		const response = await API.post('/quizzes', data, authState.isLoggedIn);
+		const response = await post('/quizzes', data, {
+			successMessage: 'Quiz Created.',
+			errorMessage: 'Quiz could not be created.',
+		});
+
 		if (response.isSuccess) {
-			const quizID = response.result.data.QuizID;
-			handleNavigateToQuizEditor(quizID);
-			toast.success('Quiz Created.', { id:toastId });
-		} else {
-			toast.error(`Quiz could not be created. ${response.message}`, { id:toastId });
+			handleNavigateToQuizEditor(response.result.data.QuizID);
 		}
 	};
 	const handleCourseSubmit = async (data) => {
-		const toastId = toast.loading('Saving...');
-		const response = await API.post('/courses', data, authState.isLoggedIn);
+		const response = await post('/courses', data, {
+			successMessage: 'Course successfully created!',
+			errorMessage: 'Course Creation failed!',
+		});
+
 		if (response.isSuccess) {
-			const courseID = response.result.data.CourseID;
-			handleNavigateToCourseEditor(courseID);
-			toast.success('Course successfully created!', { id:toastId });
-		} else {
-			toast.error(`Course Creation failed! ${response.message}`, { id:toastId });
+			handleNavigateToCourseEditor(response.result.data.CourseID);
 		}
 	};
 	// Deletion ------------------------------------
-	const onDeleteLesson = async (id) =>{
-		const toastId = toast.loading('Deleting...');
-		const response = await API.delete(`/lessons/${id}`, authState.isLoggedIn);
-		if (response.isSuccess) {
-			loadLessons();
-			toast.success('Lesson Deleted.', { id:toastId });
-		} else {
-			toast.error(`Lesson could not be deleted. ${response.message}`, { id:toastId });
-		}
+	const onDeleteLesson = async (id) => {
+		await deleteRequest(`/lessons/${id}`, {
+			successMessage: 'Lesson Deleted.',
+			errorMessage: 'Lesson could not be deleted.',
+		});
+		loadLessons();
 	};
 	const onDeleteQuiz = async (id) =>{
 		// const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');

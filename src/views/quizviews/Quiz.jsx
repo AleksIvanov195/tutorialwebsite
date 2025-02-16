@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import useLoad from '../../api/useLoad';
-import { useAuth } from '../../hooks/useAuth';
 import Question from './Question';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import './Quiz.scss';
@@ -8,11 +7,9 @@ import './Quiz.scss';
 const Quiz = () => {
 	// Initialisation --------------------------------------------
 	const quizID = sessionStorage.getItem('previewQuizID');
-	const { authState } = useAuth();
-
 	// State ------------------------------------------------------
-	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`, authState.isLoggedIn);
-	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers`, authState.isLoggedIn);
+	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
+	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers`);
 
 	const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

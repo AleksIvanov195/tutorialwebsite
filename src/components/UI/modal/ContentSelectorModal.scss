@@ -12,6 +12,8 @@
 	ul {
 		list-style-type: none;
 		padding-left: 0;
+		max-height: 600px;
+		overflow-y: auto;
 		li {
 			padding: 15px;
 			border-bottom: 1px solid $mixedColour;

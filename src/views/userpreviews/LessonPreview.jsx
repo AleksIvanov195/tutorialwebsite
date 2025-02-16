@@ -1,10 +1,8 @@
 import RenderContentWithEditor from '../../components/utility/RenderContentWithEditor';
 import useLoad from '../../api/useLoad';
-import { useAuth } from '../../hooks/useAuth';
 import './LessonPreview.scss';
 const LessonPreview = ({ lessonID }) => {
-	const { authState } = useAuth();
-	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`, authState.isLoggedIn);
+	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`);
 	if(isLoading) {
 		return <p>Loading .....</p>;
 	}
