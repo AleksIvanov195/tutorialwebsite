@@ -5,36 +5,42 @@ import toast from 'react-hot-toast';
 const useApiActions = () => {
 	const { authState } = useAuth();
 
-	const handleApiCall = async (apiMethod, endpoint, data = null, showToast = true) => {
+
+	const handleApiCall = async (apiMethod, endpoint, data = null, options = {}) => {
+		const { showToast = true, successMessage = 'Request completed successfully!', errorMessage = 'An error occurred.' } = options;
+
 		const toastId = showToast ? toast.loading('Processing...') : null;
 		const response = await apiMethod(endpoint, data, authState.isLoggedIn);
 
 		if (showToast) {
 			if (response.isSuccess) {
-				toast.success('Request completed successfully!', { id: toastId });
+				toast.success(successMessage, { id: toastId });
 			} else {
-				toast.error(response.message || 'An error occurred.', { id: toastId });
+				toast.error(response.message + '. ' + errorMessage, { id: toastId });
 			}
 		}
 
 		return response;
 	};
 
-	const post = async (endpoint, data, showToast = true) => handleApiCall(API.post, endpoint, data, showToast);
-	const put = async (endpoint, data, showToast = true) => handleApiCall(API.put, endpoint, data, showToast);
-	const deleteRequest = async (endpoint, showToast = true) => handleApiCall(API.delete, endpoint, null, showToast);
+	const post = async (endpoint, data, options = {}) => handleApiCall(API.post, endpoint, data, options);
+	const put = async (endpoint, data, options = {}) => handleApiCall(API.put, endpoint, data, options);
+	const deleteRequest = async (endpoint, options = {}) => handleApiCall(API.delete, endpoint, null, options);
 
 	// Batch API calls
-	const batchRequests = async (requests) => {
-		const toastId = toast.loading('Processing requests...');
+	const batchRequests = async (requests, options = {}) => {
+		const { showToast = true, successMessage = 'All requests completed successfully!', errorMessage = 'Some requests failed.' } = options;
+		const toastId = showToast ? toast.loading('Processing requests...') : null;
 
 		const responses = await Promise.all(requests);
 		const success = responses.every(response => response.isSuccess);
 
-		if (success) {
-			toast.success('All requests completed successfully!', { id: toastId });
-		} else {
-			toast.error('Some requests failed', { id: toastId });
+		if (showToast) {
+			if (success) {
+				toast.success(successMessage, { id: toastId });
+			} else {
+				toast.error(errorMessage, { id: toastId });
+			}
 		}
 
 		return responses;
