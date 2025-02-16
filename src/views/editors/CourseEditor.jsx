@@ -10,6 +10,7 @@ import HoverMenu from '../../components/UI/HoverMenu';
 import ContentSelectorModal from '../../components/UI/modal/ContentSelectorModal';
 import Icons from '../../components/UI/Icons';
 import toast from 'react-hot-toast';
+import Animate from '../../components/UI/Animate';
 import './CourseEditor.scss';
 const CourseEditor = () =>{
 	// Inititalisation --------------------------------------------
@@ -145,9 +146,12 @@ const CourseEditor = () =>{
 				</SortableContentPanel>
 
 				<div className="courseEditorContent">
-					{selectedCourseContent && contentView()}
+					<Animate.FadeIn on={selectedCourseContent?.CoursecontentID}>
+						{selectedCourseContent && contentView()}
+					</Animate.FadeIn>
 				</div>
 			</div>
+
 			{showLessonModal && (
 				<ContentSelectorModal
 					endpoint="/lessons"
@@ -167,6 +171,7 @@ const CourseEditor = () =>{
 					onSave={handleAddExistingContent}
 				/>
 			)}
+
 		</div>
 
 	);
