@@ -38,15 +38,21 @@ const CourseEditor = () =>{
 		}
 	};
 	const handleRemoveContentFromCourse = async () => {
-		await deleteRequest(`/coursecontents/${selectedCourseContent.CoursecontentID}`);
+		await deleteRequest(`/coursecontents/${selectedCourseContent.CoursecontentID}`, {
+			successMessage: `${selectedCourseContent.ContentType} has been removed.`,
+			errorMessage: `${selectedCourseContent.ContentType} could not be removed.`,
+		});
 		loadCourseContent();
 		setSelectedCourseContent(null);
 	};
 	const handleSubmitReorderedContent = async () => {
 		const requests = courseContent.map((content, index) =>
-			put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, false),
+			put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, { showToast :false }),
 		);
-		await batchRequests(requests);
+		await batchRequests(requests, {
+			successMessage: 'Content has been reordered.',
+			errorMessage: 'Something went wrong while reordering, please try again!',
+		});
 		setIsReordering(false);
 		loadCourseContent();
 	};
@@ -59,9 +65,12 @@ const CourseEditor = () =>{
 				CoursecontentLessonID: showLessonModal ? id : null,
 				CoursecontentQuizID: showQuizModal ? id : null,
 				CoursecontentOrder: currentIndex + index + 1,
-			}, false),
+			}, { showToast: false }),
 		);
-		await batchRequests(requests);
+		await batchRequests(requests, {
+			successMessage: 'Content has been added.',
+			errorMessage: 'Some content could not be added, please try again!',
+		});
 		loadCourseContent();
 	};
 	const toggleReordering = () => {
