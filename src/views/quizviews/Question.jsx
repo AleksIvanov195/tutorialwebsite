@@ -4,14 +4,14 @@ import './Quiz.scss';
 const Question = ({ question, selectedAnswers, onSelectAnswer, isSubmitted }) => {
 	return (
 		<div className="question">
-			<p className="questionText">{question.question}</p>
+			<p className="questionText">{question.QuestionText}</p>
 			<div className="answers">
-				{question.answers.map((answer) => (
+				{question.Answers.map((answer) => (
 					<Answer
-						key={answer.answerID}
+						key={answer.AnswerID}
 						answer={answer}
-						questionType={question.type}
-						isSelected={selectedAnswers.includes(answer.answerID)}
+						questionType={question.QuestionType}
+						isSelected={selectedAnswers.includes(answer.AnswerID)}
 						onSelectAnswer={onSelectAnswer}
 						isSubmitted={isSubmitted}
 					/>

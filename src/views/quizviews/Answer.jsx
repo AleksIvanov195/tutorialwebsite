@@ -7,13 +7,13 @@ const Answer = ({ answer, questionType, isSelected, onSelectAnswer, isSubmitted 
 			<input
 				type={questionType === 'MultipleChoice' ? 'checkbox' : 'radio'}
 				name="answer"
-				value={answer.answerID}
+				value={answer.AnswerID}
 				checked={isSelected}
-				onChange={() => onSelectAnswer(answer.answerID)}
+				onChange={() => onSelectAnswer(answer.AnswerID)}
 				disabled={isSubmitted}
 			/>
-			{answer.text}
-			{isSubmitted && (answer.correct === 1 ? <Icons.Check color="green" /> : <Icons.Close color="red" />)}
+			{answer.AnswerText}
+			{isSubmitted && (answer.AnswerCorrect === 1 ? <Icons.Check color="green" /> : <Icons.Close color="red" />)}
 		</label>
 	);
 };

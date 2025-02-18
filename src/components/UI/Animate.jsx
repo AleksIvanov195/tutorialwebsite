@@ -1,24 +1,28 @@
 import './Animate.scss';
 
 const Animate = ({ children, on, type = 'fadeIn' }) => {
-	return (on === undefined)
-		? <div>{children}</div>
-		: <div className={type} key={on}>{children}</div>;
+	return on === undefined ? (
+		<div>{children}</div>
+	) : (
+		<div className={type} key={on?.toString()}>
+			{children}
+		</div>
+	);
 };
 
-Animate.FadeIn = ({ children, on }) => (
+const FadeIn = ({ children, on }) => (
 	<Animate on={on} type="fadeIn">
 		{children}
 	</Animate>
 );
-Animate.FadeIn.displayName = 'Animate.FadeIn';
 
-Animate.SlideIn = ({ children, on }) => (
+const SlideIn = ({ children, on }) => (
 	<Animate on={on} type="slideIn">
 		{children}
 	</Animate>
 );
-Animate.SlideIn.displayName = 'Animate.SlideIn';
 
+Animate.FadeIn = FadeIn;
+Animate.SlideIn = SlideIn;
 
 export default Animate;
