@@ -7,7 +7,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 	const [answers, setAnswers, answersMessage, isLoading, loadAnswers ] = useLoad(`/answers?AnswerQuestionID=${question.QuestionID}`);
 	// Handlers ---------------------------------------------------
 	const handleFormSubmit = (data) => {
-		const hasCorrectAnswer = data.answers.some(answer => answer.checked);
+		const hasCorrectAnswer = data.answers.some(answer => answer.checked) || data.answers.checked;
 		if (!hasCorrectAnswer) {
 			toast.error('You must select at least 1 correct answer!');
 		}else{
@@ -29,6 +29,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 					};
 				}
 			});
+			
 			const addedAnswers = currentAnswers.filter(answer => !answer.AnswerID);
 			const removedAnswers = answers.filter(originalAnswer => !currentAnswers.some(answer => answer.AnswerID === originalAnswer.AnswerID));
 			const updatedAnswers = currentAnswers.filter(answer => answer.AnswerID
