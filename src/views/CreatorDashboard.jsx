@@ -16,7 +16,7 @@ export default function CreatorDashboard() {
 	const { post, put, delete: deleteRequest } = useApiActions();
 	const navigate = useNavigate();
 	// State ------------------------------------------------------
-	const [courses ] = useLoad('/courses/mycourses');
+	const [courses, ,,, loadCourses] = useLoad('/courses/mycourses');
 	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons?orderby=LessonPublicationstatusID,desc');
 	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes');
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
@@ -73,11 +73,13 @@ export default function CreatorDashboard() {
 	};
 	// Deletion ------------------------------------
 	const onDeleteLesson = async (id) => {
-		await deleteRequest(`/lessons/${id}`, {
-			successMessage: 'Lesson Deleted.',
-			errorMessage: 'Lesson could not be deleted.',
-		});
-		loadLessons();
+		if (window.confirm('Are you sure you want to delete this lesson?')) {
+			await deleteRequest(`/lessons/${id}`, {
+				successMessage: 'Lesson Deleted.',
+				errorMessage: 'Lesson could not be deleted.',
+			});
+			loadLessons();
+		}
 	};
 	const onDeleteQuiz = async (id) =>{
 		if (window.confirm('Are you sure you want to delete this quiz? You will LOSE ALL Questions & Answers?')) {
@@ -89,7 +91,13 @@ export default function CreatorDashboard() {
 		}
 	};
 	const onDeleteCourse = async (id) =>{
-		// const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
+		if (window.confirm('Are you sure you want to delete this course?')) {
+			await deleteRequest(`/courses/${id}`, {
+				successMessage: 'Course Deleted.',
+				errorMessage: 'Course could not be deleted.',
+			});
+			loadCourses();
+		}
 	};
 	// View -------------------------------------------------------
 	return (
@@ -133,7 +141,7 @@ export default function CreatorDashboard() {
 									</div>
 									<ButtonTray>
 										<Button className='formButton submitButton'onClick={() => handleNavigateToCourseEditor(course.CourseID)}>Edit</Button>
-										<Button className='deleteButton'onClick={console.log('Delete')}>Delete</Button>
+										<Button className='deleteButton'onClick={() => onDeleteCourse(course.CourseID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
 							))
