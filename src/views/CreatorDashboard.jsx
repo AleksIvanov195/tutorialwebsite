@@ -9,15 +9,13 @@ import QuizForm from '../components/enitity/forms/QuizForm';
 import Modal from '../components/UI/modal/Modal';
 import useApiActions from '../hooks/useApiActions';
 import CourseForm from '../components/enitity/forms/CourseForm';
+import './CreatorDashboard.scss';
 
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
 	const { post, put, delete: deleteRequest } = useApiActions();
 	const navigate = useNavigate();
 	// State ------------------------------------------------------
-	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1');
-	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4');
-	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3');
 	const [courses ] = useLoad('/courses/mycourses');
 	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons?orderby=LessonPublicationstatusID,desc');
 	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes');
@@ -96,11 +94,15 @@ export default function CreatorDashboard() {
 	// View -------------------------------------------------------
 	return (
 		<>
-			<ButtonTray>
-				<Button onClick={() => openForm('course') }>Create Course</Button>
-				<Button onClick={() => openForm('lesson') }>Create Lesson</Button>
-				<Button onClick={() => openForm('quiz') }>Create Quiz</Button>
-			</ButtonTray>
+			<header className="dashboardHeader">
+				<h1>Creator Dashboard</h1>
+				<p>Manage your courses, lessons, and quizzes</p>
+				<ButtonTray>
+					<Button onClick={() => openForm('course')}>Create Course</Button>
+					<Button onClick={() => openForm('lesson')}>Create Lesson</Button>
+					<Button onClick={() => openForm('quiz')}>Create Quiz</Button>
+				</ButtonTray>
+			</header>
 			{
 				showForm.show && showForm.type === 'lesson' &&
 				<Modal>
@@ -130,8 +132,8 @@ export default function CreatorDashboard() {
 										<p>{course.CourseDescription}</p>
 									</div>
 									<ButtonTray>
-										<Button className='formButton submitButton'onClick={console.log("Edit")}>Edit</Button>
-										<Button className='deleteButton'onClick={console.log("Delete")}>Delete</Button>
+										<Button className='formButton submitButton'onClick={console.log('Edit')}>Edit</Button>
+										<Button className='deleteButton'onClick={console.log('Delete')}>Delete</Button>
 									</ButtonTray>
 								</Card>
 							))

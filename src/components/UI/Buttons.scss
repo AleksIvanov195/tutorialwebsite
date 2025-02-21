@@ -12,7 +12,8 @@
   gap: 8px;
 	color: $bgColour;
 	line-height: 1;
-
+	font-weight: 600;
+	
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
