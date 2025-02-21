@@ -1,5 +1,5 @@
 import { FiRefreshCw } from 'react-icons/fi';
-import { FaBold, FaItalic, FaUnderline, FaCode, FaList, FaListOl, FaPen, FaBookmark, FaRegBookmark, FaFirstdraft, FaCheck } from 'react-icons/fa';
+import { FaBold, FaItalic, FaUnderline, FaCode, FaList, FaListOl, FaPen, FaBookmark, FaRegBookmark, FaFirstdraft, FaCheck, FaChevronRight } from 'react-icons/fa';
 import { TbBlockquote, TbReorder } from 'react-icons/tb';
 import { FaPlus, FaRegTrashCan } from 'react-icons/fa6';
 import { IoMdClose } from 'react-icons/io';
@@ -35,6 +35,7 @@ const Icons = {
 	Next: ({ size = 20, color = 'currentColor' }) => <GrLinkNext size={size} color={color} />,
 	Previous: ({ size = 20, color = 'currentColor' }) => <GrLinkPrevious size={size} color={color} />,
 	Check: ({ size = 20, color = 'currentColor' }) => <FaCheck size={size} color={color} />,
+	ArrowRight: ({ size = 20, color = 'currentColor' }) => <FaChevronRight size={size} color={color} />,
 };
 
 export default Icons;

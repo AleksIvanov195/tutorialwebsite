@@ -1,17 +1,15 @@
+import React from 'react';
 import './Card.scss';
 
-export function Card(props) {
+export function Card({ status, children }) {
 	return (
-		<div className="card">
-			{props.children}
+		<div className={`card ${status}`}>
+			{status && <div className={`statusIndicator ${status}`}>{status}</div>}
+			<div className="cardContent">{children}</div>
 		</div>
 	);
 }
 
-export function CardContainer(props) {
-	return (
-		<div className="cardContainer">
-			{props.children}
-		</div>
-	);
+export function CardContainer({ children }) {
+	return <div className="cardContainer">{children}</div>;
 }

@@ -18,7 +18,8 @@ export default function CreatorDashboard() {
 	const [draftCourses ] = useLoad('/courses?CoursePublicationstatusID=1');
 	const [publishedCourses ] = useLoad('/courses?CoursePublicationstatusID=4');
 	const [reviewedCourses ] = useLoad('/courses?CoursePublicationstatusID=3');
-	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons');
+	const [courses ] = useLoad('/courses/mycourses');
+	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons?orderby=LessonPublicationstatusID,desc');
 	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes');
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
 	// Handlers ---------------------------------------------------
@@ -118,17 +119,39 @@ export default function CreatorDashboard() {
 					<CourseForm onClose={() => openForm('course')} onSubmit={handleCourseSubmit}/>
 				</Modal>
 			}
+			<CollapsiblePanel header={`My Courses (${courses.length})`}>
+				{
+					<CardContainer>
+						{
+							courses.map(course => (
+								<Card key={course.CourseID} status={course.CoursePublicationstatusName}>
+									<div className="cardContent">
+										<h3>{course.CourseName}</h3>
+										<p>{course.CourseDescription}</p>
+									</div>
+									<ButtonTray>
+										<Button className='formButton submitButton'onClick={console.log("Edit")}>Edit</Button>
+										<Button className='deleteButton'onClick={console.log("Delete")}>Delete</Button>
+									</ButtonTray>
+								</Card>
+							))
+						}
+					</CardContainer>
+				}
+			</CollapsiblePanel>
 			<CollapsiblePanel header={`My Lessons (${lessons.length})`}>
 				{
 					<CardContainer>
 						{
 							lessons.map(lesson => (
-								<Card key={lesson.LessonID}>
-									<p>{lesson.LessonName}</p>
-									<p>{lesson.LessonDescription}</p>
+								<Card key={lesson.LessonID} status={lesson.LessonPublicationstatusName}>
+									<div className="cardContent">
+										<h3>{lesson.LessonName}</h3>
+										<p>{lesson.LessonDescription}</p>
+									</div>
 									<ButtonTray>
-										<Button onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
-										<Button onClick={() => onDeleteLesson(lesson.LessonID)}>Delete</Button>
+										<Button className='formButton submitButton'onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
+										<Button className='deleteButton'onClick={() => onDeleteLesson(lesson.LessonID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
 							))
@@ -141,55 +164,15 @@ export default function CreatorDashboard() {
 					<CardContainer>
 						{
 							quizzes.map(quiz => (
-								<Card key={quiz.QuizID}>
-									<p>{quiz.QuizName}</p>
-									<p>{quiz.QuizDescription}</p>
+								<Card key={quiz.QuizID} status={quiz.QuizPublicationstatusName}>
+									<div className="cardContent">
+										<h3>{quiz.QuizName}</h3>
+										<p>{quiz.QuizDescription}</p>
+									</div>
 									<ButtonTray>
 										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID)}>Edit</Button>
 										<Button onClick={() => onDeleteQuiz(quiz.QuizID)}>Delete</Button>
 									</ButtonTray>
-								</Card>
-							))
-						}
-					</CardContainer>
-				}
-			</CollapsiblePanel>
-			<CollapsiblePanel header={`Draft Courses (${draftCourses.length})`}>
-				{
-					<CardContainer>
-						{
-							draftCourses.map(course => (
-								<Card key={course.CourseID}>
-									<p>{course.CourseName}</p>
-									<p>{course.CourseDescription}</p>
-								</Card>
-							))
-						}
-					</CardContainer>
-				}
-			</CollapsiblePanel>
-			<CollapsiblePanel header={`Reviewed/Ready for Publication Courses (${reviewedCourses.length})`}>
-				{
-					<CardContainer>
-						{
-							reviewedCourses.map(course => (
-								<Card key={course.CourseID}>
-									<p>{course.CourseName}</p>
-									<p>{course.CourseDescription}</p>
-								</Card>
-							))
-						}
-					</CardContainer>
-				}
-			</CollapsiblePanel>
-			<CollapsiblePanel header={`Published Courses (${publishedCourses.length})`}>
-				{
-					<CardContainer>
-						{
-							publishedCourses.map(course => (
-								<Card key={course.CourseID}>
-									<p>{course.CourseName}</p>
-									<p>{course.CourseDescription}</p>
 								</Card>
 							))
 						}

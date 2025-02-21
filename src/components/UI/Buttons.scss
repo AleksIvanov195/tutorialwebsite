@@ -27,6 +27,20 @@
 		background-color: darken($primaryColour, 10%);
 	}
 }
+// Delete Button
+.deleteButton {
+  @extend %baseButton;
+	font-weight: 600;
+  background-color: transparent;
+  color: $mixedColour;
+  border: 1px solid $mixedColour;
+
+  &:hover {
+    background-color: $warningColour;
+    color: $headerButtonTextColour;
+		border: 1px solid $warningColour;
+  }
+}
 
 .headerButton {
   @extend %baseButton;

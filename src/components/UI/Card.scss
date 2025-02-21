@@ -1,16 +1,75 @@
-.cardContainer{
-	display: flex;
-	flex-wrap: wrap;
-	gap: 20px;
-	padding: 20px;
-	.card{
-		border: 1px solid #ccc;
-		border-radius: 8px;
-		box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-		padding: '20px';
-		background-color: #f9f9f9;
-		width: 250px;
-		text-align: center;
+@import '../../styles/variables.scss';
 
-	}
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    background-color: $bgColour;
+    width: 280px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    // Status indicator ---------------------
+    .statusIndicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+
+      &.Draft {
+        background-color: lighten($warningColour, 30%);
+        color: darken($warningColour, 20%);
+      }
+
+      &.Published {
+        background-color: lighten($successColour, 30%);
+        color: darken($successColour, 20%);
+      }
+
+      &.Submitted {
+        background-color: lighten($primaryColour, 30%);
+        color: darken($primaryColour, 20%);
+      }
+
+      &.Reviewed {
+        background-color: lighten($tertiaryColour, 30%);
+        color: darken($tertiaryColour, 20%);
+      }
+    }
+
+    // Border ----------------
+    &.Draft {
+      border-left: 6px solid $warningColour;
+    }
+
+    &.Published {
+      border-left: 6px solid $successColour;
+    }
+
+    &.Submitted {
+      border-left: 6px solid $primaryColour;
+    }
+
+    &.Reviewed {
+      border-left: 6px solid $tertiaryColour;
+    }
+  }
 }
