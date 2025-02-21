@@ -81,7 +81,13 @@ export default function CreatorDashboard() {
 		loadLessons();
 	};
 	const onDeleteQuiz = async (id) =>{
-		// const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');
+		if (window.confirm('Are you sure you want to delete this quiz? You will LOSE ALL Questions & Answers?')) {
+			await deleteRequest(`/quizzes/${id}`, {
+				successMessage: 'Quiz Deleted.',
+				errorMessage: 'Quiz could not be deleted.',
+			});
+			loadQuizzes();
+		}
 	};
 	const onDeleteCourse = async (id) =>{
 		// const confirmDiscard = window.confirm('Are you sure you want to delete this quiz, you will LOSE ALL CONTENT?');

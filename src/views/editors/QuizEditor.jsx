@@ -233,7 +233,7 @@ const QuizEditor = () => {
 							<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete />Delete Question</span>
 						</SortableContentItem>
 					))}
-					{panelButtons}
+					{questions.length > 10 && panelButtons}
 				</SortableContentPanel>
 				<div className={'quizEditorContent'}>
 					<Animate.FadeIn on={formType}>
