@@ -9,6 +9,18 @@
 	transition: box-shadow 0.3s ease;
 	justify-content: center;
 
+.contentSelectorHeader {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+
+		h1 {
+			font-size: 30px;
+			font-weight: bold;
+			margin-top:0;
+			margin-bottom: 10;
+		}
+	}
 	ul {
 		list-style-type: none;
 		padding-left: 0;

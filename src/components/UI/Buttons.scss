@@ -60,11 +60,13 @@
 	}
 
 	&.cancelButton {
-		background-color: $mixedColour;
-		color: $headerButtonTextColour;
+		background-color: transparent;
+		color: $mixedColour;
+		border: 1px solid $mixedColour;
 
 		&:hover {
-			background-color: darken($mixedColour, 10%);
+			background-color: $mixedColour;
+			color: $headerButtonTextColour;
 		}
 	}
 	&.removeButton{
