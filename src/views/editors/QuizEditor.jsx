@@ -192,7 +192,6 @@ const QuizEditor = () => {
 					<ButtonTray className={'headerButtonTray'}>
 						<HoverMenu label="Options">
 							<a onClick = {() => changeQuizStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
-							<a ><Icons.Discard/>&nbsp;Delete</a>
 							<a onClick = {() => changeQuizStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
 							<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Quiz</a>
 						</HoverMenu>

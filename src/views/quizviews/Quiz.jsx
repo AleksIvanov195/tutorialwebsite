@@ -7,10 +7,10 @@ import './Quiz.scss';
 const Quiz = () => {
 	// Initialisation --------------------------------------------
 	const quizID = sessionStorage.getItem('previewQuizID');
+	// Initialisation --------------------------------------------
 	// State ------------------------------------------------------
 	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
-	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers`);
-
+	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers?orderby=QuestionOrdernumber,ASC`);
 	const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [selectedAnswers, setSelectedAnswers] = useState([]);
@@ -21,31 +21,18 @@ const Quiz = () => {
 
 	useEffect(() => {
 		if (questionsData.length > 0) {
-			const questionAndAnswers = Object.values(breakDownQuestionsData());
-			setQuestionsAndAnswers(questionAndAnswers);
+			setQuestionsAndAnswers(transformQuestionsData());
 		}
 	}, [questionsData]);
-
 	// Handlers ---------------------------------------------------
-	const breakDownQuestionsData = () => {
-		const questionAndAnswers = {};
-		questionsData.forEach((item) => {
-			if (!questionAndAnswers[item.QuestionID]) {
-				questionAndAnswers[item.QuestionID] = {
-					questionID: item.QuestionID,
-					question: item.QuestionText,
-					type: item.QuestionType,
-					feedback: item.QuestionFeedbacktext,
-					answers: [],
-				};
-			}
-			questionAndAnswers[item.QuestionID].answers.push({
-				answerID: item.AnswerID,
-				text: item.AnswerText,
-				correct: item.AnswerCorrect,
-			});
-		});
-		return questionAndAnswers;
+	const transformQuestionsData = () => {
+		const transformedData = questionsData.map(item => ({
+			...item,
+			Answers: JSON.parse(item.Answers),
+		}));
+		// Follow the question order
+		const sortedQuestionsAndAnswers = Object.values(transformedData).sort((a, b) => a.QuestionOrdernumber - b.QuestionOrdernumber);
+		return sortedQuestionsAndAnswers;
 	};
 
 	const handleSelectAnswer = (answerID) => {
@@ -61,11 +48,11 @@ const Quiz = () => {
 	const handleSubmit = () => {
 		if (selectedAnswers.length > 0) {
 			const currentQuestion = questionsAndAnswers[currentQuestionIndex];
-			const correctAnswerIDs = currentQuestion.answers
-				.filter((ans) => ans.correct)
-				.map((ans) => ans.answerID);
+			const correctAnswerIDs = currentQuestion.Answers
+				.filter((ans) => ans.AnswerCorrect)
+				.map((ans) => ans.AnswerID);
 
-			const isAnswerCorrect = currentQuestion.type === 'MultipleChoice' ?
+			const isAnswerCorrect = currentQuestion.QuestionType === 'MultipleChoice' ?
 				arraysMatch(selectedAnswers, correctAnswerIDs)
 				: correctAnswerIDs.includes(selectedAnswers[0]);
 
@@ -122,7 +109,7 @@ const Quiz = () => {
 			/>
 			{isSubmitted && (
 				<p className={`feedback ${isCorrect ? 'correct' : 'wrong'}`}>
-					{isCorrect ? 'Correct!' : `Wrong! ${currentQuestion.feedback}`}
+					{isCorrect ? 'Correct!' : `Wrong! ${currentQuestion.QuestionText}`}
 				</p>
 			)}
 			<ButtonTray>

@@ -4,12 +4,20 @@
   background-color: $bgColour;
 
   .quizEditorHeader {
-    background-color: $primaryColour;
-    color: $headerButtonTextColour;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-	
+		background-color: $mixedColour;
+		color: $headerButtonTextColour;
+		padding: 10px;
+		border-radius: 12px;
+		margin-bottom: 20px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		text-align: center;
+
+	  h1 {
+			margin: 0;
+			font-size: 40px;
+			font-weight: 700;
+			color: $headerButtonTextColour;
+		}
 		.headerContainer {
 			display: flex;
 			align-items: center;
@@ -21,21 +29,13 @@
 			text-align: center;
 			margin: 0;
 		}
+		
 		// Modify button styling
-		.hoverButton, .defaultStyle{
-			background-color: $mixedColour;
-			padding: 8px 12px;
-			&:hover{
-				background-color: darken($tertiaryColour, 10%);
-			}
-		}
 		.defaultStyle{
 			padding: 0 10px;
 		}
 		
   }
-
-
   .quizEditorBody {
     display: flex;
     gap: 20px;
@@ -50,23 +50,6 @@
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     display: block;
   }
-
-	.addQuestionButton {
-    padding: 8px 16px;
-    background-color: $tertiaryColour;
-    color: $secondaryColour;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 10px;
-		max-width: 50%;
-		align-self: center;
-
-    &:hover {
-        background-color: darken($tertiaryColour, 10%);
-    }
-}
 
 
 }

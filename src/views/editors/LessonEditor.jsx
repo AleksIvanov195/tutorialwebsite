@@ -5,6 +5,7 @@ import useApiActions from '../../hooks/useApiActions';
 import useLoad from '../../api/useLoad';
 import LessonForm from '../../components/enitity/forms/LessonForm';
 import Modal from '../../components/UI/modal/Modal';
+import './LessonEditor.scss';
 const LessonEditor = () => {
 	// Inititalisation --------------------------------------------
 	const location = useLocation();
@@ -60,7 +61,9 @@ const LessonEditor = () => {
 	}
 	return (
 		<div>
-			<h1>Editing {lesson[0].LessonName}</h1>
+			<header className='lessoEditorHeader'>
+				<h1>{lesson[0].LessonName}</h1>
+			</header>
 			{
 				showModal &&
 						<Modal>
