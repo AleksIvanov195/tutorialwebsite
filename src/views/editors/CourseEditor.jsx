@@ -36,6 +36,9 @@ const CourseEditor = () =>{
 	const handleNavigateToLessonEditor = (lessonID) =>{
 		navigate('/lessoneditor', { state: { lessonID } });
 	};
+	const handleNavigateToQuizEditor = (quizID) =>{
+		navigate('/quizeditor', { state: { quizID } });
+	}
 	const handleNavigateToEditor = () =>{
 		if(selectedCourseContent.ContentType == 'Lesson') {
 			navigate('/lessoneditor', { state: { lessonID: selectedCourseContent.ContentID } });
@@ -102,6 +105,26 @@ const CourseEditor = () =>{
 			});
 			if (attachResponse.isSuccess) {
 				handleNavigateToLessonEditor(createLessonResponse.result.data.LessonID);
+			}
+		}
+	};
+	const handleQuizSubmit = async (data) => {
+		const createQuizResponse = await post('/quizzes', data, {
+			successMessage: 'Quiz Created.',
+			errorMessage: 'Quiz could not be created.',
+		});
+		if (createQuizResponse.isSuccess) {
+			const attachResponse = await post('/coursecontents', {
+				CoursecontentCourseID: 1,
+				CoursecontentLessonID: null,
+				CoursecontentQuizID: createQuizResponse.result.data.QuizID,
+				CoursecontentOrder: getCurrentOrder() + 1,
+			}, {
+				successMessage: 'Quiz Attached, redirecting to editor.',
+				errorMessage: 'Quiz could not be attached.',
+			});
+			if (attachResponse.isSuccess) {
+				handleNavigateToQuizEditor(createQuizResponse.result.data.QuizID);
 			}
 		}
 	};
@@ -176,7 +199,7 @@ const CourseEditor = () =>{
 										<a onClick={() => setShowLessonModal(true)}><Icons.Review />&nbsp;Existing Lesson</a>
 										<a onClick={() => setShowQuizModal(true)}><Icons.Discard />&nbsp;Existing Quiz</a>
 										<a onClick={() => openForm('Lesson')}><Icons.Publish />&nbsp;New Lesson</a>
-										<a><Icons.Edit />&nbsp;New Quiz</a>
+										<a onClick={() => openForm('Quiz')}><Icons.Edit />&nbsp;New Quiz</a>
 									</HoverMenu><Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
 								</>
 						}
