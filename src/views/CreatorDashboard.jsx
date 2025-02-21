@@ -132,7 +132,7 @@ export default function CreatorDashboard() {
 										<p>{course.CourseDescription}</p>
 									</div>
 									<ButtonTray>
-										<Button className='formButton submitButton'onClick={console.log('Edit')}>Edit</Button>
+										<Button className='formButton submitButton'onClick={() => handleNavigateToCourseEditor(course.CourseID)}>Edit</Button>
 										<Button className='deleteButton'onClick={console.log('Delete')}>Delete</Button>
 									</ButtonTray>
 								</Card>

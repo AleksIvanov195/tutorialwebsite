@@ -22,7 +22,7 @@ const CourseEditor = () =>{
 	const navigate = useNavigate();
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
-	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad('/coursecontents/simplified?CoursecontentCourseID=1&orderby=CoursecontentOrder,ASC');
+	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(`/coursecontents/simplified?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`);
 	const [selectedCourseContent, setSelectedCourseContent] = useState(null);
 	const [isReordering, setIsReordering] = useState(false);
 	const [showLessonModal, setShowLessonModal] = useState(false);
@@ -76,7 +76,7 @@ const CourseEditor = () =>{
 	const handleAddExistingContent = async (ids) => {
 		const requests = ids.map((id, index) =>
 			post('/coursecontents', {
-				CoursecontentCourseID: 1,
+				CoursecontentCourseID: courseID,
 				CoursecontentLessonID: showLessonModal ? id : null,
 				CoursecontentQuizID: showQuizModal ? id : null,
 				CoursecontentOrder: getCurrentOrder() + index + 1,
@@ -95,7 +95,7 @@ const CourseEditor = () =>{
 		});
 		if (createLessonResponse.isSuccess) {
 			const attachResponse = await post('/coursecontents', {
-				CoursecontentCourseID: 1,
+				CoursecontentCourseID: courseID,
 				CoursecontentLessonID: createLessonResponse.result.data.LessonID,
 				CoursecontentQuizID: null,
 				CoursecontentOrder: getCurrentOrder() + 1,
@@ -115,7 +115,7 @@ const CourseEditor = () =>{
 		});
 		if (createQuizResponse.isSuccess) {
 			const attachResponse = await post('/coursecontents', {
-				CoursecontentCourseID: 1,
+				CoursecontentCourseID: courseID,
 				CoursecontentLessonID: null,
 				CoursecontentQuizID: createQuizResponse.result.data.QuizID,
 				CoursecontentOrder: getCurrentOrder() + 1,
