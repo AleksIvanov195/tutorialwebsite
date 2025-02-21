@@ -6,7 +6,10 @@ import { SortableContentItem, SortableContentPanel } from '../../components/UI/c
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import LessonPreview from '../userpreviews/lessonpreview';
 import QuizUserView from '../userpreviews/QuizUserView';
+import LessonForm from '../../components/enitity/forms/LessonForm';
+import QuizForm from '../../components/enitity/forms/QuizForm';
 import HoverMenu from '../../components/UI/HoverMenu';
+import Modal from '../../components/UI/modal/Modal';
 import ContentSelectorModal from '../../components/UI/modal/ContentSelectorModal';
 import Icons from '../../components/UI/Icons';
 import toast from 'react-hot-toast';
@@ -24,10 +27,14 @@ const CourseEditor = () =>{
 	const [isReordering, setIsReordering] = useState(false);
 	const [showLessonModal, setShowLessonModal] = useState(false);
 	const [showQuizModal, setShowQuizModal] = useState(false);
+	const [showForm, setShowForm] = useState({ show: false, type: '' });
 	const initialCourseContent = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (content) => {
 		setSelectedCourseContent(content);
+	};
+	const handleNavigateToLessonEditor = (lessonID) =>{
+		navigate('/lessoneditor', { state: { lessonID } });
 	};
 	const handleNavigateToEditor = () =>{
 		if(selectedCourseContent.ContentType == 'Lesson') {
@@ -37,6 +44,9 @@ const CourseEditor = () =>{
 		}else{
 			toast.error('Something went wrong, please try again!');
 		}
+	};
+	const openForm = (type) =>{
+		setShowForm({ show: !showForm.show, type });
 	};
 	const handleRemoveContentFromCourse = async () => {
 		await deleteRequest(`/coursecontents/${selectedCourseContent.CoursecontentID}`, {
@@ -57,15 +67,16 @@ const CourseEditor = () =>{
 		setIsReordering(false);
 		loadCourseContent();
 	};
+	const getCurrentOrder = () => {
+		return courseContent[courseContent.length - 1]?.CoursecontentOrder || 0;
+	};
 	const handleAddExistingContent = async (ids) => {
-		const currentIndex = courseContent[courseContent.length - 1]?.CoursecontentOrder || 0;
-
 		const requests = ids.map((id, index) =>
 			post('/coursecontents', {
 				CoursecontentCourseID: 1,
 				CoursecontentLessonID: showLessonModal ? id : null,
 				CoursecontentQuizID: showQuizModal ? id : null,
-				CoursecontentOrder: currentIndex + index + 1,
+				CoursecontentOrder: getCurrentOrder() + index + 1,
 			}, { showToast: false }),
 		);
 		await batchRequests(requests, {
@@ -73,6 +84,26 @@ const CourseEditor = () =>{
 			errorMessage: 'Some content could not be added, please try again!',
 		});
 		loadCourseContent();
+	};
+	const handleLessonSubmit = async (data) => {
+		const createLessonResponse = await post('/lessons', data, {
+			successMessage: 'Lesson Created.',
+			errorMessage: 'Lesson could not be created.',
+		});
+		if (createLessonResponse.isSuccess) {
+			const attachResponse = await post('/coursecontents', {
+				CoursecontentCourseID: 1,
+				CoursecontentLessonID: createLessonResponse.result.data.LessonID,
+				CoursecontentQuizID: null,
+				CoursecontentOrder: getCurrentOrder() + 1,
+			}, {
+				successMessage: 'Lesson Attached, redirecting to editor.',
+				errorMessage: 'Lesson could not be attached.',
+			});
+			if (attachResponse.isSuccess) {
+				handleNavigateToLessonEditor(createLessonResponse.result.data.LessonID);
+			}
+		}
 	};
 	const toggleReordering = () => {
 		if (isReordering) {
@@ -87,7 +118,25 @@ const CourseEditor = () =>{
 		setIsReordering(!isReordering);
 	};
 	// View -------------------------------------------------------
-	const contentView = () => {
+	const renderForm = () => {
+		if (showForm.type === 'Lesson') {
+			return (
+				<Modal>
+					<LessonForm onClose={() => openForm('Lesson')} onSubmit={handleLessonSubmit} />
+				</Modal>
+			);
+		}
+		if (showForm.show && showForm.type === 'Quiz') {
+			return (
+				<Modal>
+					<QuizForm onClose={() => openForm('Quiz')} onSubmit={handleQuizSubmit} />
+				</Modal>
+			);
+		}
+		return null;
+	};
+	// Content to preview
+	const renderContentView = () => {
 		if (selectedCourseContent.ContentType === 'Lesson') {
 			return <LessonPreview lessonID={selectedCourseContent.ContentID} />;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
@@ -102,6 +151,7 @@ const CourseEditor = () =>{
 	}
 	return(
 		<div className="courseEditor">
+			{showForm.show && renderForm()}
 			<header className="courseEditorHeader">
 				<h1>Hi</h1>
 			</header>
@@ -125,7 +175,7 @@ const CourseEditor = () =>{
 									<HoverMenu label="Add">
 										<a onClick={() => setShowLessonModal(true)}><Icons.Review />&nbsp;Existing Lesson</a>
 										<a onClick={() => setShowQuizModal(true)}><Icons.Discard />&nbsp;Existing Quiz</a>
-										<a><Icons.Publish />&nbsp;New Lesson</a>
+										<a onClick={() => openForm('Lesson')}><Icons.Publish />&nbsp;New Lesson</a>
 										<a><Icons.Edit />&nbsp;New Quiz</a>
 									</HoverMenu><Button icon={<Icons.Reorder size={25} />} onClick={toggleReordering} title="Reorder questions" />
 								</>
@@ -144,10 +194,9 @@ const CourseEditor = () =>{
 						</SortableContentItem>
 					))}
 				</SortableContentPanel>
-
 				<div className="courseEditorContent">
 					<Animate.FadeIn on={selectedCourseContent?.CoursecontentID}>
-						{selectedCourseContent && contentView()}
+						{selectedCourseContent && renderContentView()}
 					</Animate.FadeIn>
 				</div>
 			</div>
@@ -159,6 +208,7 @@ const CourseEditor = () =>{
 					textField="LessonName"
 					onClose={() => setShowLessonModal(false)}
 					onSave={handleAddExistingContent}
+					title='Your Lessons'
 				/>
 			)}
 
@@ -169,6 +219,7 @@ const CourseEditor = () =>{
 					textField="QuizName"
 					onClose={() => setShowQuizModal(false)}
 					onSave={handleAddExistingContent}
+					title='Your Quizzes'
 				/>
 			)}
 
