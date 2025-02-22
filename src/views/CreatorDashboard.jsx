@@ -2,42 +2,27 @@ import useLoad from '../api/useLoad';
 import { useState } from 'react';
 import { Card, CardContainer } from '../components/UI/Card';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
-import { useNavigate } from 'react-router-dom';
 import { ButtonTray, Button } from '../components/UI/Buttons';
 import LessonForm from '../components/enitity/forms/LessonForm';
 import QuizForm from '../components/enitity/forms/QuizForm';
 import Modal from '../components/UI/modal/Modal';
 import useApiActions from '../hooks/useApiActions';
+import useNavigation from '../hooks/useNavigation';
 import CourseForm from '../components/enitity/forms/CourseForm';
 import './CreatorDashboard.scss';
 
 export default function CreatorDashboard() {
 	// Inititalisation --------------------------------------------
 	const { post, put, delete: deleteRequest } = useApiActions();
-	const navigate = useNavigate();
+	const { navigateToLessonEditor, navigateToQuizEditor, navigateToCourseEditor } = useNavigation();
 	// State ------------------------------------------------------
 	const [courses, ,,, loadCourses] = useLoad('/courses/mycourses');
 	const [lessons, ,,, loadLessons] = useLoad('/lessons/mylessons?orderby=LessonPublicationstatusID,desc');
 	const [quizzes, ,,, loadQuizzes] = useLoad('/quizzes/myquizzes');
-	const [showForm, setShowForm] = useState({ show: false, type: '' });
+	const [showModalForm, setShowModalForm] = useState({ show: false, type: '' });
 	// Handlers ---------------------------------------------------
-
-	// Navigation ------------------------------------
-
-	const handleNavigateToLessonEditor = (lessonID) =>{
-		navigate('/lessoneditor', { state: { lessonID } });
-	};
-
-	const handleNavigateToQuizEditor = (quizID) =>{
-		navigate('/quizeditor', { state: { quizID } });
-	};
-
-	const handleNavigateToCourseEditor = (courseID) =>{
-		navigate('/courseeditor', { state: { courseID } });
-	};
-
-	const openForm = (type) =>{
-		setShowForm({ show: !showForm.show, type });
+	const openModalForm = (type) =>{
+		setShowModalForm({ show: !showModalForm.show, type });
 	};
 
 	// Submission ------------------------------------
@@ -48,7 +33,7 @@ export default function CreatorDashboard() {
 		});
 
 		if (response.isSuccess) {
-			handleNavigateToLessonEditor(response.result.data.LessonID);
+			navigateToLessonEditor(response.result.data.LessonID);
 		}
 	};
 	const handleQuizSubmit = async (data) => {
@@ -58,7 +43,7 @@ export default function CreatorDashboard() {
 		});
 
 		if (response.isSuccess) {
-			handleNavigateToQuizEditor(response.result.data.QuizID);
+			navigateToQuizEditor(response.result.data.QuizID);
 		}
 	};
 	const handleCourseSubmit = async (data) => {
@@ -68,7 +53,7 @@ export default function CreatorDashboard() {
 		});
 
 		if (response.isSuccess) {
-			handleNavigateToCourseEditor(response.result.data.CourseID);
+			navigateToCourseEditor(response.result.data.CourseID);
 		}
 	};
 	// Deletion ------------------------------------
@@ -106,27 +91,27 @@ export default function CreatorDashboard() {
 				<h1>Creator Dashboard</h1>
 				<p>Manage your courses, lessons, and quizzes</p>
 				<ButtonTray>
-					<Button onClick={() => openForm('course')}>Create Course</Button>
-					<Button onClick={() => openForm('lesson')}>Create Lesson</Button>
-					<Button onClick={() => openForm('quiz')}>Create Quiz</Button>
+					<Button onClick={() => openModalForm('course')}>Create Course</Button>
+					<Button onClick={() => openModalForm('lesson')}>Create Lesson</Button>
+					<Button onClick={() => openModalForm('quiz')}>Create Quiz</Button>
 				</ButtonTray>
 			</header>
 			{
-				showForm.show && showForm.type === 'lesson' &&
+				showModalForm.show && showModalForm.type === 'lesson' &&
 				<Modal>
-					<LessonForm onClose={() => openForm('lesson')} onSubmit={handleLessonSubmit} />
+					<LessonForm onClose={() => openModalForm('lesson')} onSubmit={handleLessonSubmit} />
 				</Modal>
 			}
 			{
-				showForm.show && showForm.type === 'quiz' &&
+				showModalForm.show && showModalForm.type === 'quiz' &&
 				<Modal>
-					<QuizForm onClose={() => openForm('quiz')} onSubmit={handleQuizSubmit}/>
+					<QuizForm onClose={() => openModalForm('quiz')} onSubmit={handleQuizSubmit}/>
 				</Modal>
 			}
 			{
-				showForm.show && showForm.type === 'course' &&
+				showModalForm.show && showModalForm.type === 'course' &&
 				<Modal>
-					<CourseForm onClose={() => openForm('course')} onSubmit={handleCourseSubmit}/>
+					<CourseForm onClose={() => openModalForm('course')} onSubmit={handleCourseSubmit}/>
 				</Modal>
 			}
 			<CollapsiblePanel header={`My Courses (${courses.length})`}>
@@ -140,7 +125,7 @@ export default function CreatorDashboard() {
 										<p>{course.CourseDescription}</p>
 									</div>
 									<ButtonTray>
-										<Button className='formButton submitButton'onClick={() => handleNavigateToCourseEditor(course.CourseID)}>Edit</Button>
+										<Button className='formButton submitButton'onClick={() => navigateToCourseEditor(course.CourseID)}>Edit</Button>
 										<Button className='deleteButton'onClick={() => onDeleteCourse(course.CourseID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
@@ -160,7 +145,7 @@ export default function CreatorDashboard() {
 										<p>{lesson.LessonDescription}</p>
 									</div>
 									<ButtonTray>
-										<Button className='formButton submitButton'onClick={() => handleNavigateToLessonEditor(lesson.LessonID)}>Edit</Button>
+										<Button className='formButton submitButton'onClick={() => navigateToLessonEditor(lesson.LessonID)}>Edit</Button>
 										<Button className='deleteButton'onClick={() => onDeleteLesson(lesson.LessonID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
@@ -180,7 +165,7 @@ export default function CreatorDashboard() {
 										<p>{quiz.QuizDescription}</p>
 									</div>
 									<ButtonTray>
-										<Button onClick={() => handleNavigateToQuizEditor(quiz.QuizID)}>Edit</Button>
+										<Button onClick={() => navigateToQuizEditor(quiz.QuizID)}>Edit</Button>
 										<Button onClick={() => onDeleteQuiz(quiz.QuizID)}>Delete</Button>
 									</ButtonTray>
 								</Card>
