@@ -4,24 +4,35 @@
   background-color: $bgColour;
 	
   .courseEditorHeader {
-    background-color: $primaryColour;
-    color: $headerButtonTextColour;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
+		background-color: $mixedColour;
+		color: $headerButtonTextColour;
+		padding: 10px;
+		border-radius: 12px;
+		margin-bottom: 20px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		text-align: center;
 	
+	  h1 {
+			margin: 0;
+			font-size: 40px;
+			font-weight: 700;
+			color: $headerButtonTextColour;
+		}
 		.headerContainer {
 			display: flex;
 			align-items: center;
 			width: 100%;
 		}
-	
 		.headerContainer h1 {
 			flex-grow: 1;
 			text-align: center;
 			margin: 0;
 		}
 		
+		// Modify button styling
+		.defaultStyle{
+			padding: 0 10px;
+		}
   }
   .courseEditorBody {
     display: flex;

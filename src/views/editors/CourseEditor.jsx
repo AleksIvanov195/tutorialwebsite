@@ -22,6 +22,7 @@ const CourseEditor = () =>{
 	const navigate = useNavigate();
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
+	const [course, setQuiz, quizMessage, isCourseLoading, loadQuiz] = useLoad(`/courses/${courseID}`);
 	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(`/coursecontents/simplified?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`);
 	const [selectedCourseContent, setSelectedCourseContent] = useState(null);
 	const [isReordering, setIsReordering] = useState(false);
@@ -38,7 +39,7 @@ const CourseEditor = () =>{
 	};
 	const handleNavigateToQuizEditor = (quizID) =>{
 		navigate('/quizeditor', { state: { quizID } });
-	}
+	};
 	const handleNavigateToEditor = () =>{
 		if(selectedCourseContent.ContentType == 'Lesson') {
 			navigate('/lessoneditor', { state: { lessonID: selectedCourseContent.ContentID } });
@@ -176,7 +177,17 @@ const CourseEditor = () =>{
 		<div className="courseEditor">
 			{showForm.show && renderForm()}
 			<header className="courseEditorHeader">
-				<h1>Hi</h1>
+				<div className="headerContainer">
+					<ButtonTray className={'headerButtonTray'}>
+						<HoverMenu label="Options">
+							<a><Icons.Review/>&nbsp;Send for Review</a>
+							<a><Icons.Publish/>&nbsp;Publish</a>
+							<a><Icons.Edit/>&nbsp;Edit Course</a>
+						</HoverMenu>
+						<Button icon = {<Icons.Draft size = {28}/>} title = 'Save Course as Draft'/>
+					</ButtonTray>
+					<h1>{!isCourseLoading && course[0].CourseName}</h1>
+				</div>
 			</header>
 			<div className="courseEditorBody">
 				<SortableContentPanel
