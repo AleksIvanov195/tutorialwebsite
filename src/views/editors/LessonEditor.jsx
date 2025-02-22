@@ -27,7 +27,7 @@ const LessonEditor = () => {
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	// State ------------------------------------------------------
 	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`);
-	const [showModal, setShowModal] = useState(false);
+	const [showLessonModal, setShowLessonModal] = useState(false);
 	// Handlers ---------------------------------------------------
 	const handleSaveLessonContent = async (data, status) => {
 		await put(`/lessons/${lesson[0].LessonID}/content-status`,
@@ -48,7 +48,7 @@ const LessonEditor = () => {
 		}
 	};
 	const openModal = () =>{
-		setShowModal(!showModal);
+		setShowLessonModal(!showLessonModal);
 	};
 	// View -------------------------------------------------------
 	if(isLoading) {
@@ -65,7 +65,7 @@ const LessonEditor = () => {
 				<h1>{lesson[0].LessonName}</h1>
 			</header>
 			{
-				showModal &&
+				showLessonModal &&
 						<Modal>
 							<LessonForm
 								initialValues={{ LessonName: lesson[0].LessonName, LessonDescription: lesson[0].LessonDescription }}

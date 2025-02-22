@@ -91,7 +91,7 @@ const AppContent = () => {
 				}
 			/>
 			<Route
-				path="/preview"
+				path="/previewrichtextcontent"
 				element = {
 					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
 						<ErrorBoundary>

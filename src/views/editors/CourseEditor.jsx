@@ -1,7 +1,8 @@
 import useApiActions from '../../hooks/useApiActions';
 import useLoad from '../../api/useLoad';
+import useNavigation from '../../hooks/useNavigation';
 import { useState, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { SortableContentItem, SortableContentPanel } from '../../components/UI/contentpanel/SortableContentPanel';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import LessonPreview from '../userpreviews/lessonpreview';
@@ -18,8 +19,8 @@ import './CourseEditor.scss';
 const CourseEditor = () =>{
 	// Inititalisation --------------------------------------------
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
+	const { navigateToLessonEditor, navigateToQuizEditor } = useNavigation();
 	const location = useLocation();
-	const navigate = useNavigate();
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
 	const [course, setQuiz, quizMessage, isCourseLoading, loadQuiz] = useLoad(`/courses/${courseID}`);
@@ -34,18 +35,12 @@ const CourseEditor = () =>{
 	const handleItemClick = (content) => {
 		setSelectedCourseContent(content);
 	};
-	const handleNavigateToLessonEditor = (lessonID) =>{
-		navigate('/lessoneditor', { state: { lessonID } });
-	};
-	const handleNavigateToQuizEditor = (quizID) =>{
-		navigate('/quizeditor', { state: { quizID } });
-	};
 	const handleNavigateToEditor = () =>{
-		if(selectedCourseContent.ContentType == 'Lesson') {
-			navigate('/lessoneditor', { state: { lessonID: selectedCourseContent.ContentID } });
-		} else if(selectedCourseContent.ContentType == 'Quiz') {
-			navigate('/quizeditor', { state: { quizID: selectedCourseContent.ContentID } });
-		}else{
+		if (selectedCourseContent.ContentType === 'Lesson') {
+			navigateToLessonEditor(selectedCourseContent.ContentID);
+		} else if (selectedCourseContent.ContentType === 'Quiz') {
+			navigateToQuizEditor(selectedCourseContent.ContentID);
+		} else {
 			toast.error('Something went wrong, please try again!');
 		}
 	};
@@ -105,7 +100,7 @@ const CourseEditor = () =>{
 				errorMessage: 'Lesson could not be attached.',
 			});
 			if (attachResponse.isSuccess) {
-				handleNavigateToLessonEditor(createLessonResponse.result.data.LessonID);
+				navigateToLessonEditor(createLessonResponse.result.data.LessonID);
 			}
 		}
 	};
@@ -125,7 +120,7 @@ const CourseEditor = () =>{
 				errorMessage: 'Quiz could not be attached.',
 			});
 			if (attachResponse.isSuccess) {
-				handleNavigateToQuizEditor(createQuizResponse.result.data.QuizID);
+				navigateToQuizEditor(createQuizResponse.result.data.QuizID);
 			}
 		}
 	};

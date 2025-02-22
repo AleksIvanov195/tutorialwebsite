@@ -211,7 +211,7 @@ const RichTextEditor = ({ handleEditContentDetails, initialContent, options, han
 	const onPreview = () => {
 		const contentJSON = JSON.stringify(editor.getJSON());
 		sessionStorage.setItem('contentJSON', contentJSON);
-		window.open('/preview', '_blank');
+		window.open('/previewrichtextcontent', '_blank');
 	};
 	const onDiscard = () =>{
 		const confirmDiscard = window.confirm('Are you sure you want to discard all content?');
