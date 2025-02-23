@@ -1,0 +1,52 @@
+@import '../../styles/variables.scss';
+
+.filterBox {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 20px;
+  background-color: $bgColour;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: $secondaryColour;
+    font-weight: 600;
+
+		@media (max-width: 768px) {
+			font-size: 20px;
+		}
+  }
+
+  .filterOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+		
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: $secondaryColour;
+      cursor: pointer;
+			@media (max-width: 768px) {
+				font-size: 18px;
+			}
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+
+				@media (max-width: 768px) {
+					width: 25px;
+					height: 25px;
+				}
+      }
+      &:hover {
+        background: lighten($primaryColour,40%);
+      }
+    }
+  }
+}
