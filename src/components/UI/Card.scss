@@ -31,6 +31,21 @@
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
+		.bookmarkIcon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $tertiaryColour;
+      }
+
+      &.bookmarked {
+        color: $tertiaryColour;
+      }
+    }
     // Status indicator ---------------------
     .statusIndicator {
       position: absolute;
@@ -42,12 +57,12 @@
       font-weight: bold;
       text-transform: uppercase;
 
-      &.Draft {
+      &.Draft, &.NotStarted {
         background-color: lighten($warningColour, 30%);
         color: darken($warningColour, 20%);
       }
 
-      &.Published {
+      &.Published, &.Completed  {
         background-color: lighten($successColour, 30%);
         color: darken($successColour, 20%);
       }
@@ -57,18 +72,18 @@
         color: darken($primaryColour, 20%);
       }
 
-      &.Reviewed {
+      &.Reviewed, &.InProgress {
         background-color: lighten($tertiaryColour, 30%);
         color: darken($tertiaryColour, 20%);
       }
     }
 
     // Border ----------------
-    &.Draft {
+    &.Draft, &.NotStarted {
       border-left: 6px solid $warningColour;
     }
 
-    &.Published {
+    &.Published, &.Completed {
       border-left: 6px solid $successColour;
     }
 
@@ -76,7 +91,7 @@
       border-left: 6px solid $primaryColour;
     }
 
-    &.Reviewed {
+    &.Reviewed, &.InProgress {
       border-left: 6px solid $tertiaryColour;
     }
   }

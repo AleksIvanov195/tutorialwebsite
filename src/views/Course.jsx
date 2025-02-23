@@ -21,7 +21,7 @@ export default function Course() {
 		return queryString;
 	};
 	const [courses, , coursesMessage, isCoursesLoading] = useLoad(`/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`);
-	const [categories, setCategories, ,isCategoriesLoading] = useLoad('/coursecategories');
+	const [categories, setCategories, , isCategoriesLoading] = useLoad('/coursecategories');
 
 	// Handlers ------------------------------------------------------
 	const handleFilterChange = (filterName, value) => {
@@ -54,10 +54,12 @@ export default function Course() {
 				<CardContainer>
 					{
 						courses.map((course) => (
-							<Card key={course.CourseID}>
-								<p style={{ fontWeight: 'bold' }}>{course.CourseName}</p>
-								<p>{course.CourseDescription}</p>
-								<p><strong>Category:</strong> {course.CoursecategoryName}</p>
+							<Card key={course.CourseID} status={course.UsercontentstatusName}>
+								<div className="cardContent">
+									<h3>{course.CourseName}</h3>
+									<p>{course.CourseDescription}</p>
+									<p><strong>Category:</strong> {course.CoursecategoryName}</p>
+								</div>
 							</Card>
 						))
 					}
