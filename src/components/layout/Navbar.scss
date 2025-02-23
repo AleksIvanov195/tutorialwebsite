@@ -15,19 +15,17 @@
     display: none;
     color: white;
     font-weight: bold;
-    font-size: 1rem;
-    margin-left: 15px;
-		text-align: center;
 		margin: auto;
 		font-size: 32px;
-
   }
 	.navLinks {
 		list-style: none;
 		display: flex;
 		margin: 0;
 		padding: 0;
-
+		.navButtons{
+			display:none;
+		}
 		li {
 			margin: 0 15px; 
 
@@ -44,24 +42,30 @@
 	}
 	
 	@media (max-width: 768px) {
+		padding: 10px;
 		.hamburger{
 			display:block;
 		}
 		.activeLinkDisplay {
       display: block;
+			width:33%;
     }
-
 		.navLinks {
 			flex-direction: column;
 			align-items: center;
+			font-weight: bold;
 			width:70%;
 			display: none;
 			&.show {
 				display: flex;
+				.navButtons{
+					display:flex;
+				}
 			}
 			li {
 				margin: 10px 0;
 			}
+
 		}
 	}
 }

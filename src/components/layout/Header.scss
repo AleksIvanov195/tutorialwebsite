@@ -15,7 +15,7 @@
 		display:flex;
 		width:90%;
 	}
-	.buttons{
+	.headerButtons{
 		display:flex;
 		margin-left: 10px;
 	}
@@ -27,15 +27,15 @@
 	}
 	@media (max-width: 768px) {
 		flex-direction: column;
+		padding: 5px;
 		.logo {
-			margin-bottom: 10px;
+			display:none;
 		}
 		.navContainer{
 			width: 100%;
 		}
-		.buttons{
-			margin-left: 0px;
-			margin-top: 10px;
+		.headerButtons{
+			display:none;
 		}
 
 	}

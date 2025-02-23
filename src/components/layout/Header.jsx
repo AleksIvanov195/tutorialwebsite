@@ -18,7 +18,7 @@ export default function Header() {
 				</div>
 				<Navbar />
 			</div>
-			<div className="buttons">
+			<div className="headerButtons">
 				{
 					!authState.isLoggedIn
 						?

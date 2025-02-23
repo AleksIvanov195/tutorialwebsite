@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { Button, ButtonTray } from '../UI/Buttons';
 import './Navbar.scss';
 import Hamburger from 'hamburger-react';
 export default function Navbar() {
 	// Inititalisation --------------------------------------------
-	const { authState } = useAuth();
+	const { authState, logout } = useAuth();
 	const [currentLocation, setCurrentLocation] = useState('');
 	// State ------------------------------------------------------
 	const [isHamburgerOpen, setIsHambrugerOpen] = useState(false);
@@ -13,6 +14,19 @@ export default function Navbar() {
 	const handleChangeLocation = (name) => {
 		setCurrentLocation(name);
 	};
+	useEffect(() => {
+		const path = window.location.pathname;
+
+		if (path === '/') {
+			setCurrentLocation('Home');
+		} else if (path === '/courses') {
+			setCurrentLocation('Courses');
+		} else if (path === '/creatordashboard') {
+			setCurrentLocation('Dashboard');
+		} else {
+			setCurrentLocation('');
+		}
+	}, []);
 	// View -------------------------------------------------------
 	return (
 		<nav className="navbar">
@@ -21,7 +35,7 @@ export default function Navbar() {
 			</div>
 			{!isHamburgerOpen &&
 			<div className="activeLinkDisplay">
-				{currentLocation && <span>{currentLocation}</span>}
+				{currentLocation && <span className='currentLocation'>{currentLocation}</span>}
 			</div>
 			}
 			<ul className={`navLinks ${isHamburgerOpen ? 'show' : ''}`}>
@@ -32,6 +46,12 @@ export default function Navbar() {
 				{
 					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard" onClick={() => handleChangeLocation('Dashboard')}>Creator Dashboard</NavLink></li>
 				}
+				<li className='navButtons'>
+					<ButtonTray>
+						<Button className="headerButton">Profile</Button>
+						<Button className="headerButton" onClick={logout}>Logout</Button>
+					</ButtonTray>
+				</li>
 			</ul>
 		</nav>
 	);
