@@ -4,11 +4,13 @@ import { Card, CardContainer } from '../components/UI/Card';
 import { ContentPanel, ContentItem } from '../components/UI/contentpanel/ContentPanel';
 import SearchBar from '../components/UI/SearchBar';
 import FilterBox from '../components/UI/FilterBox';
+import useApiActions from '../hooks/useApiActions';
 import './Course.scss';
 
 export default function Course() {
 	// Inititalisation --------------------------------------------
 	// State ------------------------------------------------------
+	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const [searchString, setSearchString] = useState('');
 	const [filters, setFilters] = useState({
 		CoursecategoryName : [],
@@ -20,7 +22,7 @@ export default function Course() {
 			.join('&');
 		return queryString;
 	};
-	const [courses, , coursesMessage, isCoursesLoading] = useLoad(`/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`);
+	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(`/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`);
 	const [categories, setCategories, , isCategoriesLoading] = useLoad('/coursecategories');
 
 	// Handlers ------------------------------------------------------
@@ -36,6 +38,24 @@ export default function Course() {
 			}
 			return updatedFilters;
 		});
+	};
+	const handleBookmarkCourse = async (courseID, isBookmarked, bookmarkID) => {
+		let response;
+		if(isBookmarked) {
+			response = await deleteRequest(`/userbookmarks/${bookmarkID}`, {
+				successMessage: 'Bookmark removed.',
+				errorMessage: 'Bookmark could not be removed.',
+			});
+		}else{
+			response = await post('/userbookmarks', { UserbookmarkCourseID: courseID }, {
+				successMessage: 'Course bookmarked.',
+				errorMessage: 'Course could not be bookmarked.',
+			});
+		}
+		if (response.isSuccess) {
+			loadCourses();
+		}
+
 	};
 
 	// View --------------------------------------------------------
@@ -54,7 +74,12 @@ export default function Course() {
 				<CardContainer>
 					{
 						courses.map((course) => (
-							<Card key={course.CourseID} status={course.UsercontentstatusName}>
+							<Card
+								key={course.CourseID}
+								status={course.UsercontentstatusName}
+								isCardBookmarked={course.IsBookmarked}
+								handleBookmark={() => handleBookmarkCourse(course.CourseID, course.IsBookmarked, course.UserbookmarkID)}
+							>
 								<div className="cardContent">
 									<h3>{course.CourseName}</h3>
 									<p>{course.CourseDescription}</p>
