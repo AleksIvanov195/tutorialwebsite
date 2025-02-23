@@ -12,6 +12,9 @@
 	overflow-y: auto;
 	color: $bgColour;
 
+	@media (max-width: 768px) {
+    min-width: 80vw;
+  }
 	.panelHeader{
 		align-self: center;
 		color:white;

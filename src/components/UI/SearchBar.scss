@@ -11,6 +11,11 @@
     background-color: $bgColour;
     color: $secondaryColour;
 		font-size: 15px;
+
+		@media (max-width: 768px) {
+			padding: 20px;
+			font-size: 18px;
+		}
 		&:focus {
       border-color: $primaryColour;
       box-shadow: 0 0 0 3px rgba($primaryColour, 0.1);
