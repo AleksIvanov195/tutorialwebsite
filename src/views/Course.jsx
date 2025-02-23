@@ -1,14 +1,17 @@
 import useLoad from '../api/useLoad';
 import { useState } from 'react';
 import { Card, CardContainer } from '../components/UI/Card';
-import { ContentPanel, ContentItem } from '../components/UI/contentpanel/ContentPanel';
+import { ContentPanel } from '../components/UI/contentpanel/ContentPanel';
 import SearchBar from '../components/UI/SearchBar';
 import FilterBox from '../components/UI/FilterBox';
 import useApiActions from '../hooks/useApiActions';
+import { useAuth } from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 import './Course.scss';
 
 export default function Course() {
 	// Inititalisation --------------------------------------------
+	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const [searchString, setSearchString] = useState('');
@@ -22,7 +25,10 @@ export default function Course() {
 			.join('&');
 		return queryString;
 	};
-	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(`/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`);
+	const coursesEndpoint = authState.isLoggedIn
+		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`
+		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}`
+	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(coursesEndpoint);
 	const [categories, setCategories, , isCategoriesLoading] = useLoad('/coursecategories');
 
 	// Handlers ------------------------------------------------------
@@ -41,19 +47,23 @@ export default function Course() {
 	};
 	const handleBookmarkCourse = async (courseID, isBookmarked, bookmarkID) => {
 		let response;
-		if(isBookmarked) {
-			response = await deleteRequest(`/userbookmarks/${bookmarkID}`, {
-				successMessage: 'Bookmark removed.',
-				errorMessage: 'Bookmark could not be removed.',
-			});
+		if(!authState.isLoggedIn) {
+			toast.error('Please log in to your account before bookmarking any courses.');
 		}else{
-			response = await post('/userbookmarks', { UserbookmarkCourseID: courseID }, {
-				successMessage: 'Course bookmarked.',
-				errorMessage: 'Course could not be bookmarked.',
-			});
-		}
-		if (response.isSuccess) {
-			loadCourses();
+			if(isBookmarked) {
+				response = await deleteRequest(`/userbookmarks/${bookmarkID}`, {
+					successMessage: 'Bookmark removed.',
+					errorMessage: 'Bookmark could not be removed.',
+				});
+			}else{
+				response = await post('/userbookmarks', { UserbookmarkCourseID: courseID }, {
+					successMessage: 'Course bookmarked.',
+					errorMessage: 'Course could not be bookmarked.',
+				});
+			}
+			if (response.isSuccess) {
+				loadCourses();
+			}
 		}
 
 	};
