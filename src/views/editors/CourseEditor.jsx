@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SortableContentItem, SortableContentPanel } from '../../components/UI/contentpanel/SortableContentPanel';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
-import LessonPreview from '../userpreviews/lessonpreview';
+import LessonPreview from '../userpreviews/LessonPreview';
 import QuizUserView from '../userpreviews/QuizUserView';
 import LessonForm from '../../components/enitity/forms/LessonForm';
 import QuizForm from '../../components/enitity/forms/QuizForm';
