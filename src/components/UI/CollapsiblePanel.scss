@@ -16,11 +16,10 @@
 		display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 0px 20px;
     background-color: $primaryColour;
     color: $headerButtonTextColour;
     cursor: pointer;
-    font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
 
 		&:hover {
@@ -51,7 +50,7 @@
 		padding: 15px;
 		background-color: #fff;
 		color: $secondaryColour;
-		max-height: 45vh;
+		max-height: 60vh;
 		overflow-y: auto;
 
 	}
