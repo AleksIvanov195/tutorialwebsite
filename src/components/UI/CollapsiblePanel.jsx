@@ -3,7 +3,7 @@ import Collapse from 'react-collapse';
 import Icons from './Icons';
 import './CollapsiblePanel.scss';
 
-export default function CollapsiblePanel({ children, header }) {
+export default function CollapsiblePanel({ children, title, titleSize = 'medium' }) {
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	const handleToggle = () => {
@@ -12,8 +12,8 @@ export default function CollapsiblePanel({ children, header }) {
 
 	return (
 		<div className={`collapsiblePanel ${isCollapsed ? 'isActive' : ''}`}>
-			<div className="collapsiblePanelHeader" onClick={handleToggle}>
-				<h1>{header}</h1>
+			<div className={`collapsiblePanelHeader ${titleSize}`} onClick={handleToggle}>
+				<h1>{title}</h1>
 				<span>
 					<Icons.ArrowRight />
 				</span>

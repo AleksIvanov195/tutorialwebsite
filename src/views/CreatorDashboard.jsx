@@ -114,7 +114,7 @@ export default function CreatorDashboard() {
 					<CourseForm onClose={() => openModalForm('course')} onSubmit={handleCourseSubmit}/>
 				</Modal>
 			}
-			<CollapsiblePanel header={`My Courses (${courses.length})`}>
+			<CollapsiblePanel title={`My Courses (${courses.length})`}>
 				{
 					<CardContainer>
 						{
@@ -134,7 +134,7 @@ export default function CreatorDashboard() {
 					</CardContainer>
 				}
 			</CollapsiblePanel>
-			<CollapsiblePanel header={`My Lessons (${lessons.length})`}>
+			<CollapsiblePanel title={`My Lessons (${lessons.length})`}>
 				{
 					<CardContainer>
 						{
@@ -154,7 +154,7 @@ export default function CreatorDashboard() {
 					</CardContainer>
 				}
 			</CollapsiblePanel>
-			<CollapsiblePanel header={`My Quizzes (${quizzes.length})`}>
+			<CollapsiblePanel title={`My Quizzes (${quizzes.length})`}>
 				{
 					<CardContainer>
 						{

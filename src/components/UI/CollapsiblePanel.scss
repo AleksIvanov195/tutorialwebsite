@@ -24,15 +24,26 @@
 
 		&:hover {
 			background-color: darken($primaryColour, 10%);
-      transform: translateY(-1px);
 		}
 		
 		span {
 			display: inline-block;
 			transition: transform 0.3s ease;
 		}
-
+		&.small {
+			font-size: 7px;
+			padding: 0px 10px;
 		}
+
+		&.medium {
+			font-size: 12px;
+		}
+
+		&.large {
+			font-size: 24px;
+		}
+
+	}
 		&.isActive {
 			.collapsiblePanelHeader {
 				background-color: darken($primaryColour, 15%);
