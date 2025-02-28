@@ -15,6 +15,7 @@ const LessonEditor = lazy(() => import('./views/editors/LessonEditor'));
 const QuizEditor = lazy(() => import('./views/editors/QuizEditor'));
 const Quiz = lazy(() => import('./views/quizviews/Quiz'));
 const PreviewRichTextContent = lazy(() => import('./views/PreviewRichTextContent'));
+const CoursePreview = lazy(() => import('./views/userpreviews/CoursePreview.jsx'));
 
 // Error boundary for lazy loaded components
 const ErrorBoundary = ({ children }) => {
@@ -48,7 +49,11 @@ const AppContent = () => {
 			<Route path="/courses" element={<Course />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-
+			<Route path="/coursepreview" element={
+				<ErrorBoundary>
+					<CoursePreview/>
+				</ErrorBoundary>
+			}/>
 			{/* Content Creator routes ----------------------------------*/}
 			<Route
 				path="/creatordashboard"

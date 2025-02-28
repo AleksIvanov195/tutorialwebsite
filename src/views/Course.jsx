@@ -6,7 +6,9 @@ import SearchBar from '../components/UI/SearchBar';
 import FilterBox from '../components/UI/FilterBox';
 import useApiActions from '../hooks/useApiActions';
 import { useAuth } from '../hooks/useAuth';
+import useNavigation from '../hooks/useNavigation';
 import toast from 'react-hot-toast';
+import ContentPreviewModal from '../components/UI/modal/ContentPreviewModal';
 import './Course.scss';
 
 export default function Course() {
@@ -14,6 +16,9 @@ export default function Course() {
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
+	const { navigateToCoursePreview } = useNavigation();
+	const [showContentModal, setShowContentModal] = useState(false);
+	const [selectedCourse, setSelectedCourse] = useState(null);
 	const [searchString, setSearchString] = useState('');
 	const [filters, setFilters] = useState({
 		CoursecategoryName : [],
@@ -27,7 +32,7 @@ export default function Course() {
 	};
 	const coursesEndpoint = authState.isLoggedIn
 		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`
-		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}`
+		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}`;
 	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(coursesEndpoint);
 	const [categories, setCategories, , isCategoriesLoading] = useLoad('/coursecategories');
 
@@ -65,9 +70,23 @@ export default function Course() {
 				loadCourses();
 			}
 		}
-
+	};
+	const handleCourseClicked = (course) =>{
+		setSelectedCourse(course);
+		setShowContentModal(true);
 	};
 
+	const handleStartCourse = async () => {
+		if(authState.isLoggedIn) {
+			await post('/usercourses', { UsercourseCourseID: selectedCourse.CourseID });
+		}
+		toast.error('You need to log in to save your progress!');
+		navigateToCoursePreview(selectedCourse.CourseID);
+	};
+	const handleCloseModal = () =>{
+		setShowContentModal(false);
+		setSelectedCourse(null);
+	};
 	// View --------------------------------------------------------
 	if (isCoursesLoading || isCategoriesLoading) {
 		return <div>Loading</div>;
@@ -89,7 +108,7 @@ export default function Course() {
 								status={course.UsercontentstatusName}
 								isCardBookmarked={course.IsBookmarked}
 								handleBookmark={() => handleBookmarkCourse(course.CourseID, course.IsBookmarked, course.UserbookmarkID)}
-							>
+								handleCardClicked={() => handleCourseClicked(course)}>
 								<div className="cardContent">
 									<h3>{course.CourseName}</h3>
 									<p>{course.CourseDescription}</p>
@@ -100,6 +119,17 @@ export default function Course() {
 					}
 				</CardContainer>
 			</div>
+			{showContentModal && (
+				<ContentPreviewModal
+					endpoint={`/coursecontents/simplified?CoursecontentCourseID=${selectedCourse.CourseID}`}
+					idField="CoursecontentID"
+					textField="ContentName"
+					onClose={handleCloseModal}
+					onSave={handleStartCourse}
+					onSaveText="Start"
+					title='Review Course Contents'
+				/>
+			)}
 		</div>
 	);
 };
