@@ -73,14 +73,23 @@ export default function Course() {
 	};
 	const handleCourseClicked = (course) =>{
 		setSelectedCourse(course);
-		setShowContentModal(true);
+		if(course.UsercontentstatusID == 1) {
+			setShowContentModal(true);
+		}else{
+			handleStartCourse();
+		}
+
 	};
 
 	const handleStartCourse = async () => {
-		if(authState.isLoggedIn) {
-			await post('/usercourses', { UsercourseCourseID: selectedCourse.CourseID });
+		if(authState.isLoggedIn && selectedCourse.UsercontentstatusID == 1) {
+			await post('/usercourses', { UsercourseCourseID: selectedCourse.CourseID }, {
+				successMessage: 'Course started!',
+				errorMessage: 'Course could not be started!',
+			});
+		}else if (!authState.isLoggedIn) {
+			toast.error('You need to log in to save your progress!');
 		}
-		toast.error('You need to log in to save your progress!');
 		navigateToCoursePreview(selectedCourse.CourseID);
 	};
 	const handleCloseModal = () =>{
