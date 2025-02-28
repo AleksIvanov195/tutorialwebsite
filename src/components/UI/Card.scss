@@ -46,6 +46,9 @@
         color: $tertiaryColour;
       }
     }
+		.clickableArea {
+			cursor: pointer;
+		}
     // Status indicator ---------------------
     .statusIndicator {
       position: absolute;

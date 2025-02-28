@@ -15,7 +15,11 @@ const useNavigation = () => {
 		navigate('/courseeditor', { state: { courseID } });
 	};
 
-	return { navigateToLessonEditor, navigateToQuizEditor, navigateToCourseEditor };
+	const navigateToCoursePreview = (courseID) => {
+		navigate('/coursepreview', { state: { courseID } });
+	};
+
+	return { navigateToLessonEditor, navigateToQuizEditor, navigateToCourseEditor, navigateToCoursePreview };
 };
 
 export default useNavigation;

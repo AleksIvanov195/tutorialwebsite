@@ -1,7 +1,7 @@
 import Icons from './Icons';
 import './Card.scss';
 
-export function Card({ status, isCardBookmarked, children, handleBookmark }) {
+export function Card({ status, isCardBookmarked, children, handleBookmark, handleCardClicked }) {
 
 	const toggleBookmark = () => {
 		handleBookmark();
@@ -20,8 +20,11 @@ export function Card({ status, isCardBookmarked, children, handleBookmark }) {
 				)}
 			</div>
 			{status && <div className={`statusIndicator ${status}`}>{status}</div>}
-			<div className="cardContent">{children}</div>
+			<div className = "clickableArea" onClick={handleCardClicked}>
+				<div className="cardContent">{children}</div>
+			</div>
 		</div>
+
 	);
 }
 
