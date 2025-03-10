@@ -1,6 +1,7 @@
 import useLoad from '../api/useLoad';
 import { useState } from 'react';
-import { Card, CardContainer } from '../components/UI/Card';
+import { CardContainer } from '../components/UI/Card';
+import CourseCard from '../components/enitity/cards/CourseCard';
 import CollapsiblePanel from '../components/UI/CollapsiblePanel';
 import { ButtonTray, Button } from '../components/UI/Buttons';
 import LessonForm from '../components/enitity/forms/LessonForm';
@@ -119,7 +120,7 @@ export default function CreatorDashboard() {
 					<CardContainer>
 						{
 							courses.map(course => (
-								<Card key={course.CourseID} status={course.CoursePublicationstatusName}>
+								<CourseCard key={course.CourseID} status={course.CoursePublicationstatusName}>
 									<div className="cardContent">
 										<h3>{course.CourseName}</h3>
 										<p>{course.CourseDescription}</p>
@@ -128,7 +129,7 @@ export default function CreatorDashboard() {
 										<Button className='formButton submitButton'onClick={() => navigateToCourseEditor(course.CourseID)}>Edit</Button>
 										<Button className='deleteButton'onClick={() => onDeleteCourse(course.CourseID)}>Delete</Button>
 									</ButtonTray>
-								</Card>
+								</CourseCard>
 							))
 						}
 					</CardContainer>
@@ -139,7 +140,7 @@ export default function CreatorDashboard() {
 					<CardContainer>
 						{
 							lessons.map(lesson => (
-								<Card key={lesson.LessonID} status={lesson.LessonPublicationstatusName}>
+								<CourseCard key={lesson.LessonID} status={lesson.LessonPublicationstatusName}>
 									<div className="cardContent">
 										<h3>{lesson.LessonName}</h3>
 										<p>{lesson.LessonDescription}</p>
@@ -148,7 +149,7 @@ export default function CreatorDashboard() {
 										<Button className='formButton submitButton'onClick={() => navigateToLessonEditor(lesson.LessonID)}>Edit</Button>
 										<Button className='deleteButton'onClick={() => onDeleteLesson(lesson.LessonID)}>Delete</Button>
 									</ButtonTray>
-								</Card>
+								</CourseCard>
 							))
 						}
 					</CardContainer>
@@ -159,7 +160,7 @@ export default function CreatorDashboard() {
 					<CardContainer>
 						{
 							quizzes.map(quiz => (
-								<Card key={quiz.QuizID} status={quiz.QuizPublicationstatusName}>
+								<CourseCard key={quiz.QuizID} status={quiz.QuizPublicationstatusName}>
 									<div className="cardContent">
 										<h3>{quiz.QuizName}</h3>
 										<p>{quiz.QuizDescription}</p>
@@ -168,7 +169,7 @@ export default function CreatorDashboard() {
 										<Button onClick={() => navigateToQuizEditor(quiz.QuizID)}>Edit</Button>
 										<Button onClick={() => onDeleteQuiz(quiz.QuizID)}>Delete</Button>
 									</ButtonTray>
-								</Card>
+								</CourseCard>
 							))
 						}
 					</CardContainer>

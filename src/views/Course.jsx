@@ -1,6 +1,7 @@
 import useLoad from '../api/useLoad';
 import { useState } from 'react';
-import { Card, CardContainer } from '../components/UI/Card';
+import { CardContainer } from '../components/UI/Card';
+import CourseCard from '../components/enitity/cards/CourseCard';
 import { ContentPanel } from '../components/UI/contentpanel/ContentPanel';
 import SearchBar from '../components/UI/SearchBar';
 import FilterBox from '../components/UI/FilterBox';
@@ -133,7 +134,7 @@ export default function Course() {
 				<CardContainer>
 					{
 						courses.map((course) => (
-							<Card
+							<CourseCard
 								key={course.CourseID}
 								status={course.UsercontentstatusName}
 								isCardBookmarked={course.IsBookmarked}
@@ -144,7 +145,7 @@ export default function Course() {
 									<p>{course.CourseDescription}</p>
 									<p><strong>Category:</strong> {course.CoursecategoryName}</p>
 								</div>
-							</Card>
+							</CourseCard>
 						))
 					}
 				</CardContainer>
