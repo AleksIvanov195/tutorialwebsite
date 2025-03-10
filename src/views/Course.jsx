@@ -22,6 +22,7 @@ export default function Course() {
 	const [searchString, setSearchString] = useState('');
 	const [filters, setFilters] = useState({
 		CoursecategoryName : [],
+		UsercontentstatusName : [],
 	});
 	const generateQueryString = () => {
 		const queryString = Object.entries(filters)
@@ -30,14 +31,16 @@ export default function Course() {
 			.join('&');
 		return queryString;
 	};
+	// If user is loggedin use the courses/users endpoint to display content status
 	const coursesEndpoint = authState.isLoggedIn
-		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}`
+		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}&orderby=IsBookmarked,DESC`
 		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}`;
 	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(coursesEndpoint);
-	const [categories, setCategories, , isCategoriesLoading] = useLoad('/coursecategories');
+
 
 	// Handlers ------------------------------------------------------
 	const handleFilterChange = (filterName, value) => {
+		console.log(value);
 		setFilters((prevFilters) => {
 			const updatedFilters = { ...prevFilters };
 			if (updatedFilters[filterName].includes(value)) {
@@ -73,31 +76,34 @@ export default function Course() {
 	};
 	const handleCourseClicked = (course) =>{
 		setSelectedCourse(course);
-		if(course.UsercontentstatusID == 1) {
+		if(course.UsercontentstatusID == 1 || !authState.isLoggedIn) {
 			setShowContentModal(true);
 		}else{
-			handleStartCourse();
+			handleStartCourse(course);
 		}
 
 	};
 
-	const handleStartCourse = async () => {
-		if(authState.isLoggedIn && selectedCourse.UsercontentstatusID == 1) {
-			await post('/usercourses', { UsercourseCourseID: selectedCourse.CourseID }, {
+	const handleStartCourse = async (course) => {
+		// If user starts course for the first time make a new record.
+		if(authState.isLoggedIn && course.UsercontentstatusID == 1) {
+			await post('/usercourses', { UsercourseCourseID: course.CourseID }, {
 				successMessage: 'Course started!',
 				errorMessage: 'Course could not be started!',
 			});
 		}else if (!authState.isLoggedIn) {
+			// If they started the course but not loggedin they cannot save progress.
 			toast.error('You need to log in to save your progress!');
 		}
-		navigateToCoursePreview(selectedCourse.CourseID);
+		// Either case they are navigate to the course preview.
+		navigateToCoursePreview(course.CourseID);
 	};
 	const handleCloseModal = () =>{
 		setShowContentModal(false);
 		setSelectedCourse(null);
 	};
 	// View --------------------------------------------------------
-	if (isCoursesLoading || isCategoriesLoading) {
+	if (isCoursesLoading) {
 		return <div>Loading</div>;
 	}
 	return (
@@ -105,7 +111,22 @@ export default function Course() {
 			<div className="coursesBody">
 				<ContentPanel title="Search for Courses">
 					<SearchBar searchString={searchString} setSearchString={setSearchString} placeholder="Search for courses..." />
-					<FilterBox title="Filter by Course Category" options ={categories} selectedValues={filters.CoursecategoryName} onChange={(value) => handleFilterChange('CoursecategoryName', value)}/>
+					<FilterBox
+						title="Filter by Course Category"
+						endpoint ='/coursecategories'
+						idfield = 'CoursecategoryID'
+						textfield = 'CoursecategoryName'
+						selectedValues={filters.CoursecategoryName}
+						onChange={(value) => handleFilterChange('CoursecategoryName', value)}
+					/>
+					<FilterBox
+						title="Filter by Course Status"
+						endpoint ='/usercontentstatus'
+						idfield = 'UsercontentstatusID'
+						textfield = 'UsercontentstatusName'
+						selectedValues={filters.UsercontentstatusName}
+						onChange={(value) => handleFilterChange('UsercontentstatusName', value)}
+					/>
 				</ContentPanel>
 			</div>
 			<div className="coursesContent">
@@ -134,7 +155,7 @@ export default function Course() {
 					idField="CoursecontentID"
 					textField="ContentName"
 					onClose={handleCloseModal}
-					onSave={handleStartCourse}
+					onSave={() => handleStartCourse(selectedCourse)}
 					onSaveText="Start"
 					title='Review Course Contents'
 				/>

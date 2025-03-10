@@ -1,23 +1,28 @@
 import './FilterBox.scss';
 import CollapsiblePanel from './CollapsiblePanel';
-const FilterBox = ({ title, options, selectedValues, onChange }) => {
+import useLoad from '../../api/useLoad';
+const FilterBox = ({ title, endpoint, idfield, textfield, selectedValues, onChange }) => {
 	// Inititalisation --------------------------------------------
 	// State ------------------------------------------------------
+	const [options, , , isOptionsLoading] = useLoad(endpoint);
 	// Handlers ---------------------------------------------------
 	// View -------------------------------------------------------
+	if(isOptionsLoading) {
+		return <p> Loading options ...</p>;
+	}
 	return (
 		<div className="filterBox">
 			<CollapsiblePanel title={title} titleSize='small'>
 				<div className="filterOptions">
 					{options.map((option) => (
-						<label key={option.CoursecategoryID}>
+						<label key={option[idfield]}>
 							<input
 								type="checkbox"
-								value={option.CoursecategoryName}
-								checked={selectedValues.includes(option.CoursecategoryName)}
-								onChange={() => onChange(option.CoursecategoryName)}
+								value={option[textfield]}
+								checked={selectedValues.includes(option[textfield])}
+								onChange={() => onChange(option[textfield])}
 							/>
-							{option.CoursecategoryName}
+							{option[textfield]}
 						</label>
 					))}
 				</div>
