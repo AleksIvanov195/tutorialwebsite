@@ -29,7 +29,12 @@ const QuizEditor = () => {
 	const initialQuestions = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (question) => {
-		setSelectedQuestion(question);
+		if(question.QuestionID === selectedQuestion?.QuestionID) {
+			setSelectedQuestion(null);
+		}else{
+			setSelectedQuestion(question);
+		}
+		if(!formType)setFormType('details');
 	};
 	const handleEditDetails = () => {
 		setFormType('details');

@@ -232,7 +232,7 @@ const CourseEditor = () =>{
 
 			{showLessonModal && (
 				<ContentSelectorModal
-					endpoint="/lessons"
+					endpoint="/lessons/mylessons"
 					idField="LessonID"
 					textField="LessonName"
 					onClose={() => setShowLessonModal(false)}
@@ -243,7 +243,7 @@ const CourseEditor = () =>{
 
 			{showQuizModal && (
 				<ContentSelectorModal
-					endpoint="/quizzes"
+					endpoint="/quizzes/myquizzes"
 					idField="QuizID"
 					textField="QuizName"
 					onClose={() => setShowQuizModal(false)}
