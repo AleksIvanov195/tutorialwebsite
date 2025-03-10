@@ -3,6 +3,7 @@ import useLoad from '../../api/useLoad';
 import Question from '../quizviews/Question';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import QuestionList from '../quizviews/QuestionList';
+import toast from 'react-hot-toast';
 import '../quizviews/Quiz.scss';
 
 const QuizUserView = ({ quizID }) => {
@@ -12,11 +13,15 @@ const QuizUserView = ({ quizID }) => {
 	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers?orderby=QuestionOrdernumber,ASC`);
 	const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+	// Stores the selected answers for the current question
 	const [selectedAnswers, setSelectedAnswers] = useState([]);
-	const [isSubmitted, setIsSubmitted] = useState(false);
-	const [isCorrect, setIsCorrect] = useState(null);
+	// Tracks whether the current question has been submitted
+	const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
+	// Tracks whether the submitted answer is correct.
+	const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
 	const [score, setScore] = useState(0);
 	const [quizFinished, setQuizFinished] = useState(false);
+	// Stores the correctness of each question.
 	const [correctAnswers, setCorrectAnswers] = useState([]);
 
 	useEffect(() => {
@@ -59,14 +64,14 @@ const QuizUserView = ({ quizID }) => {
 				.filter((ans) => ans.AnswerCorrect)
 				.map((ans) => ans.AnswerID);
 
-			const isAnswerCorrect = currentQuestion.QuestionType === 'MultipleChoice' ?
+			const answersCorrect = currentQuestion.QuestionType === 'MultipleChoice' ?
 				arraysMatch(selectedAnswers, correctAnswerIDs)
 				: correctAnswerIDs.includes(selectedAnswers[0]);
 
-			setIsSubmitted(true);
-			setIsCorrect(isAnswerCorrect);
+			setIsQuestionSubmitted(true);
+			setIsAnswerCorrect(answersCorrect);
 
-			if (isAnswerCorrect) {
+			if (answersCorrect) {
 				setScore((previous) => previous + 1);
 			}
 
@@ -74,7 +79,7 @@ const QuizUserView = ({ quizID }) => {
 			setCorrectAnswers((prev) => {
 				const newCorrectAnswers = [...prev];
 				// Sets the correctnes of the answer
-				newCorrectAnswers[currentQuestionIndex] = isAnswerCorrect;
+				newCorrectAnswers[currentQuestionIndex] = answersCorrect;
 				return newCorrectAnswers;
 			});
 		}
@@ -82,22 +87,35 @@ const QuizUserView = ({ quizID }) => {
 
 	// Handle going to next question
 	const handleNext = () => {
-		setIsSubmitted(false);
+		setIsQuestionSubmitted(false);
 		setSelectedAnswers([]);
-		if (currentQuestionIndex < questionsAndAnswers.length - 1) {
-			setCurrentQuestionIndex(previous => previous + 1);
+		goToNextQuestion();
+
+	};
+	const goToNextQuestion = () => {
+		let nextIndex = currentQuestionIndex + 1;
+		while (nextIndex < questionsAndAnswers.length && correctAnswers[nextIndex] !== null) {
+			nextIndex++;
+		}
+		if (nextIndex < questionsAndAnswers.length) {
+			setCurrentQuestionIndex(nextIndex);
 		} else {
-			setQuizFinished(true);
+			// If no unanswered questions are found, check from the beginning
+			nextIndex = correctAnswers.findIndex(answer => answer === null);
+			if (nextIndex !== -1) {
+				setCurrentQuestionIndex(nextIndex);
+			} else {
+				toast.success('You have answered all question, click Finish to finish the quiz!');
+			}
 		}
 	};
-
 	// Handle selecting a question from the question list
 	const handleQuestionClick = (index) => {
-		// If the select question index is bigger than current question or if the question was not submitted
-		// This ensures that users cannot go back to previous question, if it was submitted.
-		if (index > currentQuestionIndex || correctAnswers[index] === null) {
+		// if the question was not submitted
+		// This ensures that users cannot go back to a question if it was submitted.
+		if (correctAnswers[index] === null) {
 			setCurrentQuestionIndex(index);
-			setIsSubmitted(false);
+			setIsQuestionSubmitted(false);
 			setSelectedAnswers([]);
 		}
 	};
@@ -126,7 +144,7 @@ const QuizUserView = ({ quizID }) => {
 	}
 
 	const currentQuestion = questionsAndAnswers[currentQuestionIndex];
-
+	const allQuestionsAnswered = correctAnswers.every(answer => answer !== null);
 	return (
 		<div className="quizContainer">
 			<QuestionList
@@ -140,18 +158,18 @@ const QuizUserView = ({ quizID }) => {
 				question={currentQuestion}
 				selectedAnswers={selectedAnswers}
 				onSelectAnswer={handleSelectAnswer}
-				isSubmitted={isSubmitted}
+				isQuestionSubmitted={isQuestionSubmitted}
 			/>
-			{isSubmitted && (
-				<p className={`feedback ${isCorrect ? 'correct' : 'wrong'}`}>
-					{isCorrect ? 'Correct!' : `Wrong! ${currentQuestion.QuestionText}`}
+			{isQuestionSubmitted && (
+				<p className={`feedback ${isAnswerCorrect ? 'correct' : 'wrong'}`}>
+					{isAnswerCorrect ? 'Correct!' : `Wrong! ${currentQuestion.QuestionText}`}
 				</p>
 			)}
 			<ButtonTray>
-				<Button onClick={handleSubmit} disabled={isSubmitted || selectedAnswers === null}>Submit</Button>
-				{isSubmitted && (
-					<Button onClick={handleNext}>
-						{currentQuestionIndex < questionsAndAnswers.length - 1 ? 'Next' : 'Finish'}
+				<Button onClick={handleSubmit} disabled={isQuestionSubmitted || selectedAnswers === null}>Submit</Button>
+				{isQuestionSubmitted && (
+					<Button onClick={allQuestionsAnswered ? () => setQuizFinished(true) : handleNext}>
+						{allQuestionsAnswered ? 'Finish' : 'Next'}
 					</Button>
 				)}
 			</ButtonTray>
