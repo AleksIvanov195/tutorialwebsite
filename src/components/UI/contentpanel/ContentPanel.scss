@@ -41,12 +41,11 @@
 		}
 		&:hover {
 			background-color: $mixedColour;
-			transform: translateY(-5px) scale(1.02);
+			transform: translateY(-3px);
 		}
 		&.selected {
-			margin-bottom: 0px;
 			background-color: $tertiaryColour;
-			transform: translateY(0px) scale(1.02);
+			transform: translateY(2px);
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		}
 	}

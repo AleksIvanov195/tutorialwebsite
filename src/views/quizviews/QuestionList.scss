@@ -1,0 +1,35 @@
+@import '../../styles/variables.scss';
+.questionList {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px;
+  background-color: $bgColour;
+  border-bottom: 2px solid mix($secondaryColour, $bgColour, 20%);
+  margin-bottom: 20px;
+
+  .questionItem {
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: $secondaryColour;
+    color: $bgColour;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &.active {
+      background-color: $primaryColour;
+    }
+
+    &.correct {
+      background-color: $successColour;
+    }
+
+    &.wrong {
+      background-color: $warningColour;
+    }
+
+    &:hover {
+      background-color: $mixedColour;
+    }
+  }
+}
