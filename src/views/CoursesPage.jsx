@@ -10,14 +10,14 @@ import { useAuth } from '../hooks/useAuth';
 import useNavigation from '../hooks/useNavigation';
 import toast from 'react-hot-toast';
 import ContentPreviewModal from '../components/UI/modal/ContentPreviewModal';
-import './Course.scss';
+import './CoursePage.scss';
 
-export default function Course() {
+export default function CoursesPage() {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
-	const { navigateToCoursePreview } = useNavigation();
+	const { navigateToCourseView } = useNavigation();
 	const [showContentModal, setShowContentModal] = useState(false);
 	const [selectedCourse, setSelectedCourse] = useState(null);
 	const [searchString, setSearchString] = useState('');
@@ -97,7 +97,7 @@ export default function Course() {
 			toast.error('You need to log in to save your progress!');
 		}
 		// Either case they are navigate to the course preview.
-		navigateToCoursePreview(course.CourseID);
+		navigateToCourseView(course.CourseID);
 	};
 	const handleCloseModal = () =>{
 		setShowContentModal(false);

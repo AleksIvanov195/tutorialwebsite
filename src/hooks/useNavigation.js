@@ -15,11 +15,11 @@ const useNavigation = () => {
 		navigate('/courseeditor', { state: { courseID } });
 	};
 
-	const navigateToCoursePreview = (courseID) => {
-		navigate('/coursepreview', { state: { courseID } });
+	const navigateToCourseView = (courseID) => {
+		navigate('/courseview', { state: { courseID } });
 	};
 
-	return { navigateToLessonEditor, navigateToQuizEditor, navigateToCourseEditor, navigateToCoursePreview };
+	return { navigateToLessonEditor, navigateToQuizEditor, navigateToCourseEditor, navigateToCourseView };
 };
 
 export default useNavigation;

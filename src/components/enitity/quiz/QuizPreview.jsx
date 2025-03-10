@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import useLoad from '../../api/useLoad';
+import useLoad from '../../../api/useLoad';
 import Question from './Question';
-import { Button, ButtonTray } from '../../components/UI/Buttons';
+import { Button, ButtonTray } from '../../UI/Buttons';
 import './Quiz.scss';
 
-const Quiz = () => {
+const QuizPreview = () => {
 	// Initialisation --------------------------------------------
 	const quizID = sessionStorage.getItem('previewQuizID');
 	// Initialisation --------------------------------------------
@@ -124,4 +124,4 @@ const Quiz = () => {
 	);
 };
 
-export default Quiz;
+export default QuizPreview;

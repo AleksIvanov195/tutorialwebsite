@@ -1,4 +1,4 @@
-import Icons from '../../components/UI/Icons';
+import Icons from '../../UI/Icons';
 import './Quiz.scss';
 
 const Answer = ({ answer, questionType, isSelected, onSelectAnswer, isSubmitted }) => {

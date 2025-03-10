@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Layout from './components/layout/Layout';
 import Homepage from './views/Homepage';
-import Course from './views/Course';
+import CoursesPage from './views/CoursesPage';
 import Login from './views/Login';
 import Register from './views/Register';
 import { Toaster } from 'react-hot-toast';
@@ -13,9 +13,9 @@ const CreatorDashboard = lazy(() => import('./views/CreatorDashboard'));
 const CourseEditor = lazy(() => import('./views/editors/CourseEditor'));
 const LessonEditor = lazy(() => import('./views/editors/LessonEditor'));
 const QuizEditor = lazy(() => import('./views/editors/QuizEditor'));
-const Quiz = lazy(() => import('./views/quizviews/Quiz'));
+const QuizPreview = lazy(() => import('./components/enitity/quiz/QuizPreview.jsx'));
 const PreviewRichTextContent = lazy(() => import('./views/PreviewRichTextContent'));
-const CoursePreview = lazy(() => import('./views/userpreviews/CoursePreview.jsx'));
+const Course = lazy(() => import('./views/usercontentviews/Course.jsx'));
 
 // Error boundary for lazy loaded components
 const ErrorBoundary = ({ children }) => {
@@ -46,12 +46,12 @@ const AppContent = () => {
 		<Routes>
 			{/* Public Routes ------------------------------------------*/}
 			<Route path="/" element={<Homepage />} />
-			<Route path="/courses" element={<Course />} />
+			<Route path="/courses" element={<CoursesPage />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			<Route path="/coursepreview" element={
+			<Route path="/courseview" element={
 				<ErrorBoundary>
-					<CoursePreview/>
+					<Course/>
 				</ErrorBoundary>
 			}/>
 			{/* Content Creator routes ----------------------------------*/}
@@ -110,7 +110,7 @@ const AppContent = () => {
 				element = {
 					<ProtectedRoute isAllowed={isAuthenticated && authState.role === 'ContentCreator'}>
 						<ErrorBoundary>
-							<Quiz/>
+							<QuizPreview/>
 						</ErrorBoundary>
 					</ProtectedRoute>
 				}

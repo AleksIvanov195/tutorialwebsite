@@ -1,6 +1,6 @@
 import RenderContentWithEditor from '../components/utility/RenderContentWithEditor';
 import './PreviewRichTextContent.scss';
-
+// Used in RichTextEditor.jsx
 const PreviewRichTextContent = () => {
 	const contentJSON = sessionStorage.getItem('contentJSON');
 	if(!contentJSON) return <div>An error occured, please try again!</div>;

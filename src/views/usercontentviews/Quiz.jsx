@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import useLoad from '../../api/useLoad';
-import Question from '../quizviews/Question';
+import Question from '../../components/enitity/quiz/Question';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
-import QuestionList from '../quizviews/QuestionList';
+import QuestionList from '../../components/enitity/quiz/QuestionList';
 import toast from 'react-hot-toast';
-import '../quizviews/Quiz.scss';
+import '../../components/enitity/quiz/Quiz.scss';
 
-const QuizUserView = ({ quizID }) => {
+const Quiz = ({ quizID }) => {
 	// Initialisation --------------------------------------------
 	// State ------------------------------------------------------
 	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
@@ -177,5 +177,5 @@ const QuizUserView = ({ quizID }) => {
 	);
 };
 
-export default QuizUserView;
+export default Quiz;
 

@@ -2,12 +2,12 @@ import useApiActions from '../../hooks/useApiActions';
 import useLoad from '../../api/useLoad';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import LessonPreview from '../userpreviews/LessonPreview';
-import QuizUserView from '../userpreviews/QuizUserView';
+import Lesson from './Lesson';
+import Quiz from './Quiz';
 import Animate from '../../components/UI/Animate';
 import { ContentPanel, ContentItem } from '../../components/UI/contentpanel/ContentPanel';
-import './CoursePreview.scss';
-const CoursePreview = () =>{
+import './Course.scss';
+const Course = () =>{
 	// Inititalisation --------------------------------------------
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const location = useLocation();
@@ -21,12 +21,12 @@ const CoursePreview = () =>{
 		setSelectedCourseContent(content);
 	};
 	// View -------------------------------------------------------
-	// Content to preview
+	// Content to view
 	const renderContentView = () => {
 		if (selectedCourseContent.ContentType === 'Lesson') {
-			return <LessonPreview lessonID={selectedCourseContent.ContentID} />;
+			return <Lesson lessonID={selectedCourseContent.ContentID} />;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
-			return <QuizUserView quizID={selectedCourseContent.ContentID} />;
+			return <Quiz quizID={selectedCourseContent.ContentID} />;
 		}
 		return null;
 	};
@@ -66,4 +66,4 @@ const CoursePreview = () =>{
 	);
 };
 
-export default CoursePreview;
+export default Course;

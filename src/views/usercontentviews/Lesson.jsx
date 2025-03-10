@@ -1,7 +1,7 @@
 import RenderContentWithEditor from '../../components/utility/RenderContentWithEditor';
 import useLoad from '../../api/useLoad';
-import './LessonPreview.scss';
-const LessonPreview = ({ lessonID }) => {
+import './Lesson.scss';
+const Lesson = ({ lessonID }) => {
 	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`);
 	if(isLoading) {
 		return <p>Loading .....</p>;
@@ -14,4 +14,4 @@ const LessonPreview = ({ lessonID }) => {
 	);
 };
 
-export default LessonPreview;
+export default Lesson;
