@@ -6,16 +6,21 @@ import Lesson from './Lesson';
 import Quiz from './Quiz';
 import Animate from '../../components/UI/Animate';
 import { ContentPanel, ContentItem } from '../../components/UI/contentpanel/ContentPanel';
-
+import { useAuth } from '../../hooks/useAuth';
 import './Course.scss';
 const Course = () =>{
 	// Inititalisation --------------------------------------------
+	const { authState } = useAuth();
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const location = useLocation();
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
 	const [course, setQuiz, quizMessage, isCourseLoading, loadQuiz] = useLoad(`/courses/${courseID}`);
-	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(`/coursecontents/simplified/user-completion?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`);
+	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(
+		authState.isLoggedIn
+			? `/coursecontents/simplified/user-completion?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`
+			: `/coursecontents/simplified?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`,
+	);
 	const [selectedCourseContent, setSelectedCourseContent] = useState(null);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (content) => {
