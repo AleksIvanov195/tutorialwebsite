@@ -158,11 +158,11 @@ const Quiz = ({ quizID }) => {
 				question={currentQuestion}
 				selectedAnswers={selectedAnswers}
 				onSelectAnswer={handleSelectAnswer}
-				isQuestionSubmitted={isQuestionSubmitted}
+				isSubmitted={isQuestionSubmitted}
 			/>
 			{isQuestionSubmitted && (
 				<p className={`feedback ${isAnswerCorrect ? 'correct' : 'wrong'}`}>
-					{isAnswerCorrect ? 'Correct!' : `Wrong! ${currentQuestion.QuestionText}`}
+					{isAnswerCorrect ? 'Correct!' : `Wrong! ${currentQuestion.QuestionFeedbacktext}`}
 				</p>
 			)}
 			<ButtonTray>
