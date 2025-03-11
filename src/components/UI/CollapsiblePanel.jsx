@@ -3,8 +3,8 @@ import Collapse from 'react-collapse';
 import Icons from './Icons';
 import './CollapsiblePanel.scss';
 
-export default function CollapsiblePanel({ children, title, titleSize = 'medium' }) {
-	const [isCollapsed, setIsCollapsed] = useState(false);
+export default function CollapsiblePanel({ children, title, titleSize = 'medium', defaultCollapse }) {
+	const [isCollapsed, setIsCollapsed] = useState(defaultCollapse ? defaultCollapse : false);
 
 	const handleToggle = () => {
 		setIsCollapsed(!isCollapsed);

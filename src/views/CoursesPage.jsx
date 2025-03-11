@@ -119,6 +119,7 @@ export default function CoursesPage() {
 						textfield = 'CoursecategoryName'
 						selectedValues={filters.CoursecategoryName}
 						onChange={(value) => handleFilterChange('CoursecategoryName', value)}
+						defaultCollapse = {true}
 					/>
 					<FilterBox
 						title="Filter by Course Status"

@@ -1,7 +1,7 @@
 import './FilterBox.scss';
 import CollapsiblePanel from './CollapsiblePanel';
 import useLoad from '../../api/useLoad';
-const FilterBox = ({ title, endpoint, idfield, textfield, selectedValues, onChange }) => {
+const FilterBox = ({ title, endpoint, idfield, textfield, selectedValues, onChange, defaultCollapse }) => {
 	// Inititalisation --------------------------------------------
 	// State ------------------------------------------------------
 	const [options, , , isOptionsLoading] = useLoad(endpoint);
@@ -12,7 +12,7 @@ const FilterBox = ({ title, endpoint, idfield, textfield, selectedValues, onChan
 	}
 	return (
 		<div className="filterBox">
-			<CollapsiblePanel title={title} titleSize='small'>
+			<CollapsiblePanel title={title} titleSize='small' defaultCollapse={defaultCollapse}>
 				<div className="filterOptions">
 					{options.map((option) => (
 						<label key={option[idfield]}>

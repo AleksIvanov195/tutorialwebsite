@@ -6,6 +6,7 @@ import Lesson from './Lesson';
 import Quiz from './Quiz';
 import Animate from '../../components/UI/Animate';
 import { ContentPanel, ContentItem } from '../../components/UI/contentpanel/ContentPanel';
+
 import './Course.scss';
 const Course = () =>{
 	// Inititalisation --------------------------------------------
@@ -14,7 +15,7 @@ const Course = () =>{
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
 	const [course, setQuiz, quizMessage, isCourseLoading, loadQuiz] = useLoad(`/courses/${courseID}`);
-	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(`/coursecontents/simplified?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`);
+	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(`/coursecontents/simplified/user-completion?CoursecontentCourseID=${courseID}&orderby=CoursecontentOrder,ASC`);
 	const [selectedCourseContent, setSelectedCourseContent] = useState(null);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (content) => {
@@ -50,8 +51,8 @@ const Course = () =>{
 							title={`${content.ContentType}: ${content.ContentName}`}
 							onClick={() => handleItemClick(content)}
 							isSelected={selectedCourseContent?.CoursecontentID === content.CoursecontentID}
-							enableOptions = {false}>
-						</ContentItem>
+							enableOptions = {false}
+							completed={content.ContentStatus}/>
 					))}
 				</ContentPanel>
 				<div className="coursePreviewContent">
