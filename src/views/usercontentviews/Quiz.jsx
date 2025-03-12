@@ -47,13 +47,20 @@ const Quiz = ({ quizID }) => {
 
 	// Handle selecting answers in the Question component
 	const handleSelectAnswer = (answerID) => {
-		setSelectedAnswers(prevSelectedAns => {
-			if (prevSelectedAns.includes(answerID)) {
-				return prevSelectedAns.filter(ansID => ansID !== answerID);
-			} else {
-				return [...prevSelectedAns, answerID];
-			}
-		});
+		const currentQuestion = questionsAndAnswers[currentQuestionIndex];
+		if (currentQuestion.QuestionType === 'MultipleChoice') {
+			// For multiple-choice questions toggle the selected answer
+			setSelectedAnswers(prevSelectedAns => {
+				if (prevSelectedAns.includes(answerID)) {
+					return prevSelectedAns.filter(ansID => ansID !== answerID);
+				} else {
+					return [...prevSelectedAns, answerID];
+				}
+			});
+		} else {
+			// For single choice questions set the selected answer
+			setSelectedAnswers([answerID]);
+		}
 	};
 
 	const handleSubmit = () => {
