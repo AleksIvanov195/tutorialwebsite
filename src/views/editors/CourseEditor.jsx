@@ -56,9 +56,15 @@ const CourseEditor = () =>{
 		setSelectedCourseContent(null);
 	};
 	const handleSubmitReorderedContent = async () => {
-		const requests = courseContent.map((content, index) =>
-			put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, { showToast :false }),
-		);
+		const requests = courseContent.map((content, index) =>{
+			// Find the current content in the original courseContent array
+			const initialContent = initialCourseContent.current.find((c) => c.CoursecontentID === content.CoursecontentID);
+			// Only send a request if the order has changed
+			if (initialContent && initialContent.CoursecontentOrder !== index + 1) {
+				return put(`/coursecontents/${content.CoursecontentID}`, { CoursecontentOrder: index + 1 }, { showToast: false });
+			}
+			return null;
+		}).filter(Boolean); // Remove falsy values like null
 		await batchRequests(requests, {
 			successMessage: 'Content has been reordered.',
 			errorMessage: 'Something went wrong while reordering, please try again!',
