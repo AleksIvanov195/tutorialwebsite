@@ -80,8 +80,8 @@ const QuizEditor = () => {
 			setSelectedQuestion(response.result.data);
 		}
 	};
-	const handleEditQuestion = async (data) => {
-		const response = await put(`/questions/${selectedQuestion.QuestionID}`, data, {
+	const handleEditQuestion = async ({ QuestionFeedbacktext, QuestionText, QuestionType }) => {
+		const response = await put(`/questions/${selectedQuestion.QuestionID}`, { QuestionFeedbacktext, QuestionText, QuestionType }, {
 			successMessage: 'Question Updated.',
 			errorMessage: 'Question could not be updated.',
 		});
@@ -103,7 +103,7 @@ const QuizEditor = () => {
 
 	const handleSubmitReorderedQuestions = async () => {
 		const requests = questions.map((question, index) =>
-			put(`/questions/${question.QuestionID}`, { QuestionOrdernumber: index + 1 }, { showToast: false }),
+			put(`/questions/${question.QuestionID}/reorder`, { QuestionOrdernumber: index + 1 }, { showToast: false }),
 		);
 		await batchRequests(requests, {
 			successMessage: 'Questions Reordered.',
@@ -122,8 +122,8 @@ const QuizEditor = () => {
 			deleteRequest(`/answers/${answer.AnswerID}`, { showToast: false }),
 		));
 
-		requests = requests.concat(updatedAnswers.map(answer =>
-			put(`/answers/${answer.AnswerID}`, answer, { showToast: false }),
+		requests = requests.concat(updatedAnswers.map(({ AnswerID, AnswerCorrect, AnswerText }) =>
+			put(`/answers/${AnswerID}`, { AnswerCorrect, AnswerText }, { showToast: false }),
 		));
 
 		await batchRequests(requests, {
@@ -132,8 +132,8 @@ const QuizEditor = () => {
 		});
 		setFormType('details');
 	};
-	const handleSaveQuizDetails = async (data) => {
-		const response = await put(`/quizzes/${quiz[0].QuizID}`, data, {
+	const handleSaveQuizDetails = async ({ QuizName, QuizDescription }) => {
+		const response = await put(`/quizzes/${quiz[0].QuizID}/name-description`, { QuizName, QuizDescription }, {
 			successMessage: 'Quiz Details Updated.',
 			errorMessage: 'Quiz Failed to Update.',
 		});
@@ -143,7 +143,7 @@ const QuizEditor = () => {
 		}
 	};
 	const changeQuizStatus = async (statusID) => {
-		await put(`/quizzes/${quiz[0].QuizID}`, { QuizPublicationstatusID: statusID }, {
+		await put(`/quizzes/${quiz[0].QuizID}/content-status`, { QuizPublicationstatusID: statusID }, {
 			successMessage: 'Quiz Status Updated.',
 			errorMessage: 'Quiz Status Failed to Update.',
 		});
