@@ -102,9 +102,15 @@ const QuizEditor = () => {
 	};
 
 	const handleSubmitReorderedQuestions = async () => {
-		const requests = questions.map((question, index) =>
-			put(`/questions/${question.QuestionID}/reorder`, { QuestionOrdernumber: index + 1 }, { showToast: false }),
-		);
+		const requests = questions.map((question, index) =>{
+			// Find the current question in the original questions array
+			const initialQuestion = initialQuestions.current.find((q) => q.QuestionID === question.QuestionID);
+			// Only send a request if the order has changed
+			if (initialQuestion && initialQuestion.QuestionOrdernumber !== index + 1) {
+				return put(`/questions/${question.QuestionID}/reorder`, { QuestionOrdernumber: index + 1 }, { showToast: false });
+			}
+			return null;
+		}).filter(Boolean); // Remove falsy values like null
 		await batchRequests(requests, {
 			successMessage: 'Questions Reordered.',
 			errorMessage: 'Something went wrong while reordering, please try again!',
@@ -112,6 +118,7 @@ const QuizEditor = () => {
 		setIsReordering(false);
 		loadQuestions();
 	};
+
 	const handleSubmitAnswers = async ({ addedAnswers, removedAnswers, updatedAnswers }) => {
 		let requests = [];
 		requests = requests.concat(addedAnswers.map(answer =>
