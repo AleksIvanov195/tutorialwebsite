@@ -32,7 +32,7 @@ const Course = () =>{
 		if (selectedCourseContent.ContentType === 'Lesson') {
 			return <Lesson lessonID={selectedCourseContent.ContentID} />;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
-			return <Quiz quizID={selectedCourseContent.ContentID} />;
+			return <Quiz quizID={selectedCourseContent.ContentID} completed={selectedCourseContent.ContentStatus} />;
 		}
 		return null;
 	};

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import API from './API';
 import { useAuth } from '../hooks/useAuth';
 
-const useLoad = (endpoint) =>{
+const useLoad = (endpoint, shouldLoad = true) =>{
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const [records, setRecords] = useState([]);
@@ -10,6 +10,7 @@ const useLoad = (endpoint) =>{
 	const [isLoading, setIsLoading] = useState(true);
 	// Methods ---------------------------------------------------
 	const loadRecords = async () => {
+		if (!shouldLoad) return;
 		const response = await API.get(endpoint, authState.isLoggedIn);
 		setIsLoading(false);
 		if (response.isSuccess) {

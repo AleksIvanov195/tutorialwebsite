@@ -5,12 +5,14 @@ import { Button, ButtonTray } from '../../components/UI/Buttons';
 import QuestionList from '../../components/enitity/quiz/QuestionList';
 import toast from 'react-hot-toast';
 import '../../components/enitity/quiz/Quiz.scss';
+import QuizEndScreen from '../../components/enitity/quiz/QuizEndScreen';
 
-const Quiz = ({ quizID }) => {
+const Quiz = ({ quizID, completed = false }) => {
 	// Initialisation --------------------------------------------
 	// State ------------------------------------------------------
 	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
 	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers?orderby=QuestionOrdernumber,ASC`);
+
 	const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	// Stores the selected answers for the current question
@@ -20,7 +22,7 @@ const Quiz = ({ quizID }) => {
 	// Tracks whether the submitted answer is correct.
 	const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
 	const [score, setScore] = useState(0);
-	const [quizFinished, setQuizFinished] = useState(false);
+	const [quizFinished, setQuizFinished] = useState(completed);
 	// Stores the correctness of each question.
 	const [correctAnswers, setCorrectAnswers] = useState([]);
 
@@ -134,19 +136,13 @@ const Quiz = ({ quizID }) => {
 		return sortedA.every((value, index) => value === sortedB[index]);
 	};
 
-	// ...existing code...
-
 	// View -------------------------------------------------------
 	if (isLoading || isQuizLoading) return <p>Loading...</p>;
 	if (questionsAndAnswers.length === 0) return <p>No questions available.</p>;
 
 	if (quizFinished) {
 		return (
-			<div className="quizContainer">
-				<h2>You completed {quiz[0].QuizName}!</h2>
-				<p>Your final score: {score} / {questionsAndAnswers.length}</p>
-				<Button onClick={() => window.location.reload()}>Restart Quiz</Button>
-			</div>
+			<QuizEndScreen score = {score} quiz = {quiz[0]} quizLength={questionsAndAnswers.length} setQuizFinished={setQuizFinished}/>
 		);
 	}
 
