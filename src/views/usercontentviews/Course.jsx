@@ -30,9 +30,9 @@ const Course = () =>{
 	// Content to view
 	const renderContentView = () => {
 		if (selectedCourseContent.ContentType === 'Lesson') {
-			return <Lesson lessonID={selectedCourseContent.ContentID} />;
+			return <Lesson lessonID={selectedCourseContent.ContentID} loadCourseContent = {loadCourseContent}/>;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
-			return <Quiz quizID={selectedCourseContent.ContentID} completed={selectedCourseContent.ContentStatus} />;
+			return <Quiz quizID={selectedCourseContent.ContentID} completed={selectedCourseContent.ContentStatus} loadCourseContent = {loadCourseContent}/>;
 		}
 		return null;
 	};

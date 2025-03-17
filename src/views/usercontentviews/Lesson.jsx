@@ -1,7 +1,7 @@
 import RenderContentWithEditor from '../../components/utility/RenderContentWithEditor';
 import useLoad from '../../api/useLoad';
 import './Lesson.scss';
-const Lesson = ({ lessonID }) => {
+const Lesson = ({ lessonID, loadCourseContent}) => {
 	const [lesson, setLesson, , isLoading ] = useLoad(`/lessons/${lessonID}`);
 	if(isLoading) {
 		return <p>Loading .....</p>;

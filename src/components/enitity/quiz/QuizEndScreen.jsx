@@ -3,7 +3,7 @@ import useLoad from '../../../api/useLoad';
 import { Button } from '../../UI/Buttons';
 import './Quiz.scss';
 
-const QuizEndScreen = ({ score, quiz, quizLength, setQuizFinished }) => {
+const QuizEndScreen = ({ score, quiz, quizLength, resetQuiz }) => {
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
@@ -37,7 +37,7 @@ const QuizEndScreen = ({ score, quiz, quizLength, setQuizFinished }) => {
 			<p className="questionText">Your best score: {quizUserData && quizUserData.length > 0 ? quizUserData[0].UserquizResult : score} / {quizLength}</p>
 			<p><strong>History of Completions:</strong></p>
 			{showHistory()}
-			<Button onClick={() => setQuizFinished(false)}>Try Again</Button>
+			<Button onClick={() => resetQuiz()}>Try Again</Button>
 		</div>
 	);
 };

@@ -35,16 +35,19 @@
   .completionList {
     list-style-type: none;
     padding: 0;
+		overflow-y: auto;
+		max-height: 300px;
+		.quizResultItem {
+			color: $primaryColour;
+			margin-bottom: 15px;
+			border-bottom: 1px solid mix($secondaryColour, $bgColour, 30%);
+			p {
+				margin: 5px 0;
+				font-weight: bold;
+			}
+		}
   }
-	.quizResultItem {
-    color: $primaryColour;
-    margin-bottom: 15px;
-    border-bottom: 1px solid mix($secondaryColour, $bgColour, 30%);
-    p {
-      margin: 5px 0;
-			font-weight: bold;
-    }
-  }
+
 
   .answers {
     display: flex;

@@ -6,9 +6,13 @@ import QuestionList from '../../components/enitity/quiz/QuestionList';
 import toast from 'react-hot-toast';
 import '../../components/enitity/quiz/Quiz.scss';
 import QuizEndScreen from '../../components/enitity/quiz/QuizEndScreen';
+import { useAuth } from '../../hooks/useAuth';
+import useApiActions from '../../hooks/useApiActions';
 
-const Quiz = ({ quizID, completed = false }) => {
+const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 	// Initialisation --------------------------------------------
+	const { authState } = useAuth();
+	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	// State ------------------------------------------------------
 	const [quiz, setQuiz, quizMessage, isQuizLoading, loadQuiz] = useLoad(`/quizzes/${quizID}`);
 	const [questionsData, setQuestionsData, questionsMessage, isLoading, loadQuestionsData] = useLoad(`/quizzes/${quizID}/questions-answers?orderby=QuestionOrdernumber,ASC`);
@@ -129,6 +133,33 @@ const Quiz = ({ quizID, completed = false }) => {
 		}
 	};
 
+	const handleFinishQuiz = async () => {
+		if(authState.isLoggedIn) {
+			const response = await post('/userquizzes', {
+				UserquizUsercontentstatusID: 3,
+				UserquizCompletiondate: new Date().toISOString(),
+				UserquizQuizID: quiz[0].QuizID,
+				UserquizResult: score,
+			}, {
+				successMessage: 'Quiz attempt saved to your progress.',
+				errorMessage: 'This quiz attempt could be saved.',
+			});
+			if(response.isSuccess) {
+				loadCourseContent();
+			}
+		}
+
+	};
+	const resetQuiz = () => {
+		setQuizFinished(false);
+		setScore(0);
+		setSelectedAnswers([]);
+		setCurrentQuestionIndex(0);
+		setIsQuestionSubmitted(false);
+		setIsAnswerCorrect(null);
+		setCorrectAnswers(Array(questionsAndAnswers.length).fill(null));
+	};
+
 	const arraysMatch = (arr1, arr2) => {
 		if (arr1.length !== arr2.length) return false;
 		const sortedA = [...arr1].sort();
@@ -142,7 +173,7 @@ const Quiz = ({ quizID, completed = false }) => {
 
 	if (quizFinished) {
 		return (
-			<QuizEndScreen score = {score} quiz = {quiz[0]} quizLength={questionsAndAnswers.length} setQuizFinished={setQuizFinished}/>
+			<QuizEndScreen score = {score} quiz = {quiz[0]} quizLength={questionsAndAnswers.length} resetQuiz={resetQuiz}/>
 		);
 	}
 
@@ -171,7 +202,12 @@ const Quiz = ({ quizID, completed = false }) => {
 			<ButtonTray>
 				<Button onClick={handleSubmit} disabled={isQuestionSubmitted || selectedAnswers === null}>Submit</Button>
 				{isQuestionSubmitted && (
-					<Button onClick={allQuestionsAnswered ? () => setQuizFinished(true) : handleNext}>
+					<Button onClick={allQuestionsAnswered ? () => {
+						handleFinishQuiz();
+						setQuizFinished(true);
+					}
+						:
+						handleNext}>
 						{allQuestionsAnswered ? 'Finish' : 'Next'}
 					</Button>
 				)}
