@@ -36,7 +36,7 @@ const Course = () =>{
 		}
 		return null;
 	};
-	if(isLoading) {
+	if(isLoading || isCourseLoading) {
 		return(
 			<p>Loading content...</p>
 		);
@@ -47,7 +47,9 @@ const Course = () =>{
 				<div className="headerContainer">
 					<h1>{!isCourseLoading && course[0].CourseName}</h1>
 				</div>
+
 			</header>
+			<progress className="courseProgress" value={courseContent.filter(content => content.ContentStatus == true).length} max={courseContent.length}></progress>
 			<div className="coursePreviewBody">
 				<ContentPanel title="List of Content">
 					{courseContent.map((content) => (

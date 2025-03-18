@@ -2,16 +2,42 @@
 
 .coursePreview {
   background-color: $bgColour;
-	
+  .courseProgress {
+    width: 100%;
+    height: 12px;
+    margin-bottom: 10px;
+		// Track colour
+    background-color: lighten($primaryColour, 40%);
+    border-radius: 10px; // Rounded corners
+    overflow: hidden; // Ensure the inner bar doesn't overflow
+    position: relative;
+
+    &::-webkit-progress-bar {
+			// Don't show default background
+      background-color: transparent;
+    }
+
+    &::-webkit-progress-value {
+      background: linear-gradient(90deg, $primaryColour, $tertiaryColour);
+      border-radius: 10px;
+			box-shadow: 0 4px 12px $primaryColour;
+      transition: width 0.5s ease;
+    }
+		// Firefox
+    &::-moz-progress-bar {
+      background: linear-gradient(90deg, $primaryColour, $tertiaryColour);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px $primaryColour;
+    }
+	}
   .coursePreviewHeader {
 		background-color: $mixedColour;
 		color: $headerButtonTextColour;
 		padding: 10px;
 		border-radius: 12px;
-		margin-bottom: 20px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 		text-align: center;
-	
+
 	  h1 {
 			margin: 0;
 			font-size: 40px;

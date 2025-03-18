@@ -9,6 +9,7 @@ import QuizEndScreen from '../../components/enitity/quiz/QuizEndScreen';
 import { useAuth } from '../../hooks/useAuth';
 import useApiActions from '../../hooks/useApiActions';
 
+
 const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 	// Initialisation --------------------------------------------
 	const { authState } = useAuth();
@@ -147,6 +148,8 @@ const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 			if(response.isSuccess) {
 				loadCourseContent();
 			}
+		}else{
+			toast.error('Please log in to save your progress!')
 		}
 
 	};
