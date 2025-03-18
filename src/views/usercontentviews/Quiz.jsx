@@ -138,7 +138,7 @@ const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 		if(authState.isLoggedIn) {
 			const response = await post('/userquizzes', {
 				UserquizUsercontentstatusID: 3,
-				UserquizCompletiondate: new Date().toISOString(),
+				UserquizCompletiondate: new Date().toISOString().replace('T', ' ').split('.')[0],
 				UserquizQuizID: quiz[0].QuizID,
 				UserquizResult: score,
 			}, {
