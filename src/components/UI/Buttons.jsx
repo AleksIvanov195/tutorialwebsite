@@ -1,6 +1,6 @@
 import './Buttons.scss';
 
-export const Button = ({ type = 'button', children, onClick, className, icon, title }) => {
+export const Button = ({ type = 'button', children, onClick, className, icon, title, disabled = false }) => {
 	const buttonClass = className ? className : 'defaultStyle';
 	return (
 		<button
@@ -8,6 +8,7 @@ export const Button = ({ type = 'button', children, onClick, className, icon, ti
 			className={buttonClass}
 			onClick={onClick}
 			title={title}
+			disabled = {disabled}
 		>
 			{icon && <span className='icon'>{icon}</span>}
 			{children}

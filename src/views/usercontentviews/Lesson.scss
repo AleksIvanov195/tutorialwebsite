@@ -1,9 +1,31 @@
+@import '../../styles/variables.scss';
 .previewContent{
 	overflow-y: auto;
 	height: 70vh;
 	max-width: 1100px;
 	padding: 20px;
 	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+
+	.endOfLesson {
+		width: 100%; 
+		text-align: center; 
+		border-bottom: 1px dashed black; 
+		line-height: 0.1em;
+		margin: 10px 0 20px; 
+
+		span { 
+			background:$bgColour; 
+			padding:0 8px; 
+		}
+ 	}
+	.startOfLesson {
+		width: 100%; 
+		border-bottom: 1px solid black; 
+		padding-bottom: 10px;
+		margin: 10px; 
+	} 
+ 
+
 }
 .previewHTML{
 	width: 100%;
