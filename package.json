@@ -42,6 +42,7 @@
     "react-hook-form": "^7.53.2",
     "react-hot-toast": "^2.5.1",
     "react-icons": "^5.4.0",
+    "react-rewards": "^2.1.0",
     "react-router-dom": "^6.27.0",
     "tiptap-extension-resize-image": "^1.2.1"
   },

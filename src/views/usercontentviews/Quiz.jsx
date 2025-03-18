@@ -149,7 +149,7 @@ const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 				loadCourseContent();
 			}
 		}else{
-			toast.error('Please log in to save your progress!')
+			toast.error('Please log in to save your progress!');
 		}
 
 	};

@@ -47,10 +47,24 @@ export default function Navbar() {
 					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard" onClick={() => handleChangeLocation('Dashboard')}>Creator Dashboard</NavLink></li>
 				}
 				<li className='navButtons'>
-					<ButtonTray>
-						<Button className="headerButton">Profile</Button>
-						<Button className="headerButton" onClick={logout}>Logout</Button>
-					</ButtonTray>
+					{
+						authState.isLoggedIn
+							?
+							<ButtonTray>
+								<Button className="headerButton">Profile</Button>
+								<Button className="headerButton" onClick={logout}>Logout</Button>
+							</ButtonTray>
+							:
+							<ButtonTray className={'headerButtonTray'}>
+								<NavLink to="/login" className={'noUnderline'}>
+									<Button className="headerButton">Log In</Button>
+								</NavLink>
+								<NavLink to="/register" className={'noUnderline'}>
+									<Button className="headerButton">Register</Button>
+								</NavLink>
+							</ButtonTray>
+					}
+
 				</li>
 			</ul>
 		</nav>
