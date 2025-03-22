@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/useAuth';
 import useNavigation from '../hooks/useNavigation';
 import toast from 'react-hot-toast';
 import ContentPreviewModal from '../components/UI/modal/ContentPreviewModal';
+import { handleBookmarkCourse, handleStartCourse } from '../utilities/courseutils';
 import './CoursePage.scss';
 
 export default function CoursesPage() {
@@ -37,8 +38,6 @@ export default function CoursesPage() {
 		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}&orderby=IsBookmarked,DESC`
 		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}`;
 	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(coursesEndpoint);
-
-
 	// Handlers ------------------------------------------------------
 	const handleFilterChange = (filterName, value) => {
 		console.log(value);
@@ -54,50 +53,13 @@ export default function CoursesPage() {
 			return updatedFilters;
 		});
 	};
-	const handleBookmarkCourse = async (courseID, isBookmarked, bookmarkID) => {
-		let response;
-		if(!authState.isLoggedIn) {
-			toast.error('Please log in to your account before bookmarking any courses.');
-		}else{
-			if(isBookmarked) {
-				response = await deleteRequest(`/userbookmarks/${bookmarkID}`, {
-					successMessage: 'Bookmark removed.',
-					errorMessage: 'Bookmark could not be removed.',
-				});
-			}else{
-				response = await post('/userbookmarks', { UserbookmarkCourseID: courseID }, {
-					successMessage: 'Course bookmarked.',
-					errorMessage: 'Course could not be bookmarked.',
-				});
-			}
-			if (response.isSuccess) {
-				loadCourses();
-			}
-		}
-	};
 	const handleCourseClicked = (course) =>{
 		setSelectedCourse(course);
 		if(course.UsercontentstatusID == 1 || !authState.isLoggedIn) {
 			setShowContentModal(true);
 		}else{
-			handleStartCourse(course);
+			handleStartCourse(course, authState, post, navigateToCourseView);
 		}
-
-	};
-
-	const handleStartCourse = async (course) => {
-		// If user starts course for the first time make a new record.
-		if(authState.isLoggedIn && course.UsercontentstatusID == 1) {
-			await post('/usercourses', { UsercourseCourseID: course.CourseID }, {
-				successMessage: 'Course started!',
-				errorMessage: 'Course could not be started!',
-			});
-		}else if (!authState.isLoggedIn) {
-			// If they started the course but not loggedin they cannot save progress.
-			toast.error('You need to log in to save your progress!');
-		}
-		// Either case they are navigate to the course preview.
-		navigateToCourseView(course.CourseID);
 	};
 	const handleCloseModal = () =>{
 		setShowContentModal(false);
@@ -109,6 +71,7 @@ export default function CoursesPage() {
 	}
 	return (
 		<div className="coursesView">
+
 			<div className="coursesBody">
 				<ContentPanel title="Search for Courses">
 					<SearchBar searchString={searchString} setSearchString={setSearchString} placeholder="Search for courses..." />
@@ -139,7 +102,7 @@ export default function CoursesPage() {
 								key={course.CourseID}
 								status={course.UsercontentstatusName}
 								isCardBookmarked={course.IsBookmarked}
-								handleBookmark={() => handleBookmarkCourse(course.CourseID, course.IsBookmarked, course.UserbookmarkID)}
+								handleBookmark={() => handleBookmarkCourse(course.CourseID, course.IsBookmarked, course.UserbookmarkID, authState, deleteRequest, post, loadCourses)}
 								handleCardClicked={() => handleCourseClicked(course)}>
 								<div className="cardContent">
 									<h3>{course.CourseName}</h3>
@@ -157,7 +120,7 @@ export default function CoursesPage() {
 					idField="CoursecontentID"
 					textField="ContentName"
 					onClose={handleCloseModal}
-					onSave={() => handleStartCourse(selectedCourse)}
+					onSave={() => handleStartCourse(selectedCourse, authState, post, navigateToCourseView)}
 					onSaveText="Start"
 					title='Review Course Contents'
 				/>
