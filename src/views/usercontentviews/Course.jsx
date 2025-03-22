@@ -1,4 +1,3 @@
-import useApiActions from '../../hooks/useApiActions';
 import useLoad from '../../api/useLoad';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -11,7 +10,6 @@ import './Course.scss';
 const Course = () =>{
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
-	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
 	const location = useLocation();
 	const { courseID } = location.state || { courseID: null };
 	// State ------------------------------------------------------
@@ -30,9 +28,9 @@ const Course = () =>{
 	// Content to view
 	const renderContentView = () => {
 		if (selectedCourseContent.ContentType === 'Lesson') {
-			return <Lesson lessonID={selectedCourseContent.ContentID} loadCourseContent = {loadCourseContent}/>;
+			return <Lesson lessonID={selectedCourseContent.ContentID} loadCourseContent = {loadCourseContent} isCompleted={selectedCourseContent.ContentStatus}/>;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
-			return <Quiz quizID={selectedCourseContent.ContentID} completed={selectedCourseContent.ContentStatus} loadCourseContent = {loadCourseContent}/>;
+			return <Quiz quizID={selectedCourseContent.ContentID} isCompleted={selectedCourseContent.ContentStatus} loadCourseContent = {loadCourseContent}/>;
 		}
 		return null;
 	};

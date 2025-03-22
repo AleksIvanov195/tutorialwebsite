@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/useAuth';
 import useApiActions from '../../hooks/useApiActions';
 
 
-const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
+const Quiz = ({ quizID, isCompleted = false, loadCourseContent }) => {
 	// Initialisation --------------------------------------------
 	const { authState } = useAuth();
 	const { post, put, delete: deleteRequest, batchRequests } = useApiActions();
@@ -27,7 +27,7 @@ const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 	// Tracks whether the submitted answer is correct.
 	const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
 	const [score, setScore] = useState(0);
-	const [quizFinished, setQuizFinished] = useState(completed);
+	const [quizFinished, setQuizFinished] = useState(isCompleted);
 	// Stores the correctness of each question.
 	const [correctAnswers, setCorrectAnswers] = useState([]);
 
@@ -149,7 +149,7 @@ const Quiz = ({ quizID, completed = false, loadCourseContent }) => {
 				loadCourseContent();
 			}
 		}else{
-			toast.error('Please log in to save your progress!');
+			toast.error('You must log in to save your quiz progress!');
 		}
 
 	};

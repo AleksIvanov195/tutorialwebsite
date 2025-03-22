@@ -163,7 +163,7 @@ const CourseEditor = () =>{
 	// Content to preview
 	const renderContentView = () => {
 		if (selectedCourseContent.ContentType === 'Lesson') {
-			return <LessonPreview lessonID={selectedCourseContent.ContentID} isEditing = {true}/>;
+			return <LessonPreview lessonID={selectedCourseContent.ContentID} isCompleted = {true}/>;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
 			return <QuizUserView quizID={selectedCourseContent.ContentID} />;
 		}

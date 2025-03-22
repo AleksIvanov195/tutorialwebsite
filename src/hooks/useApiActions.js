@@ -16,7 +16,7 @@ const useApiActions = () => {
 			if (response.isSuccess) {
 				toast.success(successMessage, { id: toastId });
 			} else {
-				toast.error(response.message + '. ' + errorMessage, { id: toastId });
+				toast.error(response.message + ' ' + errorMessage, { id: toastId });
 			}
 		}
 
