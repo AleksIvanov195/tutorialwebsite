@@ -39,7 +39,7 @@ export default function Homepage() {
 
 	return (
 		<>
-			<h1>Welcome to Our Tutorial Website!</h1>
+			<h1>Welcome to the Tutorial Website!</h1>
 			<p>Explore our wide range of courses and improve your skills.</p>
 			<CourseCarousel
 				courses={courses}

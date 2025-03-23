@@ -8,6 +8,7 @@ const CourseCarousel = ({ courses, handleBookmarkCourse, handleCourseClicked }) 
 	if (courses.length === 0) return <p>No courses available.</p>;
 	const settings = {
 		dots: true,
+		arrows:false,
 		infinite: true,
 		speed: 500,
 		slidesToShow: 5,
