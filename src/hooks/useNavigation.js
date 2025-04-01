@@ -15,8 +15,8 @@ const useNavigation = () => {
 		navigate('/courseeditor', { state: { courseID } });
 	};
 
-	const navigateToCourseView = (courseID) => {
-		navigate('/courseview', { state: { courseID } });
+	const navigateToCourseView = (courseID, userCourseID = null) => {
+		navigate('/courseview', { state: { courseID, userCourseID } });
 	};
 
 	return { navigateToLessonEditor, navigateToQuizEditor, navigateToCourseEditor, navigateToCourseView };

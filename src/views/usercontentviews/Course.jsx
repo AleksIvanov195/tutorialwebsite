@@ -11,7 +11,7 @@ const Course = () =>{
 	// Inititalisation --------------------------------------------
 	const { authState } = useAuth();
 	const location = useLocation();
-	const { courseID } = location.state || { courseID: null };
+	const { courseID, userCourseID } = location.state || { courseID: null, userCourseID: null };
 	// State ------------------------------------------------------
 	const [course, setQuiz, quizMessage, isCourseLoading, loadQuiz] = useLoad(`/courses/${courseID}`);
 	const [courseContent, setCourseContent, , isLoading, loadCourseContent ] = useLoad(

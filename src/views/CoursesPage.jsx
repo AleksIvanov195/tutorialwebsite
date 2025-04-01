@@ -58,7 +58,8 @@ export default function CoursesPage() {
 		if(course.UsercontentstatusID == 1 || !authState.isLoggedIn) {
 			setShowContentModal(true);
 		}else{
-			handleStartCourse(course, authState, post, navigateToCourseView);
+			const userCourseID = course.UsercourseID ? course.UsercourseID : null;
+			handleStartCourse(course, authState, post, navigateToCourseView, userCourseID);
 		}
 	};
 	const handleCloseModal = () =>{

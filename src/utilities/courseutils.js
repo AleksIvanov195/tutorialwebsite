@@ -22,17 +22,20 @@ export const handleBookmarkCourse = async (courseID, isBookmarked, bookmarkID, a
 	}
 };
 
-export const handleStartCourse = async (course, authState, post, navigateToCourseView) => {
+export const handleStartCourse = async (course, authState, post, navigateToCourseView, userCourseID = null) => {
 	// If user starts course for the first time make a new record.
 	if (authState.isLoggedIn && course.UsercontentstatusID == 1) {
-		await post('/usercourses', { UsercourseCourseID: course.CourseID }, {
+		const response = await post('/usercourses', { UsercourseCourseID: course.CourseID }, {
 			successMessage: 'Course started!',
 			errorMessage: 'Course could not be started!',
 		});
+		if(response.isSuccess) {
+			userCourseID = response.result.data.UsercourseID;
+		}
 	} else if (!authState.isLoggedIn) {
 		// If they started the course but not loggedin they cannot save progress.
 		toast.error('You need to log in to save your progress!');
 	}
 	// Either case they are navigate to the course preview.
-	navigateToCourseView(course.CourseID);
+	navigateToCourseView(course.CourseID, userCourseID);
 };
