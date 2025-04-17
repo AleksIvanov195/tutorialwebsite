@@ -184,13 +184,14 @@ const Quiz = ({ quizID, isCompleted = false, loadCourseContent }) => {
 	const allQuestionsAnswered = correctAnswers.every(answer => answer !== null);
 	return (
 		<div className="quizContainer">
+			<h2 className="quizTitle">{quiz[0]?.QuizName}</h2>
 			<QuestionList
 				questions={questionsAndAnswers}
 				currentQuestionIndex={currentQuestionIndex}
 				onQuestionClick={handleQuestionClick}
 				correctAnswers={correctAnswers}
 			/>
-			<h2 className="quizHeader">Question {currentQuestionIndex + 1}:</h2>
+			<h2 className="quizHeader">Question {currentQuestionIndex + 1}</h2>
 			<Question
 				question={currentQuestion}
 				selectedAnswers={selectedAnswers}

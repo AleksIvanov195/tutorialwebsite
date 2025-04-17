@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { SortableContentItem, SortableContentPanel } from '../../components/UI/contentpanel/SortableContentPanel';
 import { Button, ButtonTray } from '../../components/UI/Buttons';
 import LessonPreview from '../usercontentviews/Lesson';
-import QuizUserView from '../usercontentviews/Quiz';
+import QuizPreview from '../../components/enitity/quiz/QuizPreview';
 import LessonForm from '../../components/enitity/forms/LessonForm';
 import QuizForm from '../../components/enitity/forms/QuizForm';
 import CourseForm from '../../components/enitity/forms/CourseForm';
@@ -190,7 +190,8 @@ const CourseEditor = () =>{
 		if (selectedCourseContent.ContentType === 'Lesson') {
 			return <LessonPreview lessonID={selectedCourseContent.ContentID} isCompleted = {true}/>;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
-			return <QuizUserView quizID={selectedCourseContent.ContentID} />;
+			// Content creators will see the preview version of the quiz
+			return <QuizPreview quizID={selectedCourseContent.ContentID} />;
 		}
 		return null;
 	};

@@ -3,6 +3,7 @@ import useLoad from '../../../api/useLoad';
 import Question from './Question';
 import { Button, ButtonTray } from '../../UI/Buttons';
 import QuestionList from './QuestionList';
+import toast from 'react-hot-toast';
 import './Quiz.scss';
 
 const QuizPreview = () => {
@@ -128,8 +129,6 @@ const QuizPreview = () => {
 		return sortedA.every((value, index) => value === sortedB[index]);
 	};
 
-	// ...existing code...
-
 	// View -------------------------------------------------------
 	if (isLoading || isQuizLoading) return <p>Loading...</p>;
 	if (questionsAndAnswers.length === 0) return <p>No questions available.</p>;
@@ -137,9 +136,9 @@ const QuizPreview = () => {
 	if (quizFinished) {
 		return (
 			<div className="quizContainer">
-				<h2>You completed {quiz[0].QuizName}!</h2>
+				<h2>Preview quiz: {quiz[0].QuizName} has been completed!</h2>
 				<p>Your final score: {score} / {questionsAndAnswers.length}</p>
-				<Button onClick={() => window.location.reload()}>Restart Quiz</Button>
+				<Button onClick={() => window.location.reload()}>Something went wrong? Test again!</Button>
 			</div>
 		);
 	}
@@ -148,13 +147,14 @@ const QuizPreview = () => {
 	const allQuestionsAnswered = correctAnswers.every(answer => answer !== null);
 	return (
 		<div className="quizContainer">
+			<h2 className="quizTitle">Preview quiz: {quiz[0]?.QuizName}</h2>
 			<QuestionList
 				questions={questionsAndAnswers}
 				currentQuestionIndex={currentQuestionIndex}
 				onQuestionClick={handleQuestionClick}
 				correctAnswers={correctAnswers}
 			/>
-			<h2 className="quizHeader">Question {currentQuestionIndex + 1}:</h2>
+			<h2 className="quizHeader">Question {currentQuestionIndex + 1}</h2>
 			<Question
 				question={currentQuestion}
 				selectedAnswers={selectedAnswers}
