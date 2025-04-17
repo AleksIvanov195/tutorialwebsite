@@ -9,6 +9,7 @@ import LessonPreview from '../usercontentviews/Lesson';
 import QuizUserView from '../usercontentviews/Quiz';
 import LessonForm from '../../components/enitity/forms/LessonForm';
 import QuizForm from '../../components/enitity/forms/QuizForm';
+import CourseForm from '../../components/enitity/forms/CourseForm';
 import HoverMenu from '../../components/UI/HoverMenu';
 import Modal from '../../components/UI/modal/Modal';
 import ContentSelectorModal from '../../components/UI/modal/ContentSelectorModal';
@@ -30,10 +31,15 @@ const CourseEditor = () =>{
 	const [showLessonModal, setShowLessonModal] = useState(false);
 	const [showQuizModal, setShowQuizModal] = useState(false);
 	const [showForm, setShowForm] = useState({ show: false, type: '' });
+	const [showEditCourseModal, setShowEditCourseModal] = useState(false);
 	const initialCourseContent = useRef([]);
 	// Handlers ---------------------------------------------------
 	const handleItemClick = (content) => {
-		setSelectedCourseContent(content);
+		if(content.ContentID === selectedCourseContent?.ContentID) {
+			setSelectedCourseContent(null);
+		}else{
+			setSelectedCourseContent(content);
+		}
 	};
 	const handleNavigateToEditor = () =>{
 		if (selectedCourseContent.ContentType === 'Lesson') {
@@ -142,6 +148,25 @@ const CourseEditor = () =>{
 		}
 		setIsReordering(!isReordering);
 	};
+	const openModal = () =>{
+		setShowEditCourseModal(!showEditCourseModal);
+	};
+	const handleSaveCourseDetails = async ({ CourseName, CourseDescription, CourseCoursecategoryID }) => {
+		const response = await put(`/courses/${course[0].CourseID}/course-edit`, { CourseName, CourseDescription, CourseCoursecategoryID }, {
+			successMessage: 'Course Details Updated.',
+			errorMessage: 'Course Failed to Update.',
+		});
+		if (response.isSuccess) {
+			loadQuiz();
+			openModal();
+		}
+	};
+	const changeCourseStatus = async (statusID) => {
+		await put(`/courses/${course[0].CourseID}/content-status`, { CoursePublicationstatusID: statusID }, {
+			successMessage: 'Course Status Updated.',
+			errorMessage: 'Course Status Failed to Update.',
+		});
+	};
 	// View -------------------------------------------------------
 	const renderForm = () => {
 		if (showForm.type === 'Lesson') {
@@ -181,11 +206,11 @@ const CourseEditor = () =>{
 				<div className="headerContainer">
 					<ButtonTray className={'headerButtonTray'}>
 						<HoverMenu label="Options">
-							<a><Icons.Review/>&nbsp;Send for Review</a>
-							<a><Icons.Publish/>&nbsp;Publish</a>
-							<a><Icons.Edit/>&nbsp;Edit Course</a>
+							<a onClick = {() => changeCourseStatus(2)}><Icons.Review/>&nbsp;Send for Review</a>
+							<a onClick = {() => changeCourseStatus(4)}><Icons.Publish/>&nbsp;Publish</a>
+							<a onClick={openModal}><Icons.Edit/>&nbsp;Edit Course</a>
 						</HoverMenu>
-						<Button icon = {<Icons.Draft size = {28}/>} title = 'Save Course as Draft'/>
+						<Button onClick={() => changeCourseStatus(1)} icon = {<Icons.Draft size = {28}/>} title = 'Save Course as Draft'/>
 					</ButtonTray>
 					<h1>{!isCourseLoading && course[0].CourseName}</h1>
 				</div>
@@ -258,6 +283,17 @@ const CourseEditor = () =>{
 					title='Your Quizzes'
 				/>
 			)}
+			{
+				showEditCourseModal &&
+				<Modal>
+					<CourseForm
+						initialValues={{ CourseName: course[0].CourseName, CourseDescription: course[0].CourseDescription, CourseCoursecategoryID: course[0].CourseCoursecategoryID }}
+						onSubmit={handleSaveCourseDetails}
+						onClose={openModal}
+						mode={'edit'}/>
+				</Modal>
+			}
+
 
 		</div>
 

@@ -1,6 +1,6 @@
 import Form from '../../UI/formui/Form';
 import useLoad from '../../../api/useLoad';
-export default function CourseForm({ onSubmit, onClose }) {
+export default function CourseForm({ onSubmit, onClose, initialValues = {}, mode = 'create' }) {
 	// Inititalisation --------------------------------------------
 	const [categories, , categoriesMessage, isLoading] = useLoad('/coursecategories');
 
@@ -43,19 +43,20 @@ export default function CourseForm({ onSubmit, onClose }) {
 			validation: { required: 'Course Category is required' },
 		},
 	];
-
+	if (isLoading) {
+		return <div>Loading categories...</div>;
+	}
 	const defaultValues = {
 		CourseName: '',
 		CourseDescription: '',
-		CourseCoursecategoryID: '',
+		CourseCoursecategoryID: 1,
 		CoursePublicationstatusID: 1,
 	};
-
-	const header = 'Create Course';
-
+	const initialFormValues = mode === 'edit' ? initialValues : defaultValues;
+	const header = mode === 'edit' ? 'Edit Course' : 'Create Course';
 	return <Form
 		fields={fields}
-		defaultValues={defaultValues}
+		defaultValues={initialFormValues}
 		onSubmit={onSubmit}
 		header={header}
 		onClose = {onClose} />;

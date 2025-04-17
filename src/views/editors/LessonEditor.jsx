@@ -33,8 +33,8 @@ const LessonEditor = () => {
 		await put(`/lessons/${lesson[0].LessonID}/content-status`,
 			{ LessonContentJSON: data, LessonPublicationstatusID: status },
 			{
-				successMessage: 'Lesson Saved.',
-				errorMessage: 'Lesson could not be saved.',
+				successMessage: 'Lesson Status Updated.',
+				errorMessage: 'Lesson Status Failed to Update.',
 			},
 		);
 	};
