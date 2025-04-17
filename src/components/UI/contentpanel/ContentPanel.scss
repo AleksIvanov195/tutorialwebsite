@@ -25,13 +25,23 @@
 		
 	}
 	.contentItem {
+		display: flex;
 		padding: 15px;
+		padding-left: 10px;
 		margin: 5px 0px;
 		border-radius: 5px;
 		cursor: pointer;
 		background-color: $primaryColour;
 		color: $bgColour;
 		transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+		
+		.titleIconContainer {
+			display: flex;
+			align-items: center;
+			padding-right: 5px;
+			margin-right: 10px;
+			border-right: 1px solid white;
+		}
 		.contentItemText {
 			margin: 0;
 			white-space: nowrap;

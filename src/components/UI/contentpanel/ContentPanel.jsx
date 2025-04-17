@@ -1,11 +1,22 @@
 import './ContentPanel.scss';
 
-export const ContentItem = ({ title, onClick, isSelected, children, enableOptions = true, completed = false }) => {
+export const ContentItem = ({ title, onClick, isSelected, children, enableOptions = true, completed = false, titleIcon }) => {
 
 	return (
 		<>
-			<div className={`contentItem ${completed ? 'contentCompleted' : isSelected ? 'selected' : ''}`} onClick={onClick} title={title}>
-				<h3 className="contentItemText">{title}</h3>
+			<div
+				className={`contentItem ${completed ? 'contentCompleted' : isSelected ? 'selected' : ''}`}
+				onClick={onClick}
+				title={title}
+			>
+				{titleIcon && (
+					<span className="titleIconContainer">
+						{titleIcon}
+					</span>
+				)}
+				<h3 className="contentItemText">
+					{title}
+				</h3>
 			</div>
 			{isSelected && enableOptions && (
 				<div className="contentItemOptions">

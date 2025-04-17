@@ -30,6 +30,7 @@
       box-shadow: 0 4px 12px $primaryColour;
     }
 	}
+	
   .coursePreviewHeader {
 		background-color: $mixedColour;
 		color: $headerButtonTextColour;
@@ -71,12 +72,32 @@
 			box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 		}
   }
-
-
-
+	.courseCompletionBanner {
+		width: 100%;
+		background: linear-gradient(90deg, $primaryColour, $tertiaryColour);
+		color: $headerButtonTextColour;
+		padding: 10px;
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		text-align: center;
+		margin-bottom: 15px;
+		box-sizing: border-box;
+	
+		h2 {
+			font-size: 1.4rem;
+			font-weight: 700;
+			margin: 0 0 0.5rem;
+		}
+	
+		p {
+			font-size: 0.9rem;
+			margin: 0 0 0.75rem;
+		}
+	
+		.noUnderline {
+			text-decoration: none;
+		}
+	}
 
 }
-
-
-
 

@@ -3,15 +3,15 @@ import DndContext from '../dnd/DndContext';
 import SortableItem from '../dnd/SortableItem';
 import handleDragEnd from '../dnd/handleDragEnd';
 
-export const SortableContentItem = ({ id, title, onClick, isSelected, children, isReordering }) => {
+export const SortableContentItem = ({ id, title, onClick, isSelected, children, isReordering, titleIcon }) => {
 
 	return (
 		isReordering ?
 			<SortableItem id={id}>
-				<ContentItem title={title} onClick={onClick}/>
+				<ContentItem title={title} onClick={onClick} titleIcon={titleIcon}/>
 			</SortableItem>
 	 		:
-			<ContentItem title={title} onClick={onClick} isSelected={isSelected}>
+			<ContentItem title={title} onClick={onClick} isSelected={isSelected} titleIcon={titleIcon}>
 				{children}
 			</ContentItem>
 	);

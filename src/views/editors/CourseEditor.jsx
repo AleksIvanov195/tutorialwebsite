@@ -220,7 +220,8 @@ const CourseEditor = () =>{
 						<SortableContentItem
 							key={content.CoursecontentID}
 							id={content.CoursecontentID}
-							title={`${content.ContentType}: ${content.ContentName}`}
+							title={`${content.ContentName}`}
+							titleIcon = {content.ContentType == 'Quiz' ? <Icons.QuestionMark/> : <Icons.Notebook/>}
 							onClick={() => handleItemClick(content)}
 							isSelected={selectedCourseContent?.CoursecontentID === content.CoursecontentID}
 							isReordering={isReordering}>

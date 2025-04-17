@@ -7,6 +7,9 @@ import Animate from '../../components/UI/Animate';
 import { ContentPanel, ContentItem } from '../../components/UI/contentpanel/ContentPanel';
 import { useAuth } from '../../hooks/useAuth';
 import useApiActions from '../../hooks/useApiActions';
+import { NavLink } from 'react-router-dom';
+import { Button, ButtonTray } from '../../components/UI/Buttons';
+import Icons from '../../components/UI/Icons';
 import './Course.scss';
 
 const Course = () =>{
@@ -52,6 +55,7 @@ const Course = () =>{
 			errorMessage: 'Course could not be completed!',
 		});
 		if (response.isSuccess) {
+			setIsCourseCompleted(true);
 			loadUserCourse();
 		}
 	};
@@ -79,12 +83,24 @@ const Course = () =>{
 
 			</header>
 			<progress className="courseProgress" value={courseContent.filter(content => content.ContentStatus == true).length} max={courseContent.length}></progress>
+			{isCourseCompleted && (
+				<div className="courseCompletionBanner">
+					<h2>Congratulations! You’ve completed this course!</h2>
+					<p>Great job! Explore more courses to continue your learning journey.</p>
+					<NavLink to="/courses" className="noUnderline">
+						<ButtonTray>
+							<Button className='headerButton'>Browse More Courses</Button>
+						</ButtonTray>
+					</NavLink>
+				</div>
+			)}
 			<div className="coursePreviewBody">
 				<ContentPanel title="List of Content">
 					{courseContent.map((content) => (
 						<ContentItem
 							key={content.CoursecontentID}
-							title={`${content.ContentType}: ${content.ContentName}`}
+							title={`${content.ContentName}`}
+							titleIcon = {content.ContentType == 'Quiz' ? <Icons.QuestionMark/> : <Icons.Notebook/>}
 							onClick={() => handleItemClick(content)}
 							isSelected={selectedCourseContent?.CoursecontentID === content.CoursecontentID}
 							enableOptions = {false}
