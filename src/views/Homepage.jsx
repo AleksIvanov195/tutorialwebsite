@@ -39,8 +39,17 @@ export default function Homepage() {
 
 	return (
 		<>
-			<h1>Welcome to the Tutorial Website!</h1>
-			<p>Explore our wide range of courses and improve your skills.</p>
+			<div className="bannerSection">
+				<div className="bannerContent">
+					<h1>Master Your Skills with Alecodex!</h1>
+					<p>Discover courses tailored to your learning journey.</p>
+					<NavLink to="/courses" className="noUnderline">
+						<ButtonTray>
+							<Button className="headerButton">Get Started</Button>
+						</ButtonTray>
+					</NavLink>
+				</div>
+			</div>
 			<CourseCarousel
 				courses={courses}
 				handleBookmarkCourse={(courseID, isBookmarked, bookmarkID) => handleBookmarkCourse(courseID, isBookmarked, bookmarkID, authState, deleteRequest, post, loadCourses)}

@@ -85,6 +85,8 @@ export default function CoursesPage() {
 						onChange={(value) => handleFilterChange('CoursecategoryName', value)}
 						defaultCollapse = {true}
 					/>
+					{
+						authState.isLoggedIn &&
 					<FilterBox
 						title="Filter by Course Status"
 						endpoint ='/usercontentstatus'
@@ -93,6 +95,8 @@ export default function CoursesPage() {
 						selectedValues={filters.UsercontentstatusName}
 						onChange={(value) => handleFilterChange('UsercontentstatusName', value)}
 					/>
+					}
+
 				</ContentPanel>
 			</div>
 			<div className="coursesContent">

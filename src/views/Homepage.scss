@@ -1,2 +1,40 @@
+@import '../styles/variables.scss';
+.bannerSection {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, $primaryColour 0%, $tertiaryColour 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: $headerButtonTextColour;
+  padding: 20px;
+  box-sizing: border-box;
+	margin-bottom: 20px;
 
+  .bannerContent {
+    max-width: 800px;
 
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .bannerSection {
+    height: 250px;
+
+    .bannerContent {
+
+      p {
+        font-size: 18px;
+      }
+    }
+  }
+}

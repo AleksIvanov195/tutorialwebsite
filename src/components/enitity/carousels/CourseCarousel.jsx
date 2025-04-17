@@ -7,7 +7,6 @@ import './CourseCarousel.scss';
 const CourseCarousel = ({ courses, handleBookmarkCourse, handleCourseClicked }) => {
 	if (courses.length === 0) return <p>No courses available.</p>;
 	const settings = {
-		dots: true,
 		arrows:false,
 		infinite: true,
 		speed: 500,
@@ -40,7 +39,7 @@ const CourseCarousel = ({ courses, handleBookmarkCourse, handleCourseClicked }) 
 				},
 			},
 			{
-				breakpoint: 480,
+				breakpoint: 600,
 				settings: {
 					slidesToShow: 1,
 					slidesToScroll: 1,
