@@ -3,7 +3,7 @@
 .header {
 	background-color: $primaryColour;
 	color: white;
-	padding: 16px;
+	padding: 7px 14px;
 	position: sticky;
 	top: 0;
 	display: flex;
@@ -23,6 +23,10 @@
 		margin-right: 10px;
 		img {
 			height: 50px;
+			transition: transform 0.3s ease;
+			&:hover {
+				transform: scale(1.05);
+			}
 		}
 	}
 	@media (max-width: 768px) {

@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { Button, ButtonTray } from '../UI/Buttons';
 import './Navbar.scss';
 import Hamburger from 'hamburger-react';
+import toast from 'react-hot-toast';
 export default function Navbar() {
 	// Inititalisation --------------------------------------------
 	const { authState, logout } = useAuth();
@@ -41,8 +42,8 @@ export default function Navbar() {
 			<ul className={`navLinks ${isHamburgerOpen ? 'show' : ''}`}>
 				<li><NavLink to="/" onClick={() => handleChangeLocation('Home')} >Home</NavLink></li>
 				<li><NavLink to="/courses" onClick={() => handleChangeLocation('Courses')} >Courses</NavLink></li>
-				<li><a>Topics</a></li>
-				<li><a>Exercises</a></li>
+				<li><NavLink to="/topics"><a onClick={() => toast.error('Topics page does not exist yet!')}>Topics</a></NavLink></li>
+				<li><NavLink to="/exercises"><a onClick={() => toast.error('Exercises page does not exist yet!')}>Exercises</a></NavLink></li>
 				{
 					authState.role == 'ContentCreator' && <li><NavLink to="/creatordashboard" onClick={() => handleChangeLocation('Dashboard')}>Creator Dashboard</NavLink></li>
 				}
