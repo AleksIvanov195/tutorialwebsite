@@ -1,0 +1,15 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+
+  .paginationInfo {
+    font-size: 20px;
+  }
+  .paginationCurrent,
+  .paginationTotal {
+    font-weight: 600;
+  }
+}
