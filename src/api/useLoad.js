@@ -6,6 +6,7 @@ const useLoad = (endpoint, shouldLoad = true) =>{
 	const { authState } = useAuth();
 	// State ------------------------------------------------------
 	const [records, setRecords] = useState([]);
+	const [totalRecords, setTotalRecords] = useState(null); 
 	const [loadingMessage, setLoadingMessage] = useState('Loading records...');
 	const [isLoading, setIsLoading] = useState(true);
 	// Methods ---------------------------------------------------
@@ -15,10 +16,12 @@ const useLoad = (endpoint, shouldLoad = true) =>{
 		setIsLoading(false);
 		if (response.isSuccess) {
 			setRecords(response.result || []);
+			setTotalRecords(response.totalRecords || null); 
 
 		} else {
 			setRecords([]);
 			setLoadingMessage(response.message);
+			setTotalRecords(null);
 		}
 	};
 
@@ -28,7 +31,7 @@ const useLoad = (endpoint, shouldLoad = true) =>{
 	}, [endpoint]);
 
 	// Return -------------------------------------------------------
-	return [records, setRecords, loadingMessage, isLoading, loadRecords];
+	return [records, setRecords, loadingMessage, isLoading, loadRecords, totalRecords ];
 };
 
 export default useLoad;

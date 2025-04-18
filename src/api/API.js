@@ -42,7 +42,10 @@ const callFetch = async (endpoint, method, data, isLoggedIn = false) => {
 		}
 
 		if (response.ok) {
-			return { isSuccess: true, result };
+			const totalCountHeader = response.headers.get('x-total-count');
+			// Parse only if the header exists and is a valid number
+			const totalRecords = totalCountHeader ? parseInt(totalCountHeader) : undefined;
+			return { isSuccess: true, result, totalRecords };
 		} else {
 			return {
 				isSuccess: false,
