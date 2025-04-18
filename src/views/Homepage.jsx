@@ -42,7 +42,7 @@ export default function Homepage() {
 			<div className="bannerSection">
 				<div className="bannerContent">
 					<h1>Master Your Skills with Alecodex!</h1>
-					<p>Discover courses tailored to your learning journey.</p>
+					<p>Explore our wide range of courses and improve your skills.</p>
 					<NavLink to="/courses" className="noUnderline">
 						<ButtonTray>
 							<Button className="headerButton">Get Started</Button>

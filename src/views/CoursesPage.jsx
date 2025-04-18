@@ -1,5 +1,5 @@
 import useLoad from '../api/useLoad';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CardContainer } from '../components/UI/Card';
 import CourseCard from '../components/enitity/cards/CourseCard';
 import { ContentPanel } from '../components/UI/contentpanel/ContentPanel';
@@ -8,7 +8,7 @@ import FilterBox from '../components/UI/FilterBox';
 import useApiActions from '../hooks/useApiActions';
 import { useAuth } from '../hooks/useAuth';
 import useNavigation from '../hooks/useNavigation';
-import toast from 'react-hot-toast';
+import Pagination from '../components/UI/Pagination';
 import ContentPreviewModal from '../components/UI/modal/ContentPreviewModal';
 import { handleBookmarkCourse, handleStartCourse } from '../utilities/courseutils';
 import './CoursePage.scss';
@@ -26,6 +26,9 @@ export default function CoursesPage() {
 		CoursecategoryName : [],
 		UsercontentstatusName : [],
 	});
+	const [currentPage, setCurrentPage] = useState(1);
+	// Number of items per page
+	const itemsPerPage = 16;
 	const generateQueryString = () => {
 		const queryString = Object.entries(filters)
 			.filter(([key, values]) => values.length > 0)
@@ -35,10 +38,23 @@ export default function CoursesPage() {
 	};
 	// If user is loggedin use the courses/users endpoint to display content status
 	const coursesEndpoint = authState.isLoggedIn
-		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}&orderby=IsBookmarked,DESC`
-		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}`;
-	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses] = useLoad(coursesEndpoint);
+		? `/courses/users?search=${searchString}&searchFields=CourseName&${generateQueryString()}&orderby=IsBookmarked,DESC&offset=${(currentPage - 1) * itemsPerPage}&limit=${itemsPerPage}`
+		: `/courses?search=${searchString}&searchFields=CourseName&${generateQueryString()}&offset=${(currentPage - 1) * itemsPerPage}&limit=${itemsPerPage}`;
+	const [courses, setCourses, coursesMessage, isCoursesLoading, loadCourses, totalRecords] = useLoad(coursesEndpoint);
 	// Handlers ------------------------------------------------------
+	// Pagination controls
+	const totalPages = Math.ceil((totalRecords || 0) / itemsPerPage);
+	const handlePageChange = (newPage) => {
+		if (newPage >= 1 && newPage <= totalPages) {
+			setCurrentPage(newPage);
+		}
+	};
+	// Reset to page 1 when filters/search change
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [searchString, filters]);
+
+	// Filter controls
 	const handleFilterChange = (filterName, value) => {
 		console.log(value);
 		setFilters((prevFilters) => {
@@ -118,6 +134,7 @@ export default function CoursesPage() {
 						))
 					}
 				</CardContainer>
+				<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
 			</div>
 			{showContentModal && (
 				<ContentPreviewModal
