@@ -11,7 +11,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
 			<Button
 				onClick={() => onPageChange(currentPage - 1)}
-				disabled={currentPage === 1}>
+				disabled={currentPage === 1}
+				title="Previous">
 				<Icons.Previous/>
 			</Button>
 
@@ -22,7 +23,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
 			<Button
 				onClick={() => onPageChange(currentPage + 1)}
-				disabled={currentPage >= totalPages}>
+				disabled={currentPage >= totalPages}
+				title="Next">
 				<Icons.Next/>
 			</Button>
 

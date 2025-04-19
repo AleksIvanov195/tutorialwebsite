@@ -14,7 +14,7 @@ export default function Header() {
 		<header className="header">
 			<div className="navContainer">
 				<div className="logo">
-					<img src="https://placehold.co/600x400" alt="Logo" />
+					<img src="/logo.png" alt="Logo" />
 				</div>
 				<Navbar />
 			</div>
