@@ -1,6 +1,7 @@
 import { useAuth } from '../hooks/useAuth';
 import RegisterForm from '../components/enitity/forms/RegisterForm';
 import toast from 'react-hot-toast';
+import './Register.scss';
 
 export default function Register() {
 	// Inititalisation --------------------------------------------
@@ -23,8 +24,19 @@ export default function Register() {
 	};
 	// View -------------------------------------------------------
 	return (
-		<>
-		 <RegisterForm onSubmit={handleRegister}/>
-		</>
+		<div className="registerPage">
+			<div className="welcomeContainer">
+				<div className="welcomeHeader">
+					<h1>Create Account</h1>
+					<p className="subtext">Get started with your account</p>
+				</div>
+
+				<RegisterForm onSubmit={handleRegister} />
+
+				<div className="login">
+					<p>Already have an account? <a href="/login">Sign in here</a></p>
+				</div>
+			</div>
+		</div>
 	);
 }

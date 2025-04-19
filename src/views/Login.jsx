@@ -1,6 +1,7 @@
 import { useAuth } from '../hooks/useAuth';
 import LoginForm from '../components/enitity/forms/LoginForm';
 import toast from 'react-hot-toast';
+import './Login.scss';
 export default function Login() {
 	// Inititalisation --------------------------------------------
 	const { authState, login } = useAuth();
@@ -24,8 +25,19 @@ export default function Login() {
 	};
 	// View -------------------------------------------------------
 	return (
-		<>
-			<LoginForm onSubmit={handleLogin} sessionExpired = {sessionExpired}/>
-		</>
+		<div className="loginPage">
+			<div className="welcomeContainer">
+				<div className="welcomeHeader">
+					<h1>Welcome Back</h1>
+					<p className="subtext">Sign in to continue</p>
+				</div>
+
+				<LoginForm onSubmit={handleLogin} sessionExpired={sessionExpired} />
+
+				<div className="signup">
+					<p>New user? <a href="/register">Create an account</a></p>
+				</div>
+			</div>
+		</div>
 	);
 }

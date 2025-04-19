@@ -3,7 +3,7 @@
 .navbar {
 	display: flex;
 	background-color: $secondaryColour;
-	padding: 16px;
+	padding: 16px 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
 	border-radius: 4px; 
 	width:100%;
@@ -27,7 +27,7 @@
 			display:none;
 		}
 		li {
-			margin: 0 15px; 
+			margin: 0 11px; 
 
 			a {
 				color: white;
