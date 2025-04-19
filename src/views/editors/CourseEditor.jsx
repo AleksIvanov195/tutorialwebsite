@@ -191,7 +191,8 @@ const CourseEditor = () =>{
 			return <LessonPreview lessonID={selectedCourseContent.ContentID} isCompleted = {true}/>;
 		} else if (selectedCourseContent.ContentType === 'Quiz') {
 			// Content creators will see the preview version of the quiz
-			return <QuizPreview quizID={selectedCourseContent.ContentID} />;
+			sessionStorage.setItem('previewQuizID', selectedCourseContent.ContentID);
+			return <QuizPreview />;
 		}
 		return null;
 	};
