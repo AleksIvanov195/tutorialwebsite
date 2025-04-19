@@ -29,7 +29,7 @@ const AnswerForm = ({ header, onSubmit, onClose, question, mode = 'Edit' }) =>{
 					};
 				}
 			});
-			
+
 			const addedAnswers = currentAnswers.filter(answer => !answer.AnswerID);
 			const removedAnswers = answers.filter(originalAnswer => !currentAnswers.some(answer => answer.AnswerID === originalAnswer.AnswerID));
 			const updatedAnswers = currentAnswers.filter(answer => answer.AnswerID

@@ -239,8 +239,8 @@ const QuizEditor = () => {
 							isSelected={selectedQuestion?.QuestionID === question.QuestionID}
 							isReordering={isReordering}>
 
-							<span className="option" onClick={handleEditDetails}><Icons.Edit />Edit Question</span>
-							<span className="option" onClick={handleEditAnswers}><Icons.Edit />Edit Answers</span>
+							<span className="option" onClick={handleEditDetails}><Icons.EditNode />Question Details</span>
+							<span className="option" onClick={handleEditAnswers}><Icons.CheckListRight />Answers</span>
 							<span className="option delete" onClick={handleDeleteQuestion}><Icons.Delete />Delete Question</span>
 						</SortableContentItem>
 					))}

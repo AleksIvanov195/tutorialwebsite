@@ -4,7 +4,7 @@ import { TbBlockquote, TbReorder } from 'react-icons/tb';
 import { FaPlus, FaRegTrashCan } from 'react-icons/fa6';
 import { IoMdClose } from 'react-icons/io';
 import { VscOpenPreview } from 'react-icons/vsc';
-import { MdOutlinePreview, MdPublishedWithChanges } from 'react-icons/md';
+import { MdOutlinePreview, MdPublishedWithChanges, MdChecklistRtl, MdOutlineEditNote } from 'react-icons/md';
 import { BiImageAdd } from 'react-icons/bi';
 import { PiBroomFill, PiNotebookFill } from 'react-icons/pi';
 import { GrLinkNext, GrLinkPrevious } from 'react-icons/gr';
@@ -38,6 +38,8 @@ const Icons = {
 	ArrowRight: ({ size = 20, color = 'currentColor' }) => <FaChevronRight size={size} color={color} />,
 	QuestionMark: ({ size = 20, color = 'currentColor' }) => <FaQuestion size={size} color={color} />,
 	Notebook: ({ size = 20, color = 'currentColor' }) => <PiNotebookFill size={size} color={color} />,
+	CheckListRight: ({ size = 20, color = 'currentColor' }) => <MdChecklistRtl size={size} color={color} />,
+	EditNode: ({ size = 20, color = 'currentColor' }) => <MdOutlineEditNote size={size} color={color} />,
 };
 
 export default Icons;
