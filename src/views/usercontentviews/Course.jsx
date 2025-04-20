@@ -49,7 +49,7 @@ const Course = () =>{
 		if (isCourseCompleted) return;
 		const response = await put(`/usercourses/${userCourse[0].UsercourseID}/complete`, {
 			UsercourseUsercontentstatusID: 3,
-			UserlessonCompletiondate: new Date().toISOString().replace('T', ' ').split('.')[0],
+			UsercourseCompletiondate: new Date().toISOString().replace('T', ' ').split('.')[0],
 		}, {
 			successMessage: 'Course has been completed!',
 			errorMessage: 'Course could not be completed!',
