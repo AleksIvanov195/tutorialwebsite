@@ -49,13 +49,19 @@ const QuizPreview = () => {
 
 	// Handle selecting answers in the Question component
 	const handleSelectAnswer = (answerID) => {
-		setSelectedAnswers(prevSelectedAns => {
-			if (prevSelectedAns.includes(answerID)) {
-				return prevSelectedAns.filter(ansID => ansID !== answerID);
-			} else {
-				return [...prevSelectedAns, answerID];
-			}
-		});
+		const currentQuestion = questionsAndAnswers[currentQuestionIndex];
+		if (currentQuestion.QuestionType === 'MultipleChoice') {
+			setSelectedAnswers(prevSelectedAns => {
+				if (prevSelectedAns.includes(answerID)) {
+					return prevSelectedAns.filter(ansID => ansID !== answerID);
+				} else {
+					return [...prevSelectedAns, answerID];
+				}
+			});
+		} else {
+			// For single choice questions, always replace with the new selection
+			setSelectedAnswers([answerID]);
+		}
 	};
 
 	const handleSubmit = () => {
